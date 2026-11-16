@@ -1,0 +1,56 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": false,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
+    }
+  },
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    ".next-a1/types/**/*.ts",
+    ".next-a2/types/**/*.ts",
+    ".next-a3/types/**/*.ts",
+    ".next-a3p/types/**/*.ts",
+    ".next-a4/types/**/*.ts",
+    ".next-a5/types/**/*.ts",
+    ".next-aa/types/**/*.ts",
+    ".next-b/types/**/*.ts",
+    ".next-bb/types/**/*.ts",
+    ".next-c/types/**/*.ts",
+    ".next-d/types/**/*.ts",
+    ".next-dd/types/**/*.ts",
+    ".next-f/types/**/*.ts",
+    ".next-t/types/**/*.ts",
+    ".next-w/types/**/*.ts",
+    ".next/types/**/*.ts",
+    "next-env.d.ts",
+    ".next-s/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

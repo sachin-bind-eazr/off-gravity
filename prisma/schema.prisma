@@ -1,0 +1,278 @@
+generator client {
+  provider = "prisma-client-js"
+}
+datasource db {
+  provider = "postgresql"
+  url = env("DATABASE_URL")
+}
+
+enum EventStatus {
+  PROVISIONAL
+  CONFIRMED
+  WAITLIST_OPEN
+  SALES_OPEN
+  SALES_CLOSED
+  CANCELLED
+}
+enum TicketVisibility {
+  HIDDEN
+  PREVIEW
+}
+
+enum WaitlistTier {
+  SOLO
+  SQUAD
+  GLOW
+  FAMILY
+  UNDECIDED
+}
+
+enum Day {
+  SAT
+  SUN
+}
+enum GstMode {
+  INCLUSIVE
+  EXCLUSIVE
+}
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  REFUNDED
+  EXPIRED
+}
+enum PaymentStatus {
+  CREATED
+  CAPTURED
+  FAILED
+  REFUNDED
+  PARTIALLY_REFUNDED
+}
+enum AdminRole {
+  OWNER
+  MANAGER
+  SUPPORT
+}
+
+model Season {
+  id Int @id
+  name String
+  order Int
+  events Event[]
+}
+
+model Event {
+  id Int @id @default(autoincrement())
+  slug String @unique
+  city String
+  cityCode String @unique
+  seasonId Int
+  season Season @relation(fields:[seasonId], references:[id])
+  startDate DateTime
+  endDate DateTime
+  tag String?
+  blurb String?
+  colour String
+  status EventStatus @default(PROVISIONAL)
+  venue String?
+  gatesOpen String?
+  registrationCloses String?
+  distance String?
+  obstacles String?
+  waveTimes String?
+  experiences String[]
+  tickets TicketType[]
+  bookings Booking[]
+  faqs Faq[]
+  waitlist WaitlistEntry[]
+  @@index([seasonId])
+}
+
+model TicketType {
+  id Int @id @default(autoincrement())
+  eventId Int
+  event Event @relation(fields:[eventId], references:[id])
+  name String
+  description String
+  pricePaise Int?
+  gstMode GstMode @default(INCLUSIVE)
+  capacity Int?
+  minPerBooking Int @default(1)
+  maxPerBooking Int @default(1)
+  days Day[]
+  salesOpen DateTime?
+  salesClose DateTime?
+  eligibility String @default("")
+  requiresDob Boolean @default(false)
+  active Boolean @default(false)
+  tierKey String?
+  hook String?
+  perks String[] @default([])
+  stubColour String?
+  visibility TicketVisibility @default(HIDDEN)
+  limited Boolean @default(false)
+  mostPicked Boolean @default(false)
+  sortOrder Int @default(0)
+  inventory TicketInventory[]
+  bookings Booking[]
+  @@index([eventId])
+}
+
+model TicketInventory {
+  ticketTypeId Int
+  ticketType TicketType @relation(fields:[ticketTypeId], references:[id])
+  day Day
+  sold Int @default(0)
+  held Int @default(0)
+  @@id([ticketTypeId, day])
+}
+
+model Booking {
+  id Int @id @default(autoincrement())
+  reference String @unique
+  eventId Int
+  event Event @relation(fields:[eventId], references:[id])
+  ticketTypeId Int
+  ticketType TicketType @relation(fields:[ticketTypeId], references:[id])
+  day Day
+  quantity Int
+  status BookingStatus @default(PENDING)
+  amountPaise Int
+  taxPaise Int @default(0)
+  holdExpiresAt DateTime
+  idempotencyKey String @unique
+  leadEmail String
+  leadName String
+  policySnapshot String?
+  createdAt DateTime @default(now())
+  participants Participant[]
+  payments Payment[]
+  emails EmailNotification[]
+  @@index([eventId])
+  @@index([ticketTypeId])
+  @@index([leadEmail])
+  @@index([status])
+}
+
+model Participant {
+  id Int @id @default(autoincrement())
+  bookingId Int
+  booking Booking @relation(fields:[bookingId], references:[id])
+  name String
+  email String?
+  phone String?
+  dob DateTime?
+  emergencyPhone String?
+  ticketToken String @unique
+  checkedInAt DateTime?
+  @@index([bookingId])
+}
+
+model Payment {
+  id Int @id @default(autoincrement())
+  bookingId Int
+  booking Booking @relation(fields:[bookingId], references:[id])
+  razorpayOrderId String @unique
+  razorpayPaymentId String? @unique
+  status PaymentStatus @default(CREATED)
+  amountPaise Int
+  raw Json?
+  refunds Refund[]
+  @@index([bookingId])
+}
+
+model Refund {
+  id Int @id @default(autoincrement())
+  paymentId Int
+  payment Payment @relation(fields:[paymentId], references:[id])
+  razorpayRefundId String? @unique
+  amountPaise Int
+  status String
+  reason String
+  actorId Int?
+  createdAt DateTime @default(now())
+  @@index([paymentId])
+}
+
+model WebhookEvent {
+  eventId String @id
+  type String
+  processedAt DateTime @default(now())
+}
+model EmailNotification {
+  id Int @id @default(autoincrement())
+  bookingId Int
+  booking Booking @relation(fields:[bookingId], references:[id])
+  type String
+  status String
+  attempts Int @default(0)
+  @@index([bookingId])
+}
+model OtpCode {
+  id Int @id @default(autoincrement())
+  email String
+  codeHash String
+  expiresAt DateTime
+  attempts Int @default(0)
+  createdAt DateTime @default(now())
+  @@index([email])
+}
+model AdminUser {
+  id Int @id @default(autoincrement())
+  email String @unique
+  passwordHash String
+  role AdminRole
+  totpSecret String?
+  totpEnabled Boolean @default(false)
+}
+model AuditLog {
+  id Int @id @default(autoincrement())
+  actorId Int?
+  action String
+  entity String
+  entityId String
+  before Json?
+  after Json?
+  at DateTime @default(now())
+  @@index([entity, entityId])
+}
+model Faq {
+  id Int @id @default(autoincrement())
+  eventId Int?
+  event Event? @relation(fields:[eventId], references:[id])
+  question String
+  answer String
+  order Int @default(0)
+  @@index([eventId])
+}
+model ContentBlock {
+  key String @id
+  body String
+  updatedAt DateTime @updatedAt
+}
+model RateLimit {
+  key String @id
+  count Int
+  resetAt DateTime
+}
+
+
+model WaitlistEntry {
+  id             Int      @id @default(autoincrement())
+  eventId        Int
+  event          Event    @relation(fields: [eventId], references: [id])
+  name           String?
+  email          String
+  whatsappNumber String?
+  consent        Boolean
+  source         String   @default("site")
+  tierInterest   WaitlistTier @default(UNDECIDED)
+  partySize      Int      @default(1)
+  whatsappOptIn  Boolean  @default(false)
+  reference      String   @unique
+  createdAt      DateTime @default(now())
+
+  @@unique([eventId, email])
+  @@index([eventId])
+}

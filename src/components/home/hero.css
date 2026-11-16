@@ -1,0 +1,34 @@
+/* Hero layout. Desktop: whole first screen (nav 72 + hero + tour strip) fills the viewport. */
+.og-hero{--strip-h:66px;display:flex;flex-direction:column;background:var(--color-ink);color:#fff}
+.og-hero__stage{position:relative;overflow:hidden;display:flex;flex-direction:column}
+.og-hero__art{position:relative;aspect-ratio:4/3;width:100%;overflow:hidden;
+  -webkit-mask-image:linear-gradient(to bottom,#000 60%,transparent 100%);mask-image:linear-gradient(to bottom,#000 60%,transparent 100%)}
+.og-hero__art img{object-fit:cover;object-position:50% 40%}
+.og-hero__copy{position:relative;margin-inline:auto;width:100%;max-width:1312px;padding:8px var(--pad) 56px}
+.og-hero__h1{font-size:clamp(46px,13vw,64px)}
+@media (min-width:860px){
+  .og-hero{min-height:clamp(600px,calc(100svh - 72px),1040px)}
+  .og-hero__stage{flex:1 1 auto;flex-direction:row;align-items:center}
+  .og-hero__art{position:absolute;inset:0 0 0 auto;width:78%;aspect-ratio:auto;
+    -webkit-mask-image:linear-gradient(to right,transparent 0,#000 34%);mask-image:linear-gradient(to right,transparent 0,#000 34%)}
+  .og-hero__art img{object-position:62% 45%}
+  /* scrim keeps copy readable without hiding the runners */
+  .og-hero__stage::after{content:"";position:absolute;inset:0;pointer-events:none;
+    background:linear-gradient(90deg,rgba(29,38,50,.92) 0,rgba(29,38,50,.78) 26%,rgba(29,38,50,.35) 42%,transparent 56%)}
+  .og-hero__copy{position:relative;z-index:1;padding-block:72px}
+  .og-hero__col{max-width:min(46%,600px)}
+  .og-hero__h1{font-size:clamp(52px,5.6vw,92px)}
+}
+@media (min-width:860px) and (max-width:1100px){.og-hero__art{width:84%}.og-hero__col{max-width:50%}}
+@media (min-width:1700px){.og-hero__art img{object-position:55% 45%}}
+.og-hero__strip{border-top:1px solid rgb(255 255 255/.15)}
+
+/* watch pill + scroll cue */
+.og-watch{display:inline-flex;align-items:center;gap:9px;padding:15px 20px;border-radius:999px;border:1.5px solid rgb(255 255 255/.5);color:#fff;font-weight:700;font-size:16px;white-space:nowrap;background:rgb(29 38 50/.35);cursor:pointer;transition:transform .15s,background .2s,border-color .2s}
+.og-watch:hover{transform:translateY(-3px);background:rgb(255 255 255/.14);border-color:#fff}
+.og-watch__dur{color:var(--color-on-dark);font-weight:600}
+.og-hero__cue{position:absolute;left:50%;margin-left:-1px;bottom:14px;width:2px;height:44px;border-radius:2px;background:rgb(255 255 255/.22);overflow:hidden;pointer-events:none;z-index:2}
+.og-hero__cue::after{content:"";position:absolute;left:0;top:0;width:100%;height:50%;background:var(--color-mint);border-radius:2px;animation:og-cue 2.2s cubic-bezier(.6,0,.4,1) infinite}
+@keyframes og-cue{0%{transform:translateY(-100%)}70%,100%{transform:translateY(200%)}}
+@media (max-width:859.98px){.og-hero__cue{display:none}}
+@media (prefers-reduced-motion:reduce){.og-hero__cue::after{animation:none;transform:translateY(40%)}}

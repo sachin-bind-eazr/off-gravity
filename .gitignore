@@ -1,0 +1,12 @@
+node_modules
+.next
+.next-*
+.env
+.env.*
+!.env.example
+.photo-src
+.test-pg-data
+*.log
+test-results
+playwright-report
+*.tsbuildinfo
