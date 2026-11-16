@@ -1,12 +1,23 @@
 /* Hero layout. Desktop: whole first screen (nav 72 + hero + tour strip) fills the viewport. */
 .og-hero{--strip-h:66px;display:flex;flex-direction:column;background:var(--color-ink);color:#fff}
 .og-hero__stage{position:relative;overflow:hidden;display:flex;flex-direction:column}
-.og-hero__art{position:relative;aspect-ratio:4/3;width:100%;overflow:hidden;
+.og-hero__art{position:relative;aspect-ratio:4/5;width:100%;overflow:hidden;
   -webkit-mask-image:linear-gradient(to bottom,#000 60%,transparent 100%);mask-image:linear-gradient(to bottom,#000 60%,transparent 100%)}
-.og-hero__art img{object-fit:cover;object-position:50% 40%}
-.og-hero__copy{position:relative;margin-inline:auto;width:100%;max-width:1312px;padding:8px var(--pad) 56px}
-.og-hero__h1{font-size:clamp(46px,13vw,64px)}
+.og-hero__art img{object-fit:cover;object-position:64% 45%}
+.og-hero__copy{position:relative;z-index:1;margin-top:-104px;margin-inline:auto;width:100%;max-width:1312px;padding:0 var(--pad) 48px}
+.og-hero__copy::before{content:"";position:absolute;left:0;right:0;top:-40px;height:190px;z-index:-1;pointer-events:none;background:linear-gradient(to bottom,transparent,rgba(29,38,50,.85) 55%,var(--color-ink))}
+.og-hero__col{display:flex;flex-direction:column}
+.og-hero__col>.og-hero__actions{order:2;margin-top:24px}
+.og-hero__col>.og-hero__lead{order:3;margin-top:22px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.og-hero__h1{font-size:clamp(46px,13vw,64px);order:1}
+.og-hero__col>p:first-child{order:0}
+@media (min-width:560px) and (max-width:859.98px){.og-hero__art{aspect-ratio:16/10}.og-hero__copy{margin-top:-120px}}
 @media (min-width:860px){
+  .og-hero__copy{margin-top:0}
+  .og-hero__copy::before{display:none}
+  .og-hero__h1{order:0}
+  .og-hero__col>.og-hero__actions{order:0;margin-top:36px}
+  .og-hero__col>.og-hero__lead{order:0;margin-top:24px;display:block;-webkit-line-clamp:unset;overflow:visible}
   .og-hero{min-height:clamp(600px,calc(100svh - 72px),1040px)}
   .og-hero__stage{flex:1 1 auto;flex-direction:row;align-items:center}
   .og-hero__art{position:absolute;inset:0 0 0 auto;width:78%;aspect-ratio:auto;
@@ -14,10 +25,10 @@
   .og-hero__art img{object-position:62% 45%}
   /* scrim keeps copy readable without hiding the runners */
   .og-hero__stage::after{content:"";position:absolute;inset:0;pointer-events:none;
-    background:linear-gradient(90deg,rgba(29,38,50,.92) 0,rgba(29,38,50,.78) 26%,rgba(29,38,50,.35) 42%,transparent 56%)}
+    background:linear-gradient(90deg,rgba(29,38,50,.96) 0,rgba(29,38,50,.86) 28%,rgba(29,38,50,.5) 44%,rgba(29,38,50,.12) 56%,transparent 64%)}
   .og-hero__copy{position:relative;z-index:1;padding-block:72px}
   .og-hero__col{max-width:min(46%,600px)}
-  .og-hero__h1{font-size:clamp(52px,5.6vw,92px)}
+  .og-hero__h1{font-size:clamp(58px,6.4vw,106px)}
 }
 @media (min-width:860px) and (max-width:1100px){.og-hero__art{width:84%}.og-hero__col{max-width:50%}}
 @media (min-width:1700px){.og-hero__art img{object-position:55% 45%}}

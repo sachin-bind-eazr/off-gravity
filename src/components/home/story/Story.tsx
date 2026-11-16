@@ -4,10 +4,11 @@ import { motionValue, useMotionValueEvent, useReducedMotion, useScroll, type Mot
 import { HOME } from "@/content/home";
 import { StoryPanel, type PanelData } from "./StoryPanel";
 import { useMedia } from "./hooks";
+import { ScrollEffects } from "./ScrollEffects";
 import "./story.css";
 
 const TOP = 104;   // sticky line (px) for the first panel
-const PEEK = 12;   // each later panel sticks slightly lower so earlier ones peek out above it
+const PEEK = 0;    // panels stack flush: no peeking slivers
 const SHRINK = 0.06;
 
 type Geo = { ph: number; gap: number; total: number; vh: number };
@@ -101,11 +102,12 @@ export function Story() {
 
   return (
     <section id="about" className="st-section section-y bg-cream" aria-labelledby="story-h2">
+      <ScrollEffects />
       <div className="container-og st-grid" data-mode={mode}>
         <div className="st-left">
-          <p className="text-[15px] font-bold text-text-muted">{HOME.story.kicker}</p>
-          <h2 id="story-h2" className="t-section mt-4">{HOME.story.h2}</h2>
-          <div className="mt-6 space-y-4 text-[17px] leading-[1.6] text-text-muted">
+          <p className="t-kicker">{HOME.story.kicker}</p>
+          <h2 id="story-h2" className="t-section st-h2 mt-4">{HOME.story.h2}</h2>
+          <div className="st-body mt-6 space-y-4 text-[18px] leading-[1.6] text-text-muted">
             {HOME.story.body.map((t) => <p key={t}>{t}</p>)}
           </div>
           <div className="st-progress" role="group" aria-label="Story progress">

@@ -10,7 +10,7 @@
 .tk-line strong{color:#1D2632;font-weight:800}
 
 .tk-rail{list-style:none;margin:clamp(40px,5vw,60px) 0 0;padding:14px 0 0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}
-.tk-card{position:relative;display:flex;flex-direction:column;background:#fff;border:1px solid #E4DED0;border-radius:22px;padding:28px;transition:transform .2s ease,box-shadow .2s ease;animation:tk-in .5s ease both;animation-delay:calc(var(--i)*60ms)}
+.tk-card{position:relative;display:flex;flex-direction:column;background:#fff;background-image:linear-gradient(180deg,color-mix(in srgb,var(--accent) 9%,#fff) 0,#fff 190px);border:1px solid #E4DED0;border-radius:22px;padding:28px;transition:transform .2s ease,box-shadow .2s ease;animation:tk-in .5s ease both;animation-delay:calc(var(--i)*60ms)}
 @keyframes tk-in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
 @media (hover:hover){.tk-card:hover{transform:translateY(-4px);box-shadow:0 16px 36px rgba(29,38,50,.12)}}
 .tk-card--night{border-color:rgba(2,214,156,.45);box-shadow:0 0 0 1px rgba(2,214,156,.25),0 0 26px rgba(2,214,156,.16)}
@@ -19,21 +19,28 @@
 .tk-badge--popular{background:#02D69C;color:#1D2632}
 .tk-badge--limited{background:#1A1250;color:#fff}
 .tk-body{flex:1}
-.tk-bar{display:block;width:40px;height:4px;border-radius:4px;background:var(--accent)}
+.tk-bar{display:block;width:56px;height:6px;border-radius:6px;background:var(--accent);transform-origin:left center;transition:transform .25s ease}
+@media (hover:hover){.tk-card:hover .tk-bar{transform:scaleX(1.35)}}
 .tk-name{margin:18px 0 0;font-weight:800;font-stretch:102%;font-size:26px;line-height:1.1;letter-spacing:-.01em;color:#1D2632}
 .tk-hook{margin:10px 0 0;font-size:16px;line-height:1.5;color:#3A4553;min-height:3em}
 .tk-price{display:flex;align-items:baseline;flex-wrap:wrap;gap:8px;margin:22px 0 0;padding-top:20px;border-top:1px solid #EFEADD}
-.tk-from{font-size:14px;color:#5A6472}
+.tk-from{font-size:14px;color:#4A5563}
 .tk-amt{font-weight:800;font-stretch:102%;font-size:30px;line-height:1;color:#1D2632}
-.tk-gst{font-size:14px;color:#5A6472}
+.tk-gst{font-size:14px;color:#4A5563}
 .tk-perks{list-style:none;margin:20px 0 0;padding:0;display:grid;gap:12px}
 .tk-perks li{display:flex;gap:10px;align-items:flex-start;font-size:15.5px;line-height:1.4;color:#1D2632}
 .tk-check{flex:none;margin-top:1px}
 .tk-act{margin-top:26px}
 .tk-btn{display:flex;width:100%;align-items:center;justify-content:center;gap:10px;border:1.5px solid #1D2632;color:#1D2632;background:transparent;border-radius:999px;padding:14px 20px;font-weight:800;font-size:16px;line-height:1.2;text-align:center;cursor:pointer;transition:background-color .18s ease,color .18s ease}
 .tk-btn:hover,.tk-btn:focus-visible{background:#1D2632;color:#fff}
-.tk-card--dim>.tk-body,.tk-card--dim>.tk-badge{opacity:.55}
-.tk-card--dim{background:#FBF9F3}
+.tk-btn svg{transition:transform .18s ease}
+.tk-btn:hover svg,.tk-btn:focus-visible svg{transform:translateX(3px)}
+.tk-card--dim>.tk-body,.tk-card--dim>.tk-badge{opacity:.7}
+.tk-card--dim{background-color:#FBF9F3}
+/* keep dimmed text >=4.5:1 at 70% opacity by using ink instead of muted greys */
+.tk-card--dim .tk-hook,.tk-card--dim .tk-from,.tk-card--dim .tk-gst{color:#1D2632}
+.tk-only{position:absolute;top:18px;right:18px;z-index:1;padding:5px 12px;border-radius:999px;background:#1A1250;color:#fff;font-size:14px;font-weight:800;line-height:1.2;white-space:nowrap}
+.tk-card--dim .tk-bar{margin-right:96px}
 
 .tk-dots{display:none}
 .tk-skels{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px;margin-top:clamp(40px,5vw,60px);padding-top:14px}
@@ -48,7 +55,7 @@
 .tk-banner-p{margin:12px 0 0;color:#D5DCE3;font-size:17px;max-width:50ch}
 .tk-banner-btn{flex:none;display:inline-flex;align-items:center;gap:12px;background:#02D69C;color:#1D2632;border-radius:999px;padding:18px 30px;font-weight:800;font-size:18px;transition:transform .15s;cursor:pointer}
 .tk-banner-btn:hover{transform:translateY(-3px)}
-.tk-disclaimer{margin:22px 0 0;font-size:14px;color:#5A6472}
+.tk-disclaimer{margin:22px 0 0;font-size:14px;color:#4A5563}
 
 @media (max-width:999px){
   .tk-rail,.tk-skels{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -66,3 +73,6 @@
   .tk-banner-btn{width:100%;justify-content:center}
 }
 @media (prefers-reduced-motion:reduce){.tk-card,.tk-city,.tk-skel{animation:none!important}.tk-card:hover{transform:none}}
+
+/* tour section: replace cobalt kicker/tag blues with dark mint-ink (>=4.5:1 on cream). Scoped to #tour; unlayered so it beats Tailwind utilities. */
+#tour .text-cobalt{color:#00795A}

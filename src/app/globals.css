@@ -21,8 +21,8 @@ html{scroll-behavior:smooth} body{background:var(--color-cream);color:var(--colo
 .section-y-tight{padding-block:var(--section-y-tight)}
 section[id]{scroll-margin-top:var(--nav-h)}
 .t-campaign{font-style:italic;font-weight:900;font-stretch:118%;letter-spacing:-.035em;line-height:.94;font-size:clamp(52px,6.4vw,94px)}
-.t-section{font-weight:800;font-stretch:102%;letter-spacing:-.03em;line-height:1;font-size:clamp(42px,5.2vw,76px)}
-.t-section-lg{font-weight:800;font-stretch:102%;letter-spacing:-.03em;line-height:1;font-size:clamp(46px,6vw,88px)}
+.t-section{font-weight:800;font-stretch:102%;letter-spacing:-.03em;line-height:1;font-size:clamp(38px,4.6vw,66px)}
+.t-section-lg{font-weight:800;font-stretch:102%;letter-spacing:-.03em;line-height:1;font-size:clamp(38px,4.6vw,66px)}
 .t-card{font-weight:800;font-stretch:102%;font-size:clamp(26px,2.4vw,32px);line-height:1.1}
 .t-lead{font-size:clamp(18px,1.6vw,20px);line-height:1.55}
 .btn-primary{display:inline-flex;align-items:center;gap:12px;background:var(--color-orange);color:var(--color-ink);font-weight:800;font-size:19px;padding:21px 34px;border-radius:999px;box-shadow:0 5px 0 var(--color-ink);transition:transform .15s}
@@ -82,3 +82,28 @@ section[id]{scroll-margin-top:var(--nav-h)}
 .wi-cta--ghost{background:transparent;color:#fff;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.4)}
 .wi-card{transition:transform .25s ease}
 @media (hover:hover){.wi-card:hover{transform:translateY(-4px)}}
+
+/* ---- polish round (agent X1) ---- */
+/* Shared kicker: 15px / 700, ink on light grounds (never cobalt) */
+.t-kicker{font-size:15px;font-weight:700;letter-spacing:0;color:var(--color-text-muted)}
+#tour .text-cobalt{color:var(--color-text-muted)}
+
+/* .og-grade: brand colour grade for off-palette footage/photos.
+   Usage: <div class="og-grade" style="--grade:var(--color-mint)"><img .../></div>  (wrapper needs a size; clips to its radius)
+   - image is mostly desaturated, then tinted with the grade colour (mix-blend: color)
+   - ::after adds fine film grain + a bottom vignette (hides upscale softness) */
+.og-grade{position:relative;isolation:isolate;overflow:hidden}
+.og-grade>img,.og-grade>picture img{filter:grayscale(.88) contrast(1.14) brightness(.94)}
+.og-grade::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:var(--grade,var(--color-mint));mix-blend-mode:color;opacity:var(--grade-strength,.82)}
+.og-grade::after{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E") 0 0/160px 160px,
+    linear-gradient(to top,rgb(14 21 32/.55),transparent 55%);
+  opacity:.55}
+
+/* scroll reveal (opt-in: [data-reveal], plus section h2s). Hidden state exists only when JS has armed it. */
+html[data-reveal="on"] [data-reveal]:not([data-in]){opacity:0;transform:translateY(16px)}
+html[data-reveal="on"] [data-reveal]{transition:opacity .65s cubic-bezier(.2,.7,.2,1),transform .65s cubic-bezier(.2,.7,.2,1);transition-delay:var(--reveal-delay,0s)}
+/* scroll progress hairline under the nav */
+.og-progress{position:fixed;left:0;right:0;top:var(--nav-h);height:3px;z-index:45;pointer-events:none;background:transparent}
+.og-progress i{display:block;height:100%;background:var(--color-mint);transform-origin:0 50%;transform:scaleX(0);will-change:transform}

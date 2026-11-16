@@ -11,7 +11,7 @@ export const TIERS: Record<WaitlistTier, { name: string; num: string; bg: string
 };
 export const TIER_ORDER: WaitlistTier[] = ["solo", "squad", "glow", "family"];
 
-export type DrawerCity = { slug: string; city: string; code: string; start: string; end: string; enabled: boolean; glow: boolean; count: number | null };
+export type ModalCity = { slug: string; city: string; code: string; start: string; end: string; enabled: boolean; glow: boolean; count: number | null };
 
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 const parts = (iso: string) => { const [y, m, d] = iso.slice(0, 10).split("-").map(Number); return { y, m, d }; };
@@ -21,11 +21,18 @@ export function fmtRange(start: string, end: string) {
   return `${a.d} ${MONTHS[a.m - 1]} – ${b.d} ${MONTHS[b.m - 1]}`;
 }
 
-export function tourCities(list: { slug: string; start?: string; end?: string; waitlistCount?: number | null; glow?: boolean }[]): DrawerCity[] {
+export function tourCities(list: { slug: string; start?: string; end?: string; waitlistCount?: number | null; glow?: boolean }[]): ModalCity[] {
   return TOUR.map((t) => {
     const l = list.find((x) => x.slug === t.slug);
     return { slug: t.slug, city: t.city, code: t.code, start: l?.start ?? t.start, end: l?.end ?? t.end, enabled: list.length === 0 || !!l, glow: l?.glow ?? t.slug === "jaipur", count: l?.waitlistCount ?? null };
   });
+}
+
+/** "Apr 3 – 4, 2027" / "Mar 30 – Apr 2, 2027" */
+export function fmtLong(start: string, end: string) {
+  const a = parts(start), b = parts(end);
+  if (a.m === b.m && a.y === b.y) return a.d === b.d ? `${MONTHS[a.m - 1]} ${a.d}, ${a.y}` : `${MONTHS[a.m - 1]} ${a.d} – ${b.d}, ${a.y}`;
+  return `${MONTHS[a.m - 1]} ${a.d} – ${MONTHS[b.m - 1]} ${b.d}, ${b.y}`;
 }
 
 const compact = (iso: string) => iso.slice(0, 10).replaceAll("-", "");

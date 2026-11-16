@@ -10,6 +10,7 @@ import { HOME } from "@/content/home";
 import { ctaMode } from "@/lib/cta";
 import { useWaitlist } from "@/components/waitlist";
 import { WaysIn } from "./tour/WaysIn";
+import { CityTicket } from "./tour/CityTicket";
 import { tagLabel, editionLabel } from "./tour/labels";
 
 const THEME: Record<string, { bg: string; fg: string; card: string; dark: boolean }> = {
@@ -40,7 +41,10 @@ export function Tour({ events }: { events: EventView[] }) {
     ev.preventDefault(); setSel(events[n].slug); refs.current[events[n].slug]?.focus();
   };
   useEffect(() => {
-    if (window.matchMedia("(max-width: 899px)").matches) refs.current[sel]?.scrollIntoView({ inline: "center", block: "nearest" });
+    if (!window.matchMedia("(max-width: 899px)").matches) return;
+    const el = refs.current[sel]; let box = el?.parentElement ?? null;
+    while (box && box.scrollWidth <= box.clientWidth) box = box.parentElement;
+    if (el && box && box !== document.body && box !== document.documentElement) box.scrollTo({ left: el.offsetLeft - (box.clientWidth - el.clientWidth) / 2, behavior: "smooth" });
   }, [sel]);
   const seasons = [1, 2];
   return (
@@ -84,27 +88,8 @@ export function Tour({ events }: { events: EventView[] }) {
             <div className="h-[360px] min-[900px]:h-[460px] min-[1100px]:absolute min-[1100px]:inset-0 min-[1100px]:h-full">
               <IndiaMap events={events} selected={sel} onSelect={setSel} />
             </div>
-            <div key={e.slug} className="og-tour-in relative z-10 m-3 overflow-hidden rounded-[20px] bg-white/[.92] p-5 text-ink shadow-[0_12px_40px_rgba(0,0,0,.28)] min-[700px]:m-4 min-[1100px]:absolute min-[1100px]:bottom-4 min-[1100px]:left-4 min-[1100px]:m-0 min-[1100px]:w-[372px] min-[1100px]:p-6">
-              <span aria-hidden="true" className="absolute inset-x-0 top-0 h-1.5" style={{ background: th.bg }} />
-              <p className="text-[14px] font-bold text-text-muted">Season {e.season} &middot; Stop {idx + 1} of {events.length}</p>
-              <h3 className="mt-1 font-extrabold leading-[.95] tracking-[-0.04em]" style={{ fontSize: "clamp(36px,3.6vw,48px)", fontStretch: "102%", overflowWrap: "break-word" }}>{e.city}</h3>
-              <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-2">
-                <p className="text-[clamp(18px,1.8vw,22px)] font-extrabold tracking-[-0.01em]">{fmtFull(e.start, e.end)}</p>
-                {tag && <span className="rounded-full bg-ink px-3 py-0.5 text-[14px] font-bold text-white">{tag}</span>}
-                <span className="rounded-full px-3 py-0.5 text-[14px] font-bold ring-[1.5px] ring-ink/30">{editionLabel(e.slug)}</span>
-              </div>
-              <div className="mt-4 grid grid-cols-2 gap-2.5">
-                {[{ d: fmtDay(e.start), t: jaipur ? "Evening edition, day one" : "Festival day one + Glow Night" }, { d: fmtDay(e.end), t: "Festival day two" }].map((c) => (
-                  <div key={c.d} className="rounded-[14px] bg-cream p-3"><p className="text-[14px] font-semibold text-text-muted">{c.d}</p><p className="mt-0.5 text-[15px] font-extrabold leading-tight">{c.t}</p></div>
-                ))}
-              </div>
-              <p className="mt-3 text-[15px] text-text-muted">Venue and timings to be announced.</p>
-              <div className="mt-4 flex flex-wrap items-center gap-x-6 gap-y-3">
-                {mode === "waitlist" && <button type="button" onClick={() => openWaitlist(e.slug)} className="btn-primary !px-6 !py-3.5 !text-[17px]">Join the {e.city} waitlist<ArrowIcon /></button>}
-                {mode === "book" && <Link href={`/book?city=${e.slug}`} className="btn-primary !px-6 !py-3.5 !text-[17px]">Book {e.city}<ArrowIcon /></Link>}
-                <Link href={`/events/${e.slug}`} className="link-secondary">Event details</Link>
-              </div>
-              {mode === "waitlist" && inLine != null && <p className="mt-3 text-[15px] font-bold">{inLine.toLocaleString("en-IN")} people in line for {e.city}</p>}
+            <div key={e.slug} className="og-tour-in relative z-10 m-3 drop-shadow-[0_12px_28px_rgba(0,0,0,.35)] min-[700px]:m-4 min-[1100px]:absolute min-[1100px]:bottom-4 min-[1100px]:left-4 min-[1100px]:m-0 min-[1100px]:w-[372px]">
+              <CityTicket slug={e.slug} city={e.city} code={e.code} stop={idx + 1} total={events.length} start={e.start} end={e.end} stub={th} mode={mode} inLine={inLine} onJoin={() => (openWaitlist as (a: string | { city?: string; tier?: string }) => void)({ city: e.slug })} />
             </div>
           </div>
         </div>

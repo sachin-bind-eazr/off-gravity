@@ -21,6 +21,7 @@ export function TicketCard({ tier, index, slug, dim, jaipurDates, onHold, onSwit
   const night = tier.stubColour === "night";
   return (
     <li className={`tk-card${night ? " tk-card--night" : ""}${dim ? " tk-card--dim" : ""}`} style={{ ["--i" as string]: index, ["--accent" as string]: accent }}>
+      {dim && <span className="tk-only">Jaipur only</span>}
       {tier.badge && <span className={`tk-badge tk-badge--${tier.badge}`}>{tier.badge === "popular" ? "Most popular" : "Limited"}</span>}
       <div className="tk-body">
         <span className="tk-bar" aria-hidden="true" />

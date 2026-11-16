@@ -1,3 +1,4 @@
+import "./nav.css";
 import Link from "next/link";
 import { Logo } from "./Logo";
 import { TOUR } from "@/lib/tour";
@@ -5,14 +6,15 @@ import { HOME } from "@/content/home";
 
 const head = "mb-4 text-[16px] font-extrabold text-white";
 const link = "block py-1.5 text-[16px] text-on-dark hover:text-mint";
-const plain = "block py-1.5 text-[16px] text-on-dark";
+/* unconfirmed contact details (see HOME.footer, flagged confirm): muted, not link-styled, until the client supplies real ones */
+const plain = "block py-1.5 text-[15px] italic text-white/45";
 
 export function SiteFooter() {
   return (
     <footer className="bg-ink-deep text-on-dark">
       <div className="mx-auto grid max-w-[1312px] grid-cols-2 gap-x-8 gap-y-10 px-[var(--pad)] py-[var(--section-y-tight)] min-[860px]:grid-cols-[1.4fr_1fr_1fr_1.2fr]">
         <div className="col-span-2 min-[860px]:col-span-1">
-          <Logo height={64} />
+          <Logo height={64} className="og-logo" />
           <p className="mt-5 max-w-[320px] text-[16px]">{HOME.footer.blurb}</p>
         </div>
         <nav aria-label="Footer">
@@ -32,9 +34,9 @@ export function SiteFooter() {
         </nav>
         <div>
           <h2 className={head}>Connect</h2>
-          <p className={plain}>{HOME.footer.contactEmail.value}</p>
-          <p className={plain}>[Phone TBC]</p>
-          <p className={plain}>{HOME.footer.instagram.value}</p>
+          <p className={plain} data-confirm="true" title={HOME.footer.contactEmail.note}>{HOME.footer.contactEmail.value}</p>
+          <p className={plain} data-confirm="true">[Phone TBC]</p>
+          <p className={plain} data-confirm="true" title={HOME.footer.instagram.note}>{HOME.footer.instagram.value}</p>
         </div>
       </div>
       <div className="border-t border-white/10">

@@ -12,7 +12,7 @@ export function HeroActions({ mode }: { mode: HeroCtaMode }) {
   const video = useVideoModal();
   const waitlist = useWaitlist();
   return (
-    <div className="mt-9 flex flex-wrap items-center gap-x-4 gap-y-4">
+    <div className="og-hero__actions mt-9 flex flex-wrap items-center gap-x-4 gap-y-4">
       {mode === "waitlist" && (
         <button type="button" onClick={() => waitlist.open()} className="btn-primary">Join the waitlist<ArrowIcon /></button>
       )}

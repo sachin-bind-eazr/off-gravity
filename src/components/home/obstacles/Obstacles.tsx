@@ -5,6 +5,7 @@ import { HOME } from "@/content/home";
 import { CHAPTER_RANGES, CHAPTER_STARTS, TEASER } from "@/content/video";
 import { TeaserVideo, useVideoModal } from "@/components/video";
 import "./obstacles.css";
+import "./obstacles-polish.css";
 
 const O = HOME.obstacles;
 const clamp = (v: number) => Math.min(1, Math.max(0, v));
@@ -83,6 +84,8 @@ function Pinned({ secRef, videoRef, barRefs, active, go, pill }: PinnedProps) {
         <div className="ob-stage">
           <motion.div className="ob-clip" style={{ clipPath: clip }}>
             <TeaserVideo ref={videoRef} className="ob-video" />
+            <div className="ob-grade" aria-hidden="true" />
+            <div className="ob-topscrim" aria-hidden="true" />
             <motion.div className="ob-grad" style={{ opacity: overOpacity }} />
           </motion.div>
           <motion.div className="ob-pre" style={{ opacity: preOpacity }} aria-hidden={revealed}>
@@ -166,13 +169,18 @@ export default function Obstacles() {
     return (
       <section id="obstacles" ref={secRef} className="ob ob-static" aria-labelledby="ob-h2" style={POSTER_VAR}>
         <div className="ob-static-in">
-          <p className="ob-kicker">{O.kicker}</p>
-          <h2 id="ob-h2" className="ob-h2">{O.h2}</h2>
-          <p className="ob-line">{O.line}</p>
           <div className="ob-frame">
             <TeaserVideo ref={videoRef} className="ob-video" />
+            <div className="ob-grade" aria-hidden="true" />
+            <div className="ob-topscrim" aria-hidden="true" />
+            <div className="ob-frame-grad" aria-hidden="true" />
             <div className="ob-top">{pill}</div>
+            <div className="ob-frame-copy">
+              <p className="ob-kicker">{O.kicker}</p>
+              <h2 id="ob-h2" className="ob-h2">{O.h2}</h2>
+            </div>
           </div>
+          <p className="ob-line">{O.line}</p>
           <Chips active={active} onGo={go} barRefs={barRefs} scroll />
           <Caption />
           <Stats />

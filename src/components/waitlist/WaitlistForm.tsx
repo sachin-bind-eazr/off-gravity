@@ -101,7 +101,7 @@ export function WaitlistForm({ cities, initialSlug, source = "site", variant = "
       <div>
         <label className="flex cursor-pointer items-start gap-3 text-[15px] font-semibold">
           <input type="checkbox" className="mt-1 h-5 w-5 shrink-0 accent-[#02D69C]" checked={consent} onChange={(e) => setConsent(e.target.checked)} aria-invalid={!!errs.consent} aria-describedby={errs.consent ? `${id}-consent-err` : undefined} />
-          <span>Message me about this event. Dates are provisional, subject to venue and permission confirmations.</span>
+          <span>Email me about OFF GRAVITY tickets and updates.</span>
         </label>
         {errs.consent && <p id={`${id}-consent-err`} role="alert" className={errCls}>{errs.consent}</p>}
       </div>

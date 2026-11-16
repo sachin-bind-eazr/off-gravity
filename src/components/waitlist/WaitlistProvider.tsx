@@ -1,6 +1,6 @@
 "use client";
 import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from "react";
-import { WaitlistDrawer } from "./WaitlistDrawer";
+import { WaitlistModal } from "./WaitlistModal";
 import { tourCities, type WaitlistTier } from "./ticket";
 
 export type WaitlistCity = { slug: string; city: string; start?: string; end?: string; waitlistCount?: number | null; glow?: boolean };
@@ -21,7 +21,7 @@ export function WaitlistProvider({ cities, events, children }: {
     // Every city that is not cancelled / sales-closed can take waitlist sign-ups (events are still provisional).
     return (events ?? []).filter((e) => e.status !== "CANCELLED" && e.status !== "SALES_CLOSED");
   }, [cities, events]);
-  const drawerCities = useMemo(() => tourCities(list), [list]);
+  const modalCities = useMemo(() => tourCities(list), [list]);
   const [state, setState] = useState<{ open: boolean; slug?: string; tier?: WaitlistTier; seq: number }>({ open: false, seq: 0 });
   const open = useCallback((arg?: WaitlistOpenArg) => {
     const a = typeof arg === "string" ? { city: arg } : arg ?? {};
@@ -32,7 +32,7 @@ export function WaitlistProvider({ cities, events, children }: {
   return (
     <C.Provider value={value}>
       {children}
-      {state.open && <WaitlistDrawer key={state.seq} cities={drawerCities} initialSlug={state.slug} initialTier={state.tier} onClose={close} />}
+      {state.open && <WaitlistModal key={state.seq} cities={modalCities} initialSlug={state.slug} initialTier={state.tier} onClose={close} />}
     </C.Provider>
   );
 }

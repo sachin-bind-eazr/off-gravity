@@ -131,12 +131,16 @@ describe("cta mode", () => {
   it("maps status to mode", () => {
     expect(ctaMode({ status: "WAITLIST_OPEN" })).toBe("waitlist");
     expect(ctaMode({ status: "SALES_OPEN" })).toBe("book");
-    expect(ctaMode({ status: "PROVISIONAL" })).toBe("none");
+    expect(ctaMode({ status: "PROVISIONAL" })).toBe("waitlist");
+    expect(ctaMode({ status: "CONFIRMED" })).toBe("waitlist");
+    expect(ctaMode({ status: "CANCELLED" })).toBe("none");
+    expect(ctaMode({ status: "SALES_CLOSED" })).toBe("none");
   });
   it("sales beats waitlist beats none", () => {
     expect(ctaFor([{ status: "PROVISIONAL" }, { status: "WAITLIST_OPEN" }, { status: "SALES_OPEN" }])).toBe("book");
     expect(ctaFor([{ status: "PROVISIONAL" }, { status: "WAITLIST_OPEN" }])).toBe("waitlist");
-    expect(ctaFor([{ status: "PROVISIONAL" }])).toBe("none");
+    expect(ctaFor([{ status: "PROVISIONAL" }])).toBe("waitlist");
+    expect(ctaFor([{ status: "CANCELLED" }, { status: "SALES_CLOSED" }])).toBe("none");
   });
 });
 

@@ -1,11 +1,14 @@
 /* S2 "What is OFF GRAVITY": sticky-scroll stack on desktop, swipe carousel below 900px. Layout is media-query driven so SSR matches. */
 .st-section{scroll-margin-top:72px}
+.st-section.section-y{padding-top:clamp(56px,6vw,88px)}
+.st-h2{font-size:clamp(34px,3.9vw,56px);max-width:15ch}
+.st-body p{max-width:46ch}
 .st-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:40px;align-items:start}
 .st-left{max-width:620px}
 .st-stack{list-style:none;margin:0;padding:0}
-.st-card{position:relative;overflow:hidden;border-radius:28px;aspect-ratio:4/5;width:100%;background:var(--color-ink);transform-origin:50% 0;isolation:isolate}
-.st-media{position:absolute;inset:0}
-.st-img{object-fit:cover;object-position:50% 40%}
+.st-card{position:relative;overflow:hidden;border-radius:28px;aspect-ratio:5/6;width:100%;background:var(--color-ink);transform-origin:50% 0;isolation:isolate;box-shadow:0 -14px 40px rgb(14 21 32/.18),0 24px 60px -24px rgb(14 21 32/.35)}
+.st-media,.st-media.og-grade{position:absolute;inset:0}
+.st-img{object-fit:cover;transform:scale(1.22);transform-origin:40% 100%}
 .st-band{position:absolute;left:0;right:0;bottom:0;padding:20px 24px 24px;display:grid;grid-template-columns:auto 1fr;column-gap:18px;row-gap:2px;align-items:end}
 .st-num{grid-row:1 / span 2;font-style:italic;font-weight:900;font-stretch:118%;letter-spacing:-.04em;line-height:.85;font-size:clamp(46px,4.4vw,64px)}
 .st-title{font-weight:800;font-stretch:102%;letter-spacing:-.02em;line-height:1.05;font-size:clamp(24px,2.2vw,30px)}
@@ -39,13 +42,20 @@
 .st-nav button:disabled{opacity:.3;cursor:default}
 .st-nav__dots{display:flex;gap:8px}
 .st-nav__dots i{width:8px;height:8px;border-radius:50%;background:rgb(29 38 50/.25);transition:transform .25s,background .25s}
-.st-nav__dots i[data-on="true"]{background:var(--color-ink);transform:scale(1.35)}
+.st-nav__dots{align-items:center}
+.st-nav__dots i{height:6px;width:6px;border-radius:6px;transition:width .3s,background .3s}
+.st-nav__dots i[data-on="true"]{background:var(--color-ink);width:26px}
 
 /* < 900px: swipe carousel, no pinning */
 @media (max-width:899.98px){
+  .st-section.section-y{padding-block:56px 64px}
+  .st-grid{gap:28px}
+  .st-h2{max-width:none}
   .st-stack{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-inline:var(--pad);margin-inline:calc(var(--pad) * -1);padding-inline:var(--pad);padding-bottom:6px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
   .st-stack::-webkit-scrollbar{display:none}
-  .st-item{flex:0 0 min(82%,380px);scroll-snap-align:start}
+  .st-item{flex:0 0 min(88%,420px);scroll-snap-align:center}
+  .st-band{padding:18px 20px 22px}
+  .st-line{font-size:16px}
   .st-progress .st-dots{display:none}
   .st-progress{margin-top:24px}
   .st-count{font-size:28px}
@@ -54,9 +64,9 @@
   .st-grid{grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(40px,5vw,80px)}
   .st-left{position:sticky;top:104px}
   .st-nav{display:none}
-  .st-item{position:sticky;top:calc(var(--st-top,104px) + var(--i) * var(--st-peek,12px));margin-bottom:22svh;display:flex;justify-content:center}
+  .st-item{position:sticky;top:calc(var(--st-top,104px) + var(--i) * var(--st-peek,0px));margin-bottom:22svh;display:flex;justify-content:center}
   .st-item:last-child{margin-bottom:0}
-  .st-card{width:auto;height:min(76svh,720px);max-width:100%}
+  .st-card{width:auto;height:min(80svh,760px);max-width:100%}
   .st-item .st-card{will-change:transform}
 }
 /* reduced motion: static readable stack, no pinning */

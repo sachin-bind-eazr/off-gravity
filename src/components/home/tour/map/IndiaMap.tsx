@@ -154,11 +154,19 @@ export function IndiaMap({ events, selected, onSelect }: { events: EventView[]; 
     const dots: R[] = pos.map((p) => ({ l: p.x - 17, t: p.y - 17, r: p.x + 17, b: p.y + 17 }));
     const placed: R[] = [];
     const wrapEl = wrap.current;
-    const cardEl = wrapEl?.parentElement?.querySelector<HTMLElement>(".og-tour-in");
+    const panelEl = wrapEl?.parentElement?.parentElement ?? null; // card lives in the panel, beside the map container
+    const cardEl = panelEl?.querySelector<HTMLElement>(".og-tour-in") ?? null;
     const obstacles: R[] = [];
     if (wrapEl && cardEl && getComputedStyle(cardEl).position === "absolute") {
-      const wr = wrapEl.getBoundingClientRect(), cr = cardEl.getBoundingClientRect();
-      obstacles.push({ l: cr.left - wr.left - 4, t: cr.top - wr.top - 4, r: cr.right - wr.left + 4, b: cr.bottom - wr.top + 4 });
+      // layout-based box (offset*), so an in-flight scale/translate animation on the card can't shrink the obstacle
+      const box = wrapEl.parentElement!; // positioned container of the map
+      if (cardEl.offsetParent === box.offsetParent) {
+        const l = cardEl.offsetLeft - box.offsetLeft, t = cardEl.offsetTop - box.offsetTop;
+        obstacles.push({ l: l - 8, t: t - 8, r: l + cardEl.offsetWidth + 8, b: t + cardEl.offsetHeight + 8 });
+      } else {
+        const wr = wrapEl.getBoundingClientRect(), cr = cardEl.getBoundingClientRect();
+        obstacles.push({ l: cr.left - wr.left - 8, t: cr.top - wr.top - 8, r: cr.right - wr.left + 8, b: cr.bottom - wr.top + 8 });
+      }
     }
     const sides: Record<string, Side> = {};
     const hide: Record<string, boolean> = {};
@@ -203,6 +211,9 @@ export function IndiaMap({ events, selected, onSelect }: { events: EventView[]; 
     if (!geo) return;
     cancelAnimationFrame(raf.current);
     placeLabels(slug);
+    // the floating card swaps content (and size) right after selection: re-run placement once it has settled
+    window.setTimeout(() => placeLabels(slug), 60);
+    window.setTimeout(() => placeLabels(slug), 400);
     const to = targetFor(slug);
     const start = { ...view.current };
     if (reduced.current) { view.current = to; apply(to, null); return; }
@@ -250,6 +261,18 @@ export function IndiaMap({ events, selected, onSelect }: { events: EventView[]; 
     prevSel.current = selected;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selected]);
+
+  // The floating card swaps/animates its content after a selection; re-run label placement whenever it changes
+  useEffect(() => {
+    if (!geo) return;
+    const host = wrap.current?.parentElement?.parentElement; if (!host) return;
+    let t: ReturnType<typeof setTimeout> | null = null;
+    const mo = new MutationObserver(() => { if (t) clearTimeout(t); t = setTimeout(() => placeLabels(prevSel.current ?? selected), 80); });
+    mo.observe(host, { childList: true, subtree: true, attributes: true, attributeFilter: ["class", "style"] });
+    const ro = new ResizeObserver(() => placeLabels(prevSel.current ?? selected));
+    host.querySelectorAll<HTMLElement>(".og-tour-in").forEach((n) => ro.observe(n));
+    return () => { mo.disconnect(); ro.disconnect(); if (t) clearTimeout(t); };
+  }, [geo, placeLabels, selected]);
 
   useEffect(() => () => { cancelAnimationFrame(raf.current); if (firstTimer.current) clearTimeout(firstTimer.current); }, []);
 

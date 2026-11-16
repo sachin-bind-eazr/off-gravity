@@ -19,7 +19,7 @@ export function Hero({ events }: { events: EventView[] }) {
           <div className="og-hero__col">
             <p className="text-[15px] font-bold text-mint">India&rsquo;s first play-fitness festival</p>
             <h1 className="t-campaign og-hero__h1 mt-4">Fitness,<br />minus the<br />gravity.</h1>
-            <p className="mt-6 max-w-[440px] text-[clamp(17px,1.5vw,20px)] leading-[1.55] text-on-dark">Race a timed course of giant inflatable obstacles, then stay for the festival. Two days in six cities, from 30 January 2027.</p>
+            <p className="og-hero__lead mt-6 max-w-[440px] text-[clamp(17px,1.5vw,20px)] leading-[1.55] text-on-dark">Race a timed course of giant inflatable obstacles, then stay for the festival. Two days in six cities, from 30 January 2027.</p>
             <HeroActions mode={mode} />
           </div>
         </div>
@@ -27,7 +27,7 @@ export function Hero({ events }: { events: EventView[] }) {
       </div>
       <div className="og-hero__strip">
         <div className="mx-auto max-w-[1312px] overflow-x-auto px-[var(--pad)]">
-          <ul className="flex min-w-max items-center gap-8 py-5 text-[15px]">
+          <ul className="flex min-w-max items-center gap-8 py-5 text-[16px]">
             <li>
               <Link href={`/events/${next.slug}`} className="flex items-center gap-3">
                 <span className="h-2.5 w-2.5 rounded-full bg-mint" aria-hidden />
