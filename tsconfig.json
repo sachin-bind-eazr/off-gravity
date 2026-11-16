@@ -44,11 +44,14 @@
     ".next-d/types/**/*.ts",
     ".next-dd/types/**/*.ts",
     ".next-f/types/**/*.ts",
+    ".next-m/types/**/*.ts",
+    ".next-s/types/**/*.ts",
     ".next-t/types/**/*.ts",
     ".next-w/types/**/*.ts",
+    ".next-y/types/**/*.ts",
     ".next/types/**/*.ts",
     "next-env.d.ts",
-    ".next-s/types/**/*.ts"
+    ".next-m2/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"

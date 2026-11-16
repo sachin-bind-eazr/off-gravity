@@ -3,7 +3,9 @@ import { useEffect, useRef, useState } from "react";
 import { TicketCard } from "./TicketCard";
 import type { TierCard } from "./types";
 
-export function TicketRail({ tiers, slug, city, cityCode, mode, onHold }: { tiers: TierCard[]; slug: string; city: string; cityCode: string; mode: "waitlist" | "book" | "none"; onHold: (t: TierCard) => void }) {
+export function TicketRail({ tiers, slug, city, jaipurDates, onHold, onSwitch }: {
+  tiers: TierCard[]; slug: string; city: string; jaipurDates: string; onHold: (t: TierCard) => void; onSwitch: () => void;
+}) {
   const ref = useRef<HTMLUListElement>(null);
   const [active, setActive] = useState(0);
   useEffect(() => {
@@ -13,8 +15,7 @@ export function TicketRail({ tiers, slug, city, cityCode, mode, onHold }: { tier
       cancelAnimationFrame(raf);
       raf = requestAnimationFrame(() => {
         const first = el.children[0] as HTMLElement | undefined; if (!first) return;
-        const step = first.offsetWidth + 16;
-        setActive(Math.max(0, Math.min(tiers.length - 1, Math.round(el.scrollLeft / step))));
+        setActive(Math.max(0, Math.min(tiers.length - 1, Math.round(el.scrollLeft / (first.offsetWidth + 16)))));
       });
     };
     el.scrollLeft = 0; setActive(0);
@@ -28,8 +29,11 @@ export function TicketRail({ tiers, slug, city, cityCode, mode, onHold }: { tier
   };
   return (
     <div>
-      <ul ref={ref} key={slug} className="tk-rail" style={{ ["--cols" as string]: Math.min(4, tiers.length) }} role="region" aria-label={`Ways in for ${city}, ${tiers.length} ticket tiers`} tabIndex={0}>
-        {tiers.map((t, i) => <TicketCard key={`${slug}-${t.id}`} tier={t} index={i} slug={slug} cityCode={cityCode} mode={mode} onHold={onHold} />)}
+      <ul ref={ref} key={slug} className="tk-rail" role="region" aria-label={`Ways in for ${city}, ${tiers.length} ticket tiers`} tabIndex={0}>
+        {tiers.map((t, i) => (
+          <TicketCard key={`${slug}-${t.id}`} tier={t} index={i} slug={slug} jaipurDates={jaipurDates}
+            dim={t.tierKey === "glow" && slug !== "jaipur"} onHold={onHold} onSwitch={onSwitch} />
+        ))}
       </ul>
       {tiers.length > 1 && (
         <div className="tk-dots" role="group" aria-label="Choose a tier">
