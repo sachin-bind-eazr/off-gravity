@@ -13,7 +13,7 @@ export const HOME = {
     ],
     // `photo` = file in public/images/story (without .jpg); `alt` describes what the photo shows
     panels: [
-      { id: "timed", n: "01", title: "Timed racing", line: "Every wave runs on the clock.", tone: "mint", photo: "01-timed-racing", alt: "Sprinters pushing off from starting blocks at the start line of a race track" },
+      { id: "timed", n: "01", title: "Timed racing", line: "Every wave runs on the clock.", tone: "mint", photo: "01-timed-racing", alt: "Two sprinters crouched in their starting positions on a red running track, focused on the start line" },
       { id: "leaderboards", n: "02", title: "Live leaderboards", line: "Rankings update all weekend.", tone: "ink", photo: "02-live-leaderboards", alt: "Two athletes in red sportswear sitting on an indoor track, smiling as they check a phone together" },
       { id: "family", n: "03", title: "Family wave", line: "A wave for parents and kids.", tone: "lilac", photo: "03-family-wave", alt: "A smiling mother lifting her laughing toddler into the air outdoors", confirm: { confirm: true, note: "Family wave age limit (reference said 6+ / 6–14)" } },
       { id: "glow", n: "04", title: "Glow Night", line: "Saturday after dark, lights on.", tone: "night", photo: "04-glow-night", alt: "Festival crowd at night with raised hands under blue and orange stage lights", confirm: { confirm: true, note: "UV kits and live DJ at Glow Night" } },

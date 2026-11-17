@@ -9,7 +9,7 @@
 
 ## Story panels 01-03 ("What is OFF GRAVITY")
 All photos: Pexels Licence (free to use, no attribution required; credited here anyway). Edits for all: cropped to 16:10, resized to 2000x1250 (no upscaling), mild warm-daylight channel grade + 3% saturation, no tint/duotone; script `scripts/story-photos.mjs`. Shown with an "Illustrative image" caption.
-- `public/images/story/01-timed-racing.jpg` (+ `-sm.jpg`): "Sprinters on a running track" (Pexels photo 19787364), photographer: zheng liang; https://www.pexels.com/photo/sprinters-on-a-running-track-19787364/ . Panel 01 Timed racing.
+- `public/images/story/01-timed-racing.jpg` (+ `-sm.jpg`): "Strong sportsmen ready for running on stadium" (Pexels photo 3764011), photographer: Andrea Piacquadio, https://www.pexels.com/photo/strong-sportsmen-ready-for-running-on-stadium-3764011/ . Panel 01 Timed racing. Cropped to 16:10 from 2400x1645 (top offset 120), same grade. Replaces Pexels 19787364 (visible FeiLu logo on lane boxes, Nike marks).
 - `public/images/story/02-live-leaderboards.jpg` (+ `-sm.jpg`): "Professional athletes watching video on smartphone" (Pexels photo 3763870), photographer: Andrea Piacquadio, https://www.pexels.com/photo/professional-athletes-watching-video-on-smartphone-3763870/ . Panel 02 Live leaderboards (athletes checking times on a phone; stand-in, no results screen).
 - `public/images/story/03-family-wave.jpg` (+ `-sm.jpg`): "Joyful Mother Lifting Happy Child Outdoors" (Pexels photo 32575092), photographer: Bhola Chourasia, https://www.pexels.com/photo/joyful-mother-lifting-happy-child-outdoors-32575092/ . Panel 03 Family wave. Cropped to 16:10 from the 4000x6000 portrait original (top offset 1150), same grade. Replaces Pexels 34081285 (third-party shirt text/adidas marks).
 

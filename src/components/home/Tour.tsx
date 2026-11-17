@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import type { EventView } from "@/lib/events";
 import { fmtFull, fmtRange } from "./format";
-import { IndiaMap } from "./tour/map/IndiaMap";
+import { LazyIndiaMap as IndiaMap } from "./tour/map/LazyIndiaMap";
 import { HOME } from "@/content/home";
 import { ctaMode } from "@/lib/cta";
 import { useWaitlist } from "@/components/waitlist";

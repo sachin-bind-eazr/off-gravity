@@ -1,6 +1,7 @@
 "use client";
 import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from "react";
-import { WaitlistModal } from "./WaitlistModal";
+import dynamic from "next/dynamic";
+const WaitlistModal = dynamic(() => import("./WaitlistModal").then((m) => m.WaitlistModal), { ssr: false });
 import { tourCities, type WaitlistTier } from "./ticket";
 
 export type WaitlistCity = { slug: string; city: string; start?: string; end?: string; waitlistCount?: number | null; glow?: boolean };

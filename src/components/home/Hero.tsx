@@ -14,7 +14,7 @@ export function Hero({ events }: { events: EventView[] }) {
     <section className="og-hero">
       <div className="og-hero__stage">
         <div className="og-hero__art">
-          <Image src="/assets/art/hero-course.webp" alt="Campaign artwork: runners racing across giant inflatable slides and obstacles" fill priority quality={92} sizes="100vw" />
+          <Image src="/assets/art/hero-course.webp" alt="Campaign artwork: runners racing across giant inflatable slides and obstacles" fill priority fetchPriority="high" quality={75} sizes="100vw" />
         </div>
         <Container className="og-hero__copy">
           <div className="grid-12">

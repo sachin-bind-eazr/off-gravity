@@ -4,8 +4,9 @@ import { ctaFor } from "@/lib/cta";
 import { WaitlistProvider } from "@/components/waitlist";
 import { Hero } from "@/components/home/Hero";
 import { Story } from "@/components/home/story/Story";
-import { Obstacles } from "@/components/home/obstacles";
-import { Tour } from "@/components/home/Tour";
+import dynamic from "next/dynamic";
+const Obstacles = dynamic(() => import("@/components/home/obstacles/Obstacles"));
+const Tour = dynamic(() => import("@/components/home/Tour").then((m) => m.Tour));
 import { FinalCta } from "@/components/home/FinalCta";
 import { HeaderCta } from "@/components/home/HeaderCta";
 

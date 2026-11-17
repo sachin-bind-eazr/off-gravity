@@ -11,6 +11,7 @@ import "./obstacles.css";
 
 const O = HOME.obstacles;
 const POSTER_VAR = { "--ob-poster": `url(${TEASER.poster})` } as React.CSSProperties;
+const NO_POSTER = {} as React.CSSProperties;
 type Mode = "idle" | "playing" | "paused";
 
 export default function Obstacles() {
@@ -19,6 +20,7 @@ export default function Obstacles() {
   const [mode, setMode] = useState<Mode>("idle");
   const [muted, setMuted] = useState(true);
   const [full, setFull] = useState(false);
+  const [near, setNear] = useState(false);
 
   // reveal the <video> only once playing; poster shows until then
   useEffect(() => {
@@ -33,6 +35,14 @@ export default function Obstacles() {
   useEffect(() => {
     const el = frameRef.current; if (!el) return;
     const io = new IntersectionObserver(([e]) => setFull(e.intersectionRatio >= 0.95), { threshold: [0, 0.5, 0.9, 0.95, 1], rootMargin: "-72px 0px 0px 0px" });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  // load the poster only when the video is within one viewport (it is far below the fold)
+  useEffect(() => {
+    const el = frameRef.current; if (!el) return;
+    const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setNear(true); io.disconnect(); } }, { rootMargin: "100% 0px" });
     io.observe(el);
     return () => io.disconnect();
   }, []);
@@ -73,7 +83,7 @@ export default function Obstacles() {
         <p className="t-kicker on-dark">{O.kicker}</p>
         <Button variant="ghost-on-dark" size="md" leadingIcon={Icon} onClick={toggle}>{label}</Button>
       </div>
-      <div ref={frameRef} className="ob-frame" style={POSTER_VAR}>
+      <div ref={frameRef} className="ob-frame" style={near ? POSTER_VAR : NO_POSTER}>
         <TeaserVideo ref={videoRef} className="ob-video" />
         <button type="button" className="ob-speaker" data-show={full} tabIndex={full ? 0 : -1} aria-hidden={!full}
           aria-label={muted ? "Unmute video" : "Mute video"} aria-pressed={muted} onClick={toggleMute}>

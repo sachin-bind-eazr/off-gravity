@@ -31,15 +31,8 @@
   "include": [
     "**/*.ts",
     "**/*.tsx",
-    ".next-audit/types/**/*.ts",
-    ".next-chrome/types/**/*.ts",
-    ".next-found/types/**/*.ts",
-    ".next-lh/types/**/*.ts",
-    ".next-story/types/**/*.ts",
-    ".next-video/types/**/*.ts",
     ".next/types/**/*.ts",
-    "next-env.d.ts",
-    ".next-perf/types/**/*.ts"
+    "next-env.d.ts"
   ],
   "exclude": [
     "node_modules"

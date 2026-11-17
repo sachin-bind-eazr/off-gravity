@@ -2,7 +2,6 @@
 import { useId, useRef, useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/Button";
-import { waitlistSchema } from "@/lib/schemas/waitlist";
 import type { WaitlistCity } from "./WaitlistProvider";
 import "./waitlist.css";
 
@@ -29,7 +28,8 @@ export function WaitlistForm({ cities, initialSlug, source = "site", variant = "
   const errCls = `wl-err t-label ${dark ? "wl-err--dark" : ""}`;
   const input = `wl-input ${dark ? "wl-input--dark" : ""}`;
 
-  function validate(): Errs {
+  async function validate(): Promise<Errs> {
+    const { waitlistSchema } = await import("@/lib/schemas/waitlist"); // zod loads on first submit, not on page load
     const r = waitlistSchema.safeParse({ eventSlug: slug, email, whatsappNumber: wa, consent, source, website: hp });
     if (r.success) return {};
     const e: Errs = {};
@@ -43,10 +43,10 @@ export function WaitlistForm({ cities, initialSlug, source = "site", variant = "
   async function submit(ev: React.FormEvent) {
     ev.preventDefault();
     if (submitting.current) return;
-    const e = validate();
-    setErrs(e);
-    if (Object.keys(e).length) return;
     submitting.current = true;
+    const e = await validate();
+    setErrs(e);
+    if (Object.keys(e).length) { submitting.current = false; return; }
     setBusy(true);
     try {
       const res = await fetch("/api/waitlist", {

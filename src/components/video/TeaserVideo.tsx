@@ -37,7 +37,7 @@ export const TeaserVideo = forwardRef<HTMLVideoElement, Props>(function TeaserVi
   const showPlay = reduced && !manual;
   return (
     <div className={className} style={{ position: "relative", overflow: "hidden" }}>
-      <video ref={vid} muted loop playsInline preload="none" poster={poster} aria-label={label}
+      <video ref={vid} muted loop playsInline preload="none" poster={near ? poster : undefined} aria-label={label}
         autoPlay={!reduced} style={{ width: "100%", height: "100%", objectFit: fit, display: "block" }}>
         {near && !showPlay && <>
           <source src={TEASER.mp4Mobile} type="video/mp4" media="(max-width: 700px)" />

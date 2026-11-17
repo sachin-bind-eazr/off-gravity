@@ -3,7 +3,7 @@
 import sharp from "sharp";
 const dir = process.argv[2];
 const P = [ // id, slug, crop [left, top, width, height] in source px
-  [19787364, "01-timed-racing", [80, 0, 2248, 1405]],
+  [3764011, "01-timed-racing", [0, 120, 2400, 1500]],
   [3763870, "02-live-leaderboards", [0, 103, 2400, 1500]],
   [32575092, "03-family-wave", [0, 1150, 4000, 2500]],
 ];
