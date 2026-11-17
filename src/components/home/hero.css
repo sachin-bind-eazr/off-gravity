@@ -7,7 +7,8 @@
 .og-hero__lead{margin-top:var(--s-24);color:var(--color-on-dark)}
 .og-hero__actions{margin-top:var(--s-32);display:flex;flex-wrap:wrap;gap:var(--s-16)}
 @media (min-width:1000px){
-  .og-hero__stage{display:flex;align-items:center;min-height:clamp(640px,calc(100svh - var(--nav-h) - 72px),960px)}
+  /* nav floats over the hero (homepage overlay), so the stage fills the viewport minus the city strip */
+  .og-hero__stage{display:flex;align-items:center;min-height:clamp(640px,calc(100svh - 72px),1032px)}
   .og-hero__art{position:absolute;inset:0;aspect-ratio:auto}
   .og-hero__art::after{content:"";position:absolute;inset:0;background:rgb(14 21 32/.72)}
   .og-hero__copy{width:100%}

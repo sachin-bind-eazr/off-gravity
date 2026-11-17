@@ -1,9 +1,16 @@
 /* Logo: trim the 1-2px colour fringe left by the stop-gap crop (replace with the vector logo when supplied) */
 .og-logo img{clip-path:inset(3px 2px 3px 2px round 9px)}
-/* Static (non-sticky) header: logo left, links in a rounded pill centre, My bookings button right */
-.og-nav{position:relative;z-index:50;background:var(--color-ink);color:#fff}
+/* Floating header, no bar background: logo left, links in a rounded pill centre, My bookings button right.
+   Hides on scroll down, slides back on scroll up. (No will-change: it would trap the fixed mobile menu.) */
+.og-nav__spacer{height:var(--nav-h)}
+.og-nav{position:fixed;top:0;left:0;right:0;z-index:50;background:transparent;color:#fff;transition:transform .45s cubic-bezier(.22,.8,.24,1)}
+.og-nav[data-hidden="true"]{transform:translateY(calc(-100% - 8px))}
+.og-nav .og-nav__logo{display:inline-flex;align-items:center;justify-self:start;height:52px;padding:0 var(--s-12);border-radius:16px;border:1px solid rgb(255 255 255/.14)}
+.og-nav .og-nav__chip,.og-nav .og-nav__links,.og-nav .og-nav__logo{background:rgb(14 21 32/.78);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+.og-nav .og-nav__chip{border-color:rgb(255 255 255/.5)}
+.og-nav .og-nav__chip:hover{background:#fff;color:var(--color-ink);border-color:#fff}
 .og-nav__bar{display:flex;align-items:center;justify-content:space-between;gap:var(--s-16);height:var(--nav-h)}
-.og-nav__links{display:none;align-items:center;gap:var(--s-4);padding:var(--s-4);border-radius:999px;background:rgb(255 255 255/.08);border:1px solid rgb(255 255 255/.14)}
+.og-nav__links{display:none;align-items:center;gap:var(--s-4);padding:var(--s-4);border-radius:999px;border:1px solid rgb(255 255 255/.14)}
 .og-nav__right{display:flex;align-items:center;justify-content:flex-end;gap:var(--s-12)}
 .og-nav .og-nav__mylink{display:none}
 @media (min-width:640px){.og-nav .og-nav__mylink{display:inline-flex}}
@@ -30,4 +37,4 @@
 .og-footer__bar{border-top:1px solid rgb(255 255 255/.12);margin-top:var(--s-64);padding-top:var(--s-24);display:flex;flex-wrap:wrap;justify-content:space-between;gap:var(--s-12) var(--s-32)}
 .og-footer__bar nav{display:flex;flex-wrap:wrap;gap:var(--s-8) var(--s-24)}
 .og-footer__bar a:hover{color:var(--color-mint)}
-@media (prefers-reduced-motion:reduce){.og-navlink{transition:none}}
+@media (prefers-reduced-motion:reduce){.og-navlink,.og-nav{transition:none}}

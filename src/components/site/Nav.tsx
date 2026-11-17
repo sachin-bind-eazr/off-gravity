@@ -13,10 +13,29 @@ const LINKS = [
   { href: "/#tour", label: "2027 tour" },
   { href: "/events/mumbai#faqs", label: "FAQs" },
 ];
-export function SiteNav({ cta }: { cta?: React.ReactNode } = {}) {
+export function SiteNav({ cta, overlay = false }: { cta?: React.ReactNode; overlay?: boolean } = {}) {
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState<string | null>(null);
+  // hide on scroll down, reveal on scroll up (any section)
+  const [hidden, setHidden] = useState(false);
+  const lastY = useRef(0);
+  useEffect(() => {
+    let raf = 0;
+    lastY.current = window.scrollY;
+    const tick = () => {
+      raf = 0;
+      const y = window.scrollY;
+      const dy = y - lastY.current;
+      if (y < 80) setHidden(false);
+      else if (dy > 6) setHidden(true);
+      else if (dy < -6) setHidden(false);
+      if (Math.abs(dy) > 6 || y < 80) lastY.current = y;
+    };
+    const onScroll = () => { if (!raf) raf = requestAnimationFrame(tick); };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => { window.removeEventListener("scroll", onScroll); if (raf) cancelAnimationFrame(raf); };
+  }, []);
   // active-section underline: whichever section spans the viewport's middle line.
   // Re-queries the DOM each time: homepage sections can remount when layout mode (pinned/static) resolves.
   useEffect(() => {
@@ -52,16 +71,18 @@ export function SiteNav({ cta }: { cta?: React.ReactNode } = {}) {
     return () => { document.body.style.overflow = prev; document.removeEventListener("keydown", onKey); };
   }, [open]);
   return (
-    <header className="og-nav">
+    <>
+    {!overlay && <div className="og-nav__spacer" aria-hidden />}
+    <header className="og-nav" data-hidden={hidden && !open ? "true" : undefined} onFocusCapture={() => setHidden(false)}>
       <Container>
         <div className="og-nav__bar">
-          <Logo height={50} className="og-logo" />
+          <Logo height={40} className="og-logo og-nav__logo" />
           <nav aria-label="Main" className="og-nav__links">
             {LINKS.map((l) => { const id = l.href.startsWith("/#") ? l.href.slice(2) : ""; return <Link key={l.label} href={l.href} className="og-navlink" aria-current={id && active === id ? "location" : undefined}>{l.label}</Link>; })}
           </nav>
           <div className="og-nav__right">
-            <Button href="/my-bookings" variant="ghost-on-dark" leadingIcon={Ticket} className="og-nav__mylink">My bookings</Button>
-            <Button id="menu-btn" variant="ghost-on-dark" leadingIcon={Menu} aria-expanded={open} aria-controls="mobile-menu" onClick={() => setOpen(true)} className="og-nav__burger">Menu</Button>
+            <Button href="/my-bookings" variant="ghost-on-dark" leadingIcon={Ticket} className="og-nav__mylink og-nav__chip">My bookings</Button>
+            <Button id="menu-btn" variant="ghost-on-dark" leadingIcon={Menu} aria-expanded={open} aria-controls="mobile-menu" onClick={() => setOpen(true)} className="og-nav__burger og-nav__chip">Menu</Button>
           </div>
         </div>
       </Container>
@@ -79,5 +100,6 @@ export function SiteNav({ cta }: { cta?: React.ReactNode } = {}) {
         </div>
       )}
     </header>
+    </>
   );
 }

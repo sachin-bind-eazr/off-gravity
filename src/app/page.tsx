@@ -16,7 +16,7 @@ export default async function Home() {
   const events = await getEvents();
   return (
       <WaitlistProvider cities={events.filter((e) => e.status === "WAITLIST_OPEN").map((e) => ({ slug: e.slug, city: e.city }))}>
-        <SiteNav cta={<HeaderCta mode={ctaFor(events)} />} />
+        <SiteNav overlay cta={<HeaderCta mode={ctaFor(events)} />} />
         <main id="main">
           <Hero events={events} />
           <Story />
