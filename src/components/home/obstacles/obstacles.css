@@ -1,4 +1,4 @@
-.ob{--ob-nav:72px;--ob-stage-h:min(calc(100svh - var(--ob-nav)),125vw)}
+.ob{--ob-nav:0px;--ob-stage-h:min(calc(100svh - var(--ob-nav)),125vw)}
 .ob-head{display:flex;align-items:center;justify-content:space-between;gap:var(--s-16);flex-wrap:wrap;margin-bottom:var(--s-24)}
 .ob-head .t-kicker{margin:0}
 /* scroll-linked reveal: the track gives the stage room to pin; JS opens .ob-frame's clip-path from a card to full-frame */

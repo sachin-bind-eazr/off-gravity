@@ -1,6 +1,6 @@
 /* S2 "What is OFF GRAVITY": sticky-scroll card stack (two columns from 900px, single column below). Layout is media-query driven so SSR matches.
    Photos are shown in natural colour: no grade, tint, blend or filter on .st-media / .st-img. */
-.st-section{scroll-margin-top:72px}
+.st-section{scroll-margin-top:0}
 .st-h2{max-width:15ch}
 .st-body p{max-width:46ch}
 .st-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:40px;align-items:start}
@@ -37,7 +37,7 @@
 .st-dot[data-on="true"]::before{background:var(--color-ink);transform:scaleY(1.3)}
 
 /* sticky stack at every width: each panel pins under the nav and the next one slides up over it */
-.st-item{position:sticky;top:calc(var(--st-top,104px) + var(--i) * var(--st-peek,0px));margin-bottom:22svh;display:flex;justify-content:center}
+.st-item{position:sticky;top:calc(var(--st-top,32px) + var(--i) * var(--st-peek,0px));margin-bottom:22svh;display:flex;justify-content:center}
 .st-item:last-child{margin-bottom:0}
 .st-item .st-card{will-change:transform}
 
@@ -52,7 +52,7 @@
 }
 @media (min-width:900px){
   .st-grid{grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(40px,5vw,80px)}
-  .st-left{position:sticky;top:104px}
+  .st-left{position:sticky;top:32px}
   .st-card{width:auto;height:min(80svh,760px);max-width:100%}
 }
 /* reduced motion: static readable stack, no pinning */

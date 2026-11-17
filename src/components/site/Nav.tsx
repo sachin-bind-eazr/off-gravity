@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { Logo } from "./Logo";
-import { Menu, X } from "lucide-react";
+import { Menu, Ticket, X } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import "./nav.css";
@@ -60,7 +60,7 @@ export function SiteNav({ cta }: { cta?: React.ReactNode } = {}) {
             {LINKS.map((l) => { const id = l.href.startsWith("/#") ? l.href.slice(2) : ""; return <Link key={l.label} href={l.href} className="og-navlink" aria-current={id && active === id ? "location" : undefined}>{l.label}</Link>; })}
           </nav>
           <div className="og-nav__right">
-            <Link href="/my-bookings" className="og-navlink og-nav__mylink">My bookings</Link>
+            <Button href="/my-bookings" variant="ghost-on-dark" leadingIcon={Ticket} className="og-nav__mylink">My bookings</Button>
             <Button id="menu-btn" variant="ghost-on-dark" leadingIcon={Menu} aria-expanded={open} aria-controls="mobile-menu" onClick={() => setOpen(true)} className="og-nav__burger">Menu</Button>
           </div>
         </div>

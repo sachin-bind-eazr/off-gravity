@@ -19,7 +19,7 @@ html{scroll-behavior:smooth} body{background:var(--color-cream);color:var(--colo
 .container-og{max-width:1312px;margin-inline:auto;padding-inline:var(--pad)}
 .section-y{padding-block:var(--section-y)}
 .section-y-tight{padding-block:var(--section-y-tight)}
-section[id]{scroll-margin-top:var(--nav-h)}
+section[id]{scroll-margin-top:0}
 .t-campaign{font-style:italic;font-weight:900;font-stretch:118%;letter-spacing:-.035em;line-height:.94;font-size:clamp(52px,6.4vw,94px)}
 .t-section{font-weight:800;font-stretch:102%;letter-spacing:-.03em;line-height:1;font-size:clamp(38px,4.6vw,66px)}
 .t-section-lg{font-weight:800;font-stretch:102%;letter-spacing:-.03em;line-height:1;font-size:clamp(38px,4.6vw,66px)}
@@ -56,7 +56,7 @@ section[id]{scroll-margin-top:var(--nav-h)}
 html[data-reveal="on"] [data-reveal]:not([data-in]){opacity:0;transform:translateY(16px)}
 html[data-reveal="on"] [data-reveal]{transition:opacity .65s cubic-bezier(.2,.7,.2,1),transform .65s cubic-bezier(.2,.7,.2,1);transition-delay:var(--reveal-delay,0s)}
 /* scroll progress hairline under the nav */
-.og-progress{position:fixed;left:0;right:0;top:var(--nav-h);height:3px;z-index:45;pointer-events:none;background:transparent}
+.og-progress{position:fixed;left:0;right:0;top:0;height:3px;z-index:45;pointer-events:none;background:transparent}
 .og-progress i{display:block;height:100%;background:var(--color-mint);transform-origin:0 50%;transform:scaleX(0);will-change:transform}
 
 /* ================= FOUNDATION (see FOUNDATION.md) ================= */

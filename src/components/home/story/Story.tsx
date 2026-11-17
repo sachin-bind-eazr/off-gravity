@@ -8,7 +8,7 @@ import { useMedia } from "./hooks";
 import { ScrollEffects } from "./ScrollEffects";
 import "./story.css";
 
-const TOP = 104;   // sticky line (px) for the first panel
+const TOP = 32;    // sticky line (px) for the first panel; header is static, so pin near the viewport top
 const PEEK = 0;    // panels stack flush: no peeking slivers
 const SHRINK = 0.06;
 

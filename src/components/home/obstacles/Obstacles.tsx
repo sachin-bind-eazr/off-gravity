@@ -12,7 +12,7 @@ import "./obstacles.css";
 const O = HOME.obstacles;
 const POSTER_VAR = { "--ob-poster": `url(${TEASER.poster})` } as React.CSSProperties;
 const NO_POSTER = {} as React.CSSProperties;
-const NAV = 72;
+const NAV = 0; // header is static (not sticky), so the stage pins at the viewport top
 /** Share of the pinned scroll spent growing the video; the rest holds it full-frame. */
 const GROW_END = 0.7;
 const clamp = (v: number) => Math.min(1, Math.max(0, v));
