@@ -1,7 +1,7 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Pause, Play, Volume2, VolumeX } from "lucide-react";
-import { Section } from "@/components/ui/Container";
+import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { HOME } from "@/content/home";
 import { TEASER } from "@/content/video";
@@ -12,11 +12,21 @@ import "./obstacles.css";
 const O = HOME.obstacles;
 const POSTER_VAR = { "--ob-poster": `url(${TEASER.poster})` } as React.CSSProperties;
 const NO_POSTER = {} as React.CSSProperties;
+const NAV = 72;
+/** Share of the pinned scroll spent growing the video; the rest holds it full-frame. */
+const GROW_END = 0.7;
+const clamp = (v: number) => Math.min(1, Math.max(0, v));
+const ease = (t: number) => t * (2 - t);
 type Mode = "idle" | "playing" | "paused";
+type Metrics = { sx: number; sy: number; r: number; top: number; range: number; reduced: boolean };
 
 export default function Obstacles() {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const stageRef = useRef<HTMLDivElement>(null);
   const frameRef = useRef<HTMLDivElement>(null);
+  const m = useRef<Metrics>({ sx: 0, sy: 0, r: 20, top: NAV, range: 0, reduced: false });
+  const fullRef = useRef(false);
   const [mode, setMode] = useState<Mode>("idle");
   const [muted, setMuted] = useState(true);
   const [full, setFull] = useState(false);
@@ -31,32 +41,91 @@ export default function Obstacles() {
     return () => v.removeEventListener("playing", on);
   }, []);
 
-  // speaker is shown only while the whole video frame is in view (below the sticky 72px nav)
-  useEffect(() => {
-    const el = frameRef.current; if (!el) return;
-    const io = new IntersectionObserver(([e]) => setFull(e.intersectionRatio >= 0.95), { threshold: [0, 0.5, 0.9, 0.95, 1], rootMargin: "-72px 0px 0px 0px" });
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
-
   // load the poster only when the video is within one viewport (it is far below the fold)
   useEffect(() => {
-    const el = frameRef.current; if (!el) return;
+    const el = trackRef.current; if (!el) return;
     const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setNear(true); io.disconnect(); } }, { rootMargin: "100% 0px" });
     io.observe(el);
     return () => io.disconnect();
   }, []);
 
+  // scroll-linked reveal: the stage pins under the nav and the video's clip-path opens from a card to full-frame.
+  // Runs in rAF, writes only clip-path, and listens only while the section is near the viewport.
+  useEffect(() => {
+    const track = trackRef.current, stage = stageRef.current, frame = frameRef.current;
+    if (!track || !stage || !frame) return;
+    const rm = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let raf = 0, last = -1, listening = false;
+
+    const update = () => {
+      raf = 0;
+      const s = m.current;
+      const p = s.range ? clamp((s.top - track.getBoundingClientRect().top) / s.range) : 1;
+      const e = s.reduced ? 1 : ease(clamp(p / GROW_END));
+      if (e !== last) {
+        last = e;
+        const k = 1 - e;
+        frame.style.clipPath = k < 0.0005 ? "none" : `inset(${(s.sy * k).toFixed(1)}px ${(s.sx * k).toFixed(1)}px round ${(s.r * k).toFixed(1)}px)`;
+      }
+      // full-frame = fully grown and (almost) the whole stage visible below the nav
+      const r = stage.getBoundingClientRect();
+      const vis = Math.min(r.bottom, window.innerHeight) - Math.max(r.top, NAV);
+      const isFull = e > 0.98 && vis / r.height >= 0.9;
+      if (isFull !== fullRef.current) { fullRef.current = isFull; setFull(isFull); }
+    };
+    const schedule = () => { if (!raf) raf = requestAnimationFrame(update); };
+
+    const measure = () => {
+      const W = stage.clientWidth, H = stage.clientHeight;
+      const pad = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--og-pad")) || 24;
+      const aspect = W < 640 ? 3 / 4 : 9 / 16;
+      let sw = Math.min(W, 1280) - pad * 2, sh = sw * aspect;
+      if (sh > H - 48) { sh = H - 48; sw = sh / aspect; }
+      const s = m.current;
+      s.sx = Math.max(0, (W - sw) / 2);
+      s.sy = Math.max(0, (H - sh) / 2);
+      s.r = W < 640 ? 12 : 20;
+      s.top = parseFloat(getComputedStyle(stage).top) || NAV;
+      s.range = Math.max(0, track.offsetHeight - H);
+      s.reduced = rm.matches;
+      last = -1;
+      schedule();
+    };
+
+    const listen = (on: boolean) => {
+      if (on === listening) return;
+      listening = on;
+      if (on) { window.addEventListener("scroll", schedule, { passive: true }); schedule(); }
+      else window.removeEventListener("scroll", schedule);
+    };
+    const io = new IntersectionObserver(([e]) => listen(e.isIntersecting), { rootMargin: "50% 0px" });
+    const ro = new ResizeObserver(measure);
+    io.observe(track); ro.observe(stage); ro.observe(track);
+    rm.addEventListener("change", measure);
+    measure();
+    return () => {
+      io.disconnect(); ro.disconnect(); rm.removeEventListener("change", measure);
+      listen(false); cancelAnimationFrame(raf);
+    };
+  }, []);
+
   const start = useCallback(() => {
-    const v = videoRef.current, f = frameRef.current; if (!v) return;
+    const v = videoRef.current, track = trackRef.current; if (!v) return;
     v.dataset.userPaused = "0";
     v.dispatchEvent(new Event("og-activate"));
     v.muted = false; setMuted(false);
     try { v.currentTime = 0; } catch {}
-    v.play().catch(() => { v.muted = true; setMuted(true); v.play().catch(() => {}); });
+    // only fall back to muted if the browser blocks sound; an AbortError just means the off-screen observer paused it
+    v.play().catch((err: unknown) => {
+      if ((err as DOMException)?.name !== "NotAllowedError") return;
+      v.muted = true; setMuted(true); v.play().catch(() => {});
+    });
     setMode("playing");
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    f?.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "center" });
+    if (!track) return;
+    // scroll to where the video has finished growing (inside the full-frame hold)
+    const s = m.current;
+    const top = track.getBoundingClientRect().top + window.scrollY - s.top + (s.reduced ? 0 : s.range * Math.min(1, GROW_END + 0.1));
+    window.scrollTo({ top: Math.max(0, top), behavior: s.reduced ? "auto" : "smooth" });
   }, []);
 
   const toggle = () => {
@@ -77,29 +146,35 @@ export default function Obstacles() {
   const Icon = mode === "playing" ? Pause : Play;
 
   return (
-    <Section id="obstacles" tone="dark" className="ob">
+    <section id="obstacles" className="og-section og-section--dark ob">
       <h2 className="sr-only">{O.kicker}</h2>
-      <div className="ob-head">
+      <Container className="ob-head">
         <p className="t-kicker on-dark">{O.kicker}</p>
         <Button variant="ghost-on-dark" size="md" leadingIcon={Icon} onClick={toggle}>{label}</Button>
+      </Container>
+      <div ref={trackRef} className="ob-track">
+        <div ref={stageRef} className="ob-stage">
+          <div ref={frameRef} className="ob-frame" style={near ? POSTER_VAR : NO_POSTER}>
+            <TeaserVideo ref={videoRef} className="ob-video" />
+            <button type="button" className="ob-speaker" data-show={full} tabIndex={full ? 0 : -1} aria-hidden={!full}
+              aria-label={muted ? "Unmute video" : "Mute video"} aria-pressed={muted} onClick={toggleMute}>
+              {muted ? <VolumeX size={22} strokeWidth={1.75} aria-hidden="true" /> : <Volume2 size={22} strokeWidth={1.75} aria-hidden="true" />}
+            </button>
+          </div>
+        </div>
       </div>
-      <div ref={frameRef} className="ob-frame" style={near ? POSTER_VAR : NO_POSTER}>
-        <TeaserVideo ref={videoRef} className="ob-video" />
-        <button type="button" className="ob-speaker" data-show={full} tabIndex={full ? 0 : -1} aria-hidden={!full}
-          aria-label={muted ? "Unmute video" : "Mute video"} aria-pressed={muted} onClick={toggleMute}>
-          {muted ? <VolumeX size={22} strokeWidth={1.75} aria-hidden="true" /> : <Volume2 size={22} strokeWidth={1.75} aria-hidden="true" />}
-        </button>
-      </div>
-      <p className="ob-caption t-label">{O.caption} · {TEASER.durationLabel}</p>
-      <ul className="ob-stats">
-        {O.stats.map((s, i) => (
-          <li key={s.title} className="ob-stat">
-            <span className="t-label">{String(i + 1).padStart(2, "0")}</span>
-            <h3 className="t-h3">{s.title}</h3>
-            <p className="t-body">{s.line}</p>
-          </li>
-        ))}
-      </ul>
-    </Section>
+      <Container className="ob-after">
+        <p className="ob-caption t-label">{O.caption} · {TEASER.durationLabel}</p>
+        <ul className="ob-stats">
+          {O.stats.map((s, i) => (
+            <li key={s.title} className="ob-stat">
+              <span className="t-label">{String(i + 1).padStart(2, "0")}</span>
+              <h3 className="t-h3">{s.title}</h3>
+              <p className="t-body">{s.line}</p>
+            </li>
+          ))}
+        </ul>
+      </Container>
+    </section>
   );
 }

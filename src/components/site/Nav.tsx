@@ -61,7 +61,6 @@ export function SiteNav({ cta }: { cta?: React.ReactNode } = {}) {
           </nav>
           <div className="og-nav__right">
             <Link href="/my-bookings" className="og-navlink og-nav__mylink">My bookings</Link>
-            <div className="og-nav__cta">{cta ?? <Button href="/book">Book your slot</Button>}</div>
             <Button id="menu-btn" variant="ghost-on-dark" leadingIcon={Menu} aria-expanded={open} aria-controls="mobile-menu" onClick={() => setOpen(true)} className="og-nav__burger">Menu</Button>
           </div>
         </div>

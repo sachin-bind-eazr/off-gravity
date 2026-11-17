@@ -4,8 +4,6 @@
 .og-nav__bar{display:flex;align-items:center;justify-content:space-between;gap:var(--s-16);height:var(--nav-h)}
 .og-nav__links{display:none;align-items:center;gap:var(--s-32)}
 .og-nav__right{display:flex;align-items:center;gap:var(--s-16)}
-.og-nav__cta{display:none}
-@media (min-width:640px){.og-nav__cta{display:block}}
 .og-nav .og-nav__mylink{display:none}
 @media (min-width:1000px){.og-nav__links{display:flex}.og-nav .og-nav__mylink{display:inline-block}.og-nav .og-nav__burger{display:none}}
 .og-navlink{position:relative;display:inline-block;padding-block:6px;font-size:16px;font-weight:600;color:#fff}

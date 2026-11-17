@@ -9,16 +9,18 @@ export const HOME = {
     kicker: "What is OFF GRAVITY",
     h2: "A fitness festival built around giant inflatables.",
     body: [
-      "A two-day tour through six Indian cities, built around India's first inflatable obstacle run. Race timed waves through giant inflatables, then roll into a festival village.",
+      "OFF GRAVITY is a two-day tour through six Indian cities, built around India's first inflatable obstacle run.",
+      "You race timed waves through a course of giant inflatables, then roll straight into a festival village.",
+      "Saturday turns into Glow Night. Sunday belongs to families and anyone chasing a podium.",
     ],
     // `photo` = file in public/images/story (without .jpg); `alt` describes what the photo shows
     panels: [
-      { id: "timed", n: "01", title: "Timed racing", line: "Every wave runs on the clock.", tone: "mint", photo: "01-timed-racing", alt: "Two sprinters crouched in their starting positions on a red running track, focused on the start line" },
-      { id: "leaderboards", n: "02", title: "Live leaderboards", line: "Rankings update all weekend.", tone: "ink", photo: "02-live-leaderboards", alt: "Two athletes in red sportswear sitting on an indoor track, smiling as they check a phone together" },
-      { id: "family", n: "03", title: "Family wave", line: "A wave for parents and kids.", tone: "lilac", photo: "03-family-wave", alt: "A smiling mother lifting her laughing toddler into the air outdoors", confirm: { confirm: true, note: "Family wave age limit (reference said 6+ / 6–14)" } },
-      { id: "glow", n: "04", title: "Glow Night", line: "Saturday after dark, lights on.", tone: "night", photo: "04-glow-night", alt: "Festival crowd at night with raised hands under blue and orange stage lights", confirm: { confirm: true, note: "UV kits and live DJ at Glow Night" } },
-      { id: "recovery", n: "05", title: "Recovery village", line: "Stretch, refuel, slow down.", tone: "white", photo: "05-recovery-village", alt: "A large group stretching together on a sunlit lawn among trees", confirm: { confirm: true, note: "Food trucks and hammocks in recovery village" } },
-      { id: "game", n: "06", title: "Game layer", line: "Checkpoints and bonus points.", tone: "mint", photo: "06-game-layer", alt: "An athlete gripping hanging wooden rings on an obstacle course", confirm: { confirm: true, note: "'Gaming overlay' / game layer mechanics" } },
+      { id: "timed", n: "01", title: "Timed racing", line: "Every wave is timed. Chase your best, or beat your friend's.", tone: "mint", photo: "01-timed-racing", alt: "Two sprinters crouched in their starting positions on a red running track, focused on the start line" },
+      { id: "leaderboards", n: "02", title: "Live leaderboards", line: "City and national rankings, updated through the weekend.", tone: "ink", photo: "02-live-leaderboards", alt: "Two athletes in red sportswear sitting on an indoor track, smiling as they check a phone together" },
+      { id: "family", n: "03", title: "Family wave", line: "A parent-and-child batch on smaller inflatables.", tone: "lilac", photo: "03-family-wave", alt: "A smiling mother lifting her laughing toddler into the air outdoors", confirm: { confirm: true, note: "Family wave age limit (reference said 6+ / 6–14)" } },
+      { id: "glow", n: "04", title: "Glow Night", line: "Saturday after dark: lights, music and a glowing finish.", tone: "night", photo: "04-glow-night", alt: "Festival crowd at night with raised hands under blue and orange stage lights", confirm: { confirm: true, note: "UV kits and live DJ at Glow Night" } },
+      { id: "recovery", n: "05", title: "Recovery village", line: "Stretch, hydrate, refuel and slow down after your wave.", tone: "cream", photo: "05-recovery-village", alt: "A large group stretching together on a sunlit lawn among trees", confirm: { confirm: true, note: "Food trucks and hammocks in recovery village" } },
+      { id: "game", n: "06", title: "Game layer", line: "Checkpoints, bonus obstacles and point multipliers on the course.", tone: "orange", photo: "06-game-layer", alt: "An athlete gripping hanging wooden rings on an obstacle course", confirm: { confirm: true, note: "'Gaming overlay' / game layer mechanics" } },
     ],
   },
   obstacles: {

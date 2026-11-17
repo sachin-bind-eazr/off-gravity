@@ -1,13 +1,18 @@
-.ob-head{display:flex;align-items:center;justify-content:space-between;gap:var(--s-16);flex-wrap:wrap}
+.ob{--ob-nav:72px;--ob-stage-h:min(calc(100svh - var(--ob-nav)),125vw)}
+.ob-head{display:flex;align-items:center;justify-content:space-between;gap:var(--s-16);flex-wrap:wrap;margin-bottom:var(--s-24)}
 .ob-head .t-kicker{margin:0}
-.ob-frame{position:relative;aspect-ratio:16/9;border-radius:20px;overflow:hidden;background:#141A21;margin-top:var(--s-48);scroll-margin-top:calc(72px + var(--s-24))}
+/* scroll-linked reveal: the track gives the stage room to pin; JS opens .ob-frame's clip-path from a card to full-frame */
+.ob-track{position:relative;height:calc(var(--ob-stage-h) + 110svh)}
+.ob-stage{position:sticky;top:calc(var(--ob-nav) + max(0px,(100svh - var(--ob-nav) - 125vw) / 2));height:var(--ob-stage-h);overflow:hidden}
+.ob-frame{position:absolute;inset:0;overflow:hidden;background:#141A21;clip-path:inset(10% 6% round 20px);will-change:clip-path}
 .ob-video{position:absolute!important;inset:0;width:100%;height:100%;background:#141A21 var(--ob-poster) center/cover no-repeat}
 /* zoom pushes the source's top-right watermark out of frame */
 .ob-video video{transform:scale(1.13);transform-origin:0 100%}
 .ob-speaker{position:absolute;top:var(--s-24);right:var(--s-24);z-index:3;width:48px;height:48px;border-radius:999px;display:grid;place-items:center;padding:0;cursor:pointer;color:#fff;background:#1D2632;border:1.5px solid #fff;opacity:0;visibility:hidden;pointer-events:none;transition:opacity 200ms ease,visibility 0s linear 200ms}
 .ob-speaker[data-show="true"]{opacity:1;visibility:visible;pointer-events:auto;transition:opacity 200ms ease,visibility 0s}
-.ob-speaker:focus-visible{outline:3px solid #fff;outline-offset:3px}
-.ob-caption{margin:var(--s-16) 0 0;color:rgba(255,255,255,.7)}
+.ob-speaker:focus-visible{outline:3px solid #fff;outline-offset:-6px}
+.ob-after{margin-top:var(--s-24)}
+.ob-caption{margin:0;color:rgba(255,255,255,.7)}
 .ob-stats{display:grid;grid-template-columns:1fr;margin:var(--s-48) 0 0;padding:0;list-style:none;container-type:inline-size}
 .ob-stat{padding:var(--s-24) 0;border-top:1px solid #02D69C;display:flex;flex-direction:column;gap:var(--s-8)}
 .ob-stat .t-label{color:#02D69C;margin:0}
@@ -21,4 +26,10 @@
   .ob-stat h3{font-size:24px}
 }
 @media (min-width:1120px){.ob-stat h3{font-size:28px}}
-@media (max-width:639px){.ob-frame{border-radius:12px}.ob-speaker{top:var(--s-12);right:var(--s-12)}}
+@media (max-width:639px){.ob-frame{clip-path:inset(20% 24px round 12px)}.ob-speaker{top:var(--s-12);right:var(--s-12)}}
+/* reduced motion: no pinning, the video sits static at full-frame */
+@media (prefers-reduced-motion:reduce){
+  .ob-track{height:auto}
+  .ob-stage{position:relative;top:auto}
+  .ob-frame{clip-path:none!important;will-change:auto}
+}
