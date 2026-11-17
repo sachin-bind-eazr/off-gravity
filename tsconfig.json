@@ -38,7 +38,8 @@
     ".next-story/types/**/*.ts",
     ".next-video/types/**/*.ts",
     ".next/types/**/*.ts",
-    "next-env.d.ts"
+    "next-env.d.ts",
+    ".next-perf/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"
