@@ -14,7 +14,7 @@
 .og-hero__actions{margin-top:var(--s-32);display:flex;flex-wrap:wrap;gap:var(--s-16)}
 @media (min-width:1000px){
   /* nav floats over the hero (homepage overlay), so the stage fills the viewport minus the city strip */
-  .og-hero__stage{display:flex;align-items:center;min-height:clamp(640px,calc(100svh - 72px),1032px)}
+  .og-hero__stage{display:flex;align-items:center;min-height:clamp(560px,calc(100svh - 200px),1032px)}
   .og-hero__art{position:absolute;inset:0;aspect-ratio:auto}
   /* light black gradient: darkest behind the copy (left) and under the nav (top), art stays visible on the right */
   .og-hero__art::after{content:"";position:absolute;inset:0;background:
@@ -22,8 +22,3 @@
     linear-gradient(90deg,rgb(8 10 14/.86) 0%,rgb(8 10 14/.7) 38%,rgb(8 10 14/.42) 68%,rgb(8 10 14/.3) 100%)}
   .og-hero__copy{width:100%}
 }
-.og-hero__strip{border-top:1px solid rgb(255 255 255/.12)}
-.og-hero__strip ul{display:flex;flex-wrap:wrap;align-items:center;gap:var(--s-8) var(--s-32);padding-block:var(--s-24);list-style:none;margin:0}
-.og-hero__strip li{white-space:nowrap}
-.og-hero__strip a:hover{color:var(--color-mint)}
-.og-hero__strip .tag{margin-left:var(--s-8);color:var(--color-on-dark)}

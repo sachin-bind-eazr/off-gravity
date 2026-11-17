@@ -12,7 +12,7 @@ for (const [w,h] of sizes) {
   const m = await p.evaluate(() => {
     const hero = document.querySelector(".og-hero").getBoundingClientRect();
     const nav = document.querySelector("header").getBoundingClientRect();
-    const strip = document.querySelector(".og-hero__strip").getBoundingClientRect();
+    const strip = document.querySelector(".tts").getBoundingClientRect();
     const img = document.querySelector(".og-hero__art img");
     return { overflow: document.documentElement.scrollWidth > innerWidth, navH: nav.height, heroH: Math.round(hero.height), stripBottom: Math.round(strip.bottom), vh: innerHeight, imgNatural: img.naturalWidth + "x" + img.naturalHeight, imgCss: Math.round(img.getBoundingClientRect().width) + "x" + Math.round(img.getBoundingClientRect().height), h1w: Math.round(document.querySelector("h1").getBoundingClientRect().right) };
   });

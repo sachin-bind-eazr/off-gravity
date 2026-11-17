@@ -1,14 +1,12 @@
-import Image from "next/image";
-import Link from "next/link";
+﻿import Image from "next/image";
 import type { EventView } from "@/lib/events";
 import { ctaFor } from "@/lib/cta";
 import { Container } from "@/components/ui/Container";
-import { fmtRange } from "./format";
+import { TourTicketStrip } from "@/components/hero/TourTicketStrip";
 import { HeroActions, type HeroCtaMode } from "./story/HeroActions";
 import "./hero.css";
 
 export function Hero({ events }: { events: EventView[] }) {
-  const next = events[0];
   const mode: HeroCtaMode = ctaFor(events);
   return (
     <section className="og-hero">
@@ -27,25 +25,7 @@ export function Hero({ events }: { events: EventView[] }) {
           </div>
         </Container>
       </div>
-      <div className="og-hero__strip">
-        <Container>
-          <ul className="t-body">
-            <li>
-              <Link href={`/events/${next.slug}`}>
-                <span className="text-on-dark">Next stop</span> <strong className="font-bold text-white">{next.city}, {fmtRange(next.start, next.end, true)}</strong>
-              </Link>
-            </li>
-            {events.slice(1).map((e) => (
-              <li key={e.slug}>
-                <Link href={`/events/${e.slug}`}>{e.city}</Link>
-                {e.slug === "jaipur" && <span className="tag t-label">Evening edition</span>}
-                {e.slug === "satara" && <span className="tag t-label">Season finale</span>}
-              </li>
-            ))}
-            <li className="t-label text-on-dark">Dates provisional</li>
-          </ul>
-        </Container>
-      </div>
+      <TourTicketStrip events={events.map(({ slug, city, season, start, end, status }) => ({ slug, city, season, start, end, status }))} initialNow={Date.now()} />
     </section>
   );
 }
