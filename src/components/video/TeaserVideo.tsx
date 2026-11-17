@@ -1,5 +1,7 @@
 "use client";
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
+import { Play } from "lucide-react";
+import { Button } from "@/components/ui/Button";
 import { TEASER } from "@/content/video";
 
 type Props = { className?: string; poster?: string; fit?: "cover" | "contain"; label?: string };
@@ -19,11 +21,15 @@ export const TeaserVideo = forwardRef<HTMLVideoElement, Props>(function TeaserVi
     const loadIO = new IntersectionObserver(([e]) => { if (e.isIntersecting) setNear(true); }, { rootMargin: "100% 0px" });
     const playIO = new IntersectionObserver(([e]) => {
       if (reduced && !manual) return;
+      if (e.isIntersecting && v.dataset.userPaused === "1") return;
       if (e.isIntersecting) v.play().catch(() => {}); else v.pause();
     }, { threshold: 0.1 });
     loadIO.observe(v); playIO.observe(v);
     return () => { loadIO.disconnect(); playIO.disconnect(); };
   }, [reduced, manual, near]);
+
+  // external "play now" request (user clicked Watch with sound)
+  useEffect(() => { const v = vid.current; if (!v) return; const f = () => { setManual(true); setNear(true); }; v.addEventListener("og-activate", f); return () => v.removeEventListener("og-activate", f); }, []);
 
   // once sources are mounted, trigger load
   useEffect(() => { if (near) vid.current?.load(); }, [near]);
@@ -44,8 +50,9 @@ export const TeaserVideo = forwardRef<HTMLVideoElement, Props>(function TeaserVi
         </>}
       </video>
       {showPlay && (
-        <button type="button" aria-label="Play teaser video" onClick={() => { setManual(true); setNear(true); setTimeout(() => vid.current?.play().catch(() => {}), 50); }}
-          style={{ position: "absolute", inset: 0, margin: "auto", width: 84, height: 84, borderRadius: 999, background: "#FD6B14", color: "#1D2632", border: 0, cursor: "pointer", fontSize: 30 }}>▶</button>
+        <div style={{ position: "absolute", inset: 0, display: "grid", placeItems: "center" }}>
+          <Button variant="primary" size="md" leadingIcon={Play} onClick={() => { setManual(true); setNear(true); setTimeout(() => vid.current?.play().catch(() => {}), 50); }}>Play video</Button>
+        </div>
       )}
     </div>
   );

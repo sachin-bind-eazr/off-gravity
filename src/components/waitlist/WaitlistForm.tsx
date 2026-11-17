@@ -1,7 +1,10 @@
 "use client";
 import { useId, useRef, useState } from "react";
+import { ArrowRight } from "lucide-react";
+import { Button } from "@/components/ui/Button";
 import { waitlistSchema } from "@/lib/schemas/waitlist";
 import type { WaitlistCity } from "./WaitlistProvider";
+import "./waitlist.css";
 
 type Errs = Partial<Record<"eventSlug" | "email" | "whatsappNumber" | "consent" | "form", string>>;
 
@@ -23,8 +26,8 @@ export function WaitlistForm({ cities, initialSlug, source = "site", variant = "
   const [done, setDone] = useState<{ city: string; reference?: string; duplicate?: boolean } | null>(null);
   const submitting = useRef(false);
   const dark = tone === "dark";
-  const errCls = `mt-1.5 px-2 text-sm font-semibold ${dark ? "text-[#FFB3AD]" : "text-[#8C1D18]"}`;
-  const input = `w-full rounded-full border px-5 py-3.5 text-[16px] outline-none ${dark ? "border-white/25 bg-white/10 text-white placeholder:text-on-dark/70 focus:border-mint" : "border-ink/20 bg-white text-ink focus:border-ink"}`;
+  const errCls = `wl-err t-label ${dark ? "wl-err--dark" : ""}`;
+  const input = `wl-input ${dark ? "wl-input--dark" : ""}`;
 
   function validate(): Errs {
     const r = waitlistSchema.safeParse({ eventSlug: slug, email, whatsappNumber: wa, consent, source, website: hp });
@@ -67,16 +70,16 @@ export function WaitlistForm({ cities, initialSlug, source = "site", variant = "
 
   if (done !== null)
     return (
-      <p role="status" aria-live="polite" className={`rounded-3xl px-6 py-5 text-lg font-bold ${dark ? "bg-mint text-ink" : "bg-mint/30 text-ink"}`}>
+      <p role="status" aria-live="polite" className={`wl-done t-body-lg ${dark ? "wl-done--dark" : ""}`}>
         {done.duplicate ? `You're already in line for ${done.city}.` : `You're in line for ${done.city}. We'll message you before tickets open.`}
-        {done.reference && <span className="mt-1 block text-[15px] font-semibold tabular-nums">Reference {done.reference}</span>}
+        {done.reference && <span className="t-label mt-2 block tabular-nums">Reference {done.reference}</span>}
       </p>
     );
   if (!cities.length) return <p className={dark ? "text-white" : "text-ink"}>Sign-ups aren&apos;t open yet.</p>;
 
   const inline = variant === "inline";
   return (
-    <form onSubmit={submit} noValidate aria-busy={busy} className={`relative grid gap-3 ${dark ? "text-white" : "text-ink"}`}>
+    <form onSubmit={submit} noValidate aria-busy={busy} className={`relative grid gap-4 ${dark ? "text-white" : "text-ink"}`}>
       <div className={inline ? "grid gap-3 md:grid-cols-[1.4fr_1fr_auto]" : "grid gap-3"}>
         <div>
           <label htmlFor={`${id}-email`} className="sr-only">Email</label>
@@ -90,7 +93,7 @@ export function WaitlistForm({ cities, initialSlug, source = "site", variant = "
           </select>
           {errs.eventSlug && <p role="alert" className={errCls}>{errs.eventSlug}</p>}
         </div>
-        {inline && <button type="submit" disabled={busy} className="btn-primary justify-center disabled:opacity-60">{busy ? "Joining…" : "Join the waitlist"}</button>}
+        {inline && <Button type="submit" loading={busy} trailingIcon={ArrowRight}>{busy ? "Joining…" : "Join the waitlist"}</Button>}
       </div>
       <div>
         <label htmlFor={`${id}-wa`} className="sr-only">WhatsApp number (optional)</label>
@@ -99,13 +102,13 @@ export function WaitlistForm({ cities, initialSlug, source = "site", variant = "
       </div>
       <input type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" value={hp} onChange={(e) => setHp(e.target.value)} className="absolute -left-[9999px] h-0 w-0 opacity-0" />
       <div>
-        <label className="flex cursor-pointer items-start gap-3 text-[15px] font-semibold">
+        <label className="t-body flex cursor-pointer items-start gap-3">
           <input type="checkbox" className="mt-1 h-5 w-5 shrink-0 accent-[#02D69C]" checked={consent} onChange={(e) => setConsent(e.target.checked)} aria-invalid={!!errs.consent} aria-describedby={errs.consent ? `${id}-consent-err` : undefined} />
           <span>Email me about OFF GRAVITY tickets and updates.</span>
         </label>
         {errs.consent && <p id={`${id}-consent-err`} role="alert" className={errCls}>{errs.consent}</p>}
       </div>
-      {!inline && <button type="submit" disabled={busy} className="btn-primary justify-center disabled:opacity-60">{busy ? "Joining…" : "Join the waitlist"}</button>}
+      {!inline && <Button type="submit" size="lg" fullWidth loading={busy} trailingIcon={ArrowRight}>{busy ? "Joining…" : "Join the waitlist"}</Button>}
       <div aria-live="polite">{errs.form && <p role="alert" className={errCls}>{errs.form}</p>}</div>
     </form>
   );

@@ -1,5 +1,7 @@
 "use client";
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
+import { ArrowRight, CalendarPlus, Check, Minus, Plus, RotateCcw, X } from "lucide-react";
+import { Button } from "@/components/ui/Button";
 import { waitlistSchema } from "@/lib/schemas/waitlist";
 import { Confetti } from "./Confetti";
 import { TIERS, TIER_ORDER, downloadIcs, fmtLong, type ModalCity, type WaitlistTier } from "./ticket";
@@ -166,10 +168,10 @@ export function WaitlistModal({ cities, initialSlug, initialTier, onClose }: {
         <div className="wl-stub" data-tier={done ? done.tier : tier} style={{ background: t.bg, color: t.fg }}>
           <span className="wl-num relative" aria-hidden="true">{t.num}</span>
           <div className="relative min-w-0 flex-1">
-            <p className="truncate text-[18px] font-extrabold leading-tight">{t.name === "Tier open" ? "Waitlist ticket" : t.name}</p>
-            <p className="truncate text-[14px] font-semibold opacity-90">{done ? done.city : city.city} · {done ? fmtLong(done.start, done.end) : dates}</p>
+            <p className="t-body-lg truncate font-bold leading-tight">{t.name === "Tier open" ? "Waitlist ticket" : t.name}</p>
+            <p className="t-label truncate">{done ? done.city : city.city} · {done ? fmtLong(done.start, done.end) : dates}</p>
           </div>
-          <button type="button" onClick={requestClose} aria-label="Close waitlist" className="wl-close relative">×</button>
+          <Button variant="outline" leadingIcon={X} onClick={requestClose} aria-label="Close waitlist" className="wl-icon wl-close relative">Close</Button>
         </div>
         <div className="wl-perf" aria-hidden="true" />
 
@@ -177,8 +179,8 @@ export function WaitlistModal({ cities, initialSlug, initialTier, onClose }: {
           {!done ? (
             <form id={`${uid}-form`} noValidate className="grid gap-4" onSubmit={(e) => { e.preventDefault(); submit(); }}>
               <div>
-                <h2 id={titleId} className="t-card !text-[28px]">Join the waitlist</h2>
-                <p className="mt-1.5 text-[16px] text-text-muted">Drop your details — we&apos;ll ping you the moment tickets go live for your city.</p>
+                <h2 id={titleId} className="t-h3">Join the waitlist</h2>
+                <p className="t-body mt-2 text-text-muted">Drop your details — we&apos;ll ping you the moment tickets go live for your city.</p>
               </div>
 
               <div className="wl-field">
@@ -218,9 +220,9 @@ export function WaitlistModal({ cities, initialSlug, initialTier, onClose }: {
                   <label htmlFor={`${uid}-tier`}>Ticket</label>
                 </div>
                 <div className="wl-party" role="group" aria-label="Party size">
-                  <button type="button" className="wl-step-btn" aria-label="One fewer runner" disabled={party <= 1} onClick={() => setParty((p) => Math.max(1, p - 1))}>−</button>
-                  <output aria-live="polite" className="min-w-[84px] text-center text-[17px] font-extrabold tabular-nums">{runners(party)}</output>
-                  <button type="button" className="wl-step-btn" aria-label="One more runner" disabled={party >= 8} onClick={() => setParty((p) => Math.min(8, p + 1))}>+</button>
+                  <Button variant="outline" leadingIcon={Minus} className="wl-icon" aria-label="One fewer runner" disabled={party <= 1} onClick={() => setParty((p) => Math.max(1, p - 1))}>Fewer</Button>
+                  <output aria-live="polite" className="t-body min-w-[84px] text-center font-semibold tabular-nums">{runners(party)}</output>
+                  <Button variant="outline" leadingIcon={Plus} className="wl-icon" aria-label="One more runner" disabled={party >= 8} onClick={() => setParty((p) => Math.min(8, p + 1))}>More</Button>
                 </div>
               </div>
 
@@ -228,7 +230,7 @@ export function WaitlistModal({ cities, initialSlug, initialTier, onClose }: {
                 <div>
                   <label className="wl-check">
                     <input id={`${uid}-consent`} type="checkbox" checked={consent} onChange={(e) => { setConsent(e.target.checked); if (errs.consent) setErr("consent", fieldErr.consent(e.target.checked)); }} aria-invalid={!!errs.consent} aria-describedby={errs.consent ? `${uid}-consent-err` : undefined} />
-                    <span className="wl-box" aria-hidden="true" />
+                    <span className="wl-box" aria-hidden="true"><Check size={16} strokeWidth={1.75} /></span>
                     <span>Email me about OFF GRAVITY tickets and updates.</span>
                   </label>
                   {err("consent")}
@@ -240,12 +242,10 @@ export function WaitlistModal({ cities, initialSlug, initialTier, onClose }: {
                 </label>
               </div>
 
-              <div aria-live="polite">{errs.form && <p role="alert" className="rounded-2xl bg-[#B3261E] px-4 py-3 text-[15px] font-bold text-white">{errs.form}</p>}</div>
+              <div aria-live="polite">{errs.form && <p role="alert" className="wl-formerr t-body">{errs.form}</p>}</div>
 
-              <button type="submit" className="btn-primary w-full justify-center !px-6 !py-4 !text-[18px] disabled:opacity-70" disabled={busy} aria-busy={busy}>
-                {busy ? <><span className="wl-spin" aria-hidden="true" />Saving…</> : <>Lock my waitlist spot<span aria-hidden="true">→</span></>}
-              </button>
-              <p className="text-center text-[14px] text-text-muted">We&apos;ll only use your details to notify you about ticket sales for this city. No spam, ever. Dates are provisional, subject to venue and permission confirmations.</p>
+              <Button type="submit" size="lg" fullWidth loading={busy} trailingIcon={ArrowRight}>{busy ? "Saving…" : "Lock my waitlist spot"}</Button>
+              <p className="t-label text-text-muted">We&apos;ll only use your details to notify you about ticket sales for this city. No spam, ever. Dates are provisional, subject to venue and permission confirmations.</p>
             </form>
           ) : (
             <div className="relative">
@@ -255,31 +255,31 @@ export function WaitlistModal({ cities, initialSlug, initialTier, onClose }: {
                 <div className="wl-ticket-inner">
                   <div className="relative flex h-[104px] flex-col justify-center px-6" style={{ background: t.bg, color: t.fg }}>
                     <span className="wl-num absolute right-5 top-4" aria-hidden="true">{t.num}</span>
-                    <p className="text-[14px] font-bold opacity-90">{done.duplicate ? `You're already in line for ${done.city}` : "You're in line"}</p>
-                    <p className="text-[26px] font-extrabold leading-tight">{TIERS[done.tier].name === "Tier open" ? "Tier to be chosen" : TIERS[done.tier].name}</p>
+                    <p className="t-label">{done.duplicate ? `You're already in line for ${done.city}` : "You're in line"}</p>
+                    <p className="t-h3">{TIERS[done.tier].name === "Tier open" ? "Tier to be chosen" : TIERS[done.tier].name}</p>
                   </div>
                   <div className="wl-perf" style={{ marginTop: -1 }} />
                   <div className="grid gap-4 bg-cream px-6 pb-6 pt-5">
-                    <dl className="grid grid-cols-2 gap-x-4 gap-y-3 text-[16px]">
-                      <div><dt className="text-[14px] text-text-muted">City</dt><dd className="font-extrabold">{done.city}</dd></div>
-                      <div><dt className="text-[14px] text-text-muted">Dates (provisional)</dt><dd className="font-extrabold">{fmtLong(done.start, done.end)}</dd></div>
-                      <div><dt className="text-[14px] text-text-muted">Party size</dt><dd className="font-extrabold tabular-nums">{runners(done.partySize)}</dd></div>
-                      {done.count != null && <div><dt className="text-[14px] text-text-muted">In line</dt><dd className="font-extrabold tabular-nums">{done.count}</dd></div>}
+                    <dl className="t-body grid grid-cols-2 gap-x-4 gap-y-3">
+                      <div><dt className="t-label text-text-muted">City</dt><dd className="font-bold">{done.city}</dd></div>
+                      <div><dt className="t-label text-text-muted">Dates (provisional)</dt><dd className="font-bold">{fmtLong(done.start, done.end)}</dd></div>
+                      <div><dt className="t-label text-text-muted">Party size</dt><dd className="font-bold tabular-nums">{runners(done.partySize)}</dd></div>
+                      {done.count != null && <div><dt className="t-label text-text-muted">In line</dt><dd className="font-bold tabular-nums">{done.count}</dd></div>}
                     </dl>
                     {done.reference && (
-                      <div className="rounded-2xl border-2 border-dashed border-ink/25 bg-white px-4 py-3">
-                        <p className="text-[14px] text-text-muted">Waitlist reference</p>
-                        <p className="wl-ref text-[24px] font-extrabold">{done.reference}</p>
+                      <div className="wl-refbox">
+                        <p className="t-label text-text-muted">Waitlist reference</p>
+                        <p className="wl-ref t-h3">{done.reference}</p>
                       </div>
                     )}
                   </div>
                 </div>
               </div>
-              <p role="status" className="mt-5 text-[17px] font-semibold">We&apos;ll message you before tickets open for {done.city}.</p>
-              <div className="mt-5 grid gap-3">
-                <button type="button" onClick={() => downloadIcs(done.city, done.start, done.end)} className="cursor-pointer rounded-full bg-white px-6 py-3.5 text-[16px] font-extrabold hover:bg-ink hover:text-white">Add {done.city} dates to calendar</button>
-                <button type="button" onClick={() => { setDone(null); setErrs({}); }} className="cursor-pointer rounded-full bg-white px-6 py-3.5 text-[16px] font-extrabold hover:bg-ink hover:text-white">Join another city</button>
-                <button type="button" className="btn-primary w-full justify-center !px-6 !py-4 !text-[18px]" onClick={requestClose}>Done</button>
+              <p role="status" className="t-body mt-6">We&apos;ll message you before tickets open for {done.city}.</p>
+              <div className="mt-6 grid gap-3">
+                <Button size="lg" variant="outline" fullWidth leadingIcon={CalendarPlus} onClick={() => downloadIcs(done.city, done.start, done.end)}>Add to calendar</Button>
+                <Button size="lg" variant="outline" fullWidth leadingIcon={RotateCcw} onClick={() => { setDone(null); setErrs({}); }}>Join another city</Button>
+                <Button size="lg" fullWidth onClick={requestClose}>Done</Button>
               </div>
             </div>
           )}

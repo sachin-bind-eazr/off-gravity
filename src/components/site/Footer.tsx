@@ -1,54 +1,56 @@
 import "./nav.css";
 import Link from "next/link";
 import { Logo } from "./Logo";
+import { Section } from "@/components/ui/Container";
 import { TOUR } from "@/lib/tour";
 import { HOME } from "@/content/home";
 
-const head = "mb-4 text-[16px] font-extrabold text-white";
-const link = "block py-1.5 text-[16px] text-on-dark hover:text-mint";
+const colHead = "t-kicker on-dark";
 /* unconfirmed contact details (see HOME.footer, flagged confirm): muted, not link-styled, until the client supplies real ones */
-const plain = "block py-1.5 text-[15px] italic text-white/45";
+const plain = "og-footer__plain t-body";
 
 export function SiteFooter() {
   return (
-    <footer className="bg-ink-deep text-on-dark">
-      <div className="mx-auto grid max-w-[1312px] grid-cols-2 gap-x-8 gap-y-10 px-[var(--pad)] py-[var(--section-y-tight)] min-[860px]:grid-cols-[1.4fr_1fr_1fr_1.2fr]">
-        <div className="col-span-2 min-[860px]:col-span-1">
+    <Section as="footer" tone="none" className="og-footer">
+      <div className="grid-12">
+        <div className="col-span-12 md:col-span-6 lg:col-span-3">
           <Logo height={64} className="og-logo" />
-          <p className="mt-5 max-w-[320px] text-[16px]">{HOME.footer.blurb}</p>
+          <p className="t-body mt-6 max-w-[320px]">{HOME.footer.blurb}</p>
         </div>
-        <nav aria-label="Footer">
-          <h2 className={head}>Explore</h2>
-          <Link className={link} href="/#about">About</Link>
-          <Link className={link} href="/#obstacles">Obstacles</Link>
-          <Link className={link} href="/#tour">Tour</Link>
-          <Link className={link} href="/book">Tickets</Link>
-          <Link className={link} href="/events/mumbai#faqs">FAQs</Link>
-          <Link className={link} href="/my-bookings">My bookings</Link>
+        <nav aria-label="Footer" className="col-span-6 lg:col-span-3">
+          <h2 className={colHead}>Explore</h2>
+          <div className="og-footer__links t-body">
+            <Link href="/#about">About</Link>
+            <Link href="/#obstacles">Obstacles</Link>
+            <Link href="/#tour">Tour</Link>
+            <Link href="/book">Tickets</Link>
+            <Link href="/events/mumbai#faqs">FAQs</Link>
+            <Link href="/my-bookings">My bookings</Link>
+          </div>
         </nav>
-        <nav aria-label="2027 tour">
-          <h2 className={head}>2027 tour</h2>
-          {TOUR.map((t) => (
-            <Link key={t.slug} className={link} href={`/events/${t.slug}`}>{t.city}</Link>
-          ))}
+        <nav aria-label="2027 tour" className="col-span-6 lg:col-span-3">
+          <h2 className={colHead}>2027 tour</h2>
+          <div className="og-footer__links t-body">
+            {TOUR.map((t) => (<Link key={t.slug} href={`/events/${t.slug}`}>{t.city}</Link>))}
+          </div>
         </nav>
-        <div>
-          <h2 className={head}>Connect</h2>
-          <p className={plain} data-confirm="true" title={HOME.footer.contactEmail.note}>{HOME.footer.contactEmail.value}</p>
-          <p className={plain} data-confirm="true">[Phone TBC]</p>
-          <p className={plain} data-confirm="true" title={HOME.footer.instagram.note}>{HOME.footer.instagram.value}</p>
-        </div>
-      </div>
-      <div className="border-t border-white/10">
-        <div className="mx-auto flex max-w-[1312px] flex-wrap items-center justify-between gap-x-8 gap-y-3 px-[var(--pad)] py-6 text-[14px] text-on-dark">
-          <p>&copy; 2027 The Great Inflate Run. Dates are provisional, subject to venue and permission confirmations.</p>
-          <div className="flex flex-wrap gap-x-6 gap-y-2">
-            <Link href="/terms" className="hover:text-mint">Terms &amp; conditions</Link>
-            <Link href="/privacy" className="hover:text-mint">Privacy policy</Link>
-            <Link href="/refund-policy" className="hover:text-mint">Refund &amp; cancellation</Link>
+        <div className="col-span-12 md:col-span-6 lg:col-span-3">
+          <h2 className={colHead}>Connect</h2>
+          <div className="og-footer__links">
+            <p className={plain} data-confirm="true" title={HOME.footer.contactEmail.note}>{HOME.footer.contactEmail.value}</p>
+            <p className={plain} data-confirm="true">[Phone TBC]</p>
+            <p className={plain} data-confirm="true" title={HOME.footer.instagram.note}>{HOME.footer.instagram.value}</p>
           </div>
         </div>
       </div>
-    </footer>
+      <div className="og-footer__bar t-label">
+        <p>&copy; 2027 The Great Inflate Run. Dates are provisional, subject to venue and permission confirmations.</p>
+        <nav aria-label="Legal">
+          <Link href="/terms">Terms &amp; conditions</Link>
+          <Link href="/privacy">Privacy policy</Link>
+          <Link href="/refund-policy">Refund &amp; cancellation</Link>
+        </nav>
+      </div>
+    </Section>
   );
 }

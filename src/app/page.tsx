@@ -1,7 +1,6 @@
 import { SiteNav, SiteFooter } from "@/components/site";
 import { getEvents } from "@/lib/events";
 import { ctaFor } from "@/lib/cta";
-import { VideoModalProvider } from "@/components/video";
 import { WaitlistProvider } from "@/components/waitlist";
 import { Hero } from "@/components/home/Hero";
 import { Story } from "@/components/home/story/Story";
@@ -15,7 +14,6 @@ export const revalidate = 60;
 export default async function Home() {
   const events = await getEvents();
   return (
-    <VideoModalProvider>
       <WaitlistProvider cities={events.filter((e) => e.status === "WAITLIST_OPEN").map((e) => ({ slug: e.slug, city: e.city }))}>
         <SiteNav cta={<HeaderCta mode={ctaFor(events)} />} />
         <main id="main">
@@ -27,6 +25,5 @@ export default async function Home() {
         </main>
         <SiteFooter />
       </WaitlistProvider>
-    </VideoModalProvider>
   );
 }

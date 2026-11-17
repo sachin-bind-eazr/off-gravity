@@ -7,7 +7,7 @@ export const TEASER = {
   mp4: "/video/obstacles-1080.mp4",
   mp4Mobile: "/video/obstacles-720.mp4",
   webm: "/video/obstacles-1080.webm",
-  poster: "/images/teaser/frame-01.jpg",
+  poster: "/images/teaser/frame-01.webp",
   duration: 83.2,
   durationLabel: "1:23",
   /** First second of footage with no title card (the intro is ~6 s of branding). */

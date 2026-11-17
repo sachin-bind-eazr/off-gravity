@@ -1,48 +1,43 @@
 "use client";
-import Link from "next/link";
-import { ArrowIcon } from "@/components/site/BookButton";
+import { Check } from "lucide-react";
+import { Button } from "@/components/ui/Button";
 import { ACCENT, inr, type TierCard } from "./types";
 
-function Check({ colour }: { colour: string }) {
-  const stroke = colour === "#B8A6F4" ? "#6E58C9" : colour === "#02D69C" ? "#00916A" : colour;
-  return (
-    <svg className="tk-check" width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
-      <circle cx="9" cy="9" r="9" fill={colour} fillOpacity=".22" />
-      <path d="M5.2 9.4l2.4 2.4 5.2-5.6" fill="none" stroke={stroke} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
-export function TicketCard({ tier, index, slug, dim, jaipurDates, onHold, onSwitch }: {
-  tier: TierCard; index: number; slug: string; dim: boolean; jaipurDates: string;
+export function TicketCard({ tier, slug, offCity, jaipurDates, onHold, onSwitch }: {
+  tier: TierCard; slug: string; offCity: boolean; jaipurDates: string;
   onHold: (t: TierCard) => void; onSwitch: () => void;
 }) {
   const accent = ACCENT[tier.stubColour];
-  const night = tier.stubColour === "night";
+  const priced = !!tier.priceFromPaise;
   return (
-    <li className={`tk-card${night ? " tk-card--night" : ""}${dim ? " tk-card--dim" : ""}`} style={{ ["--i" as string]: index, ["--accent" as string]: accent }}>
-      {dim && <span className="tk-only">Jaipur only</span>}
-      {tier.badge && <span className={`tk-badge tk-badge--${tier.badge}`}>{tier.badge === "popular" ? "Most popular" : "Limited"}</span>}
-      <div className="tk-body">
-        <span className="tk-bar" aria-hidden="true" />
-        <h4 className="tk-name">{tier.name}</h4>
-        <p className="tk-hook">{tier.hook}</p>
-        <p className="tk-price">
-          <span className="tk-from">From</span>
-          <span className="tk-amt">{tier.priceFromPaise ? inr(tier.priceFromPaise) : "TBA"}</span>
-          {tier.priceFromPaise ? <span className="tk-gst">{tier.gstMode === "INCLUSIVE" ? "incl. GST" : "+ GST"}</span> : null}
-        </p>
-        <ul className="tk-perks">
-          {tier.perks.slice(0, 4).map((p) => <li key={p}><Check colour={accent} /><span>{p}</span></li>)}
-        </ul>
+    <li className="tk-card" style={{ ["--accent" as string]: accent }}>
+      <div className="tk-badges">
+        {tier.badge && <span className="tk-badge t-label">{tier.badge === "popular" ? "Most popular" : "Limited"}</span>}
+        {offCity && <span className="tk-badge t-label">Jaipur only</span>}
       </div>
+      <span className="tk-bar" aria-hidden="true" />
+      <h3 className="tk-name t-h3">{tier.name}</h3>
+      <p className="tk-hook t-body">{tier.hook}</p>
+      <div className="tk-price">
+        <p className="tk-price-row">
+          <span className="tk-from t-label">From</span>
+          <span className="tk-amt t-h3">{priced ? inr(tier.priceFromPaise!) : "TBA"}</span>
+          {priced ? <span className="tk-gst t-label">{tier.gstMode === "INCLUSIVE" ? "incl. GST" : "+ GST"}</span> : null}
+        </p>
+        {offCity && <p className="tk-avail t-label">Available in Jaipur · {jaipurDates}</p>}
+      </div>
+      <ul className="tk-perks">
+        {tier.perks.slice(0, 4).map((p) => (
+          <li key={p} className="t-body"><span className="tk-check"><Check size={16} strokeWidth={1.75} aria-hidden /></span><span>{p}</span></li>
+        ))}
+      </ul>
       <div className="tk-act">
-        {dim ? (
-          <button type="button" className="tk-btn" onClick={onSwitch}>Available in Jaipur · {jaipurDates}<ArrowIcon /></button>
+        {offCity ? (
+          <Button variant="outline" fullWidth onClick={onSwitch}>Switch to Jaipur</Button>
         ) : tier.purchasable ? (
-          <Link href={`/book?city=${slug}`} className="tk-btn">Book this tier<ArrowIcon /></Link>
+          <Button variant="outline" fullWidth href={`/book?city=${slug}`}>Book this tier</Button>
         ) : (
-          <button type="button" className="tk-btn" onClick={() => onHold(tier)}>Hold my spot<ArrowIcon /></button>
+          <Button variant="outline" fullWidth onClick={() => onHold(tier)}>Hold my spot</Button>
         )}
       </div>
     </li>

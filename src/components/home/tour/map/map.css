@@ -1,20 +1,20 @@
-.og-map{position:relative;width:100%;height:100%;min-height:300px;overflow:hidden;background-color:#141A21;background-image:radial-gradient(rgba(255,255,255,.06) 1px,transparent 1.2px);background-size:22px 22px;touch-action:pan-y;user-select:none}
+.og-map{position:relative;width:100%;height:100%;min-height:300px;overflow:hidden;background-color:#1D2632;touch-action:pan-y;user-select:none}
 .og-map svg{position:absolute;inset:0;display:block}
 /* lighter land + stronger outline (presentation attrs are overridden by CSS) */
-.og-map svg path[fill="#1D2632"]{fill:#263140}
+.og-map svg path[fill="#1D2632"]{fill:#2B3747}
 .og-map svg path[stroke-opacity=".18"]{stroke-opacity:.5}
 .og-map svg path[stroke-opacity=".08"]{stroke-opacity:.14}
-.og-map__msg{position:absolute;inset:0;display:grid;place-items:center;color:#D5DCE3;font-size:16px;padding:24px;text-align:center}
+.og-map__msg{position:absolute;inset:0;display:grid;place-items:center;color:#fff;font-size:16px;padding:24px;text-align:center}
 
 /* route draw-in: each leg's mask path reveals in order */
 @keyframes og-leg-reveal{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
 .og-leg-reveal{stroke-dasharray:1;stroke-dashoffset:1}
 .og-map[data-live="true"] .og-leg-reveal{animation:og-leg-reveal .27s linear both}
-.og-leg-mint{stroke-dasharray:1 1;stroke-dashoffset:1;transition:stroke-dashoffset .6s ease;filter:drop-shadow(0 0 4px rgba(2,214,156,.55))}
+.og-leg-mint{stroke-dasharray:1 1;stroke-dashoffset:1;transition:stroke-dashoffset .6s ease}
 .og-leg-mint[data-done="true"]{stroke-dashoffset:0}
 
 /* travelling dot */
-.og-dot{position:absolute;left:-7px;top:-7px;width:14px;height:14px;border-radius:50%;background:#02D69C;box-shadow:0 0 0 4px rgba(2,214,156,.25),0 0 14px 4px rgba(2,214,156,.7);opacity:0;pointer-events:none;will-change:transform}
+.og-dot{position:absolute;left:-7px;top:-7px;width:14px;height:14px;border-radius:50%;background:#02D69C;opacity:0;pointer-events:none;will-change:transform}
 
 /* markers: outer wrapper is translated in screen space */
 .og-mk{position:absolute;left:0;top:0;width:0;height:0;will-change:transform;z-index:2}
@@ -25,15 +25,13 @@
 @keyframes og-pop{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
 .og-mk__pop{display:block;width:26px;height:26px;transform:scale(0);opacity:0}
 .og-map[data-live="true"] .og-mk__pop{animation:og-pop .42s cubic-bezier(.2,1.5,.4,1) both;animation-delay:var(--d,0s)}
-.og-mk__dot{position:relative;display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:#fff;color:#1D2632;font:800 13px/1 var(--font-sans),system-ui,sans-serif;box-shadow:0 2px 8px rgba(0,0,0,.35);transition:transform .35s ease,background-color .35s ease}
+.og-mk__dot{position:relative;display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:#fff;color:#1D2632;font:700 14px/1 var(--font-sans),system-ui,sans-serif;transition:transform .35s ease,background-color .35s ease}
 .og-mk__btn:hover .og-mk__dot{transform:scale(1.12)}
-.og-mk[data-on="true"] .og-mk__dot{background:#FD6B14;transform:scale(1.3)}
-@keyframes og-ring{0%{transform:scale(1);opacity:.55}100%{transform:scale(2.3);opacity:0}}
-.og-mk[data-on="true"] .og-mk__dot::after{content:"";position:absolute;inset:0;border-radius:50%;border:2px solid #FD6B14;animation:og-ring 2s ease-out infinite}
+.og-mk[data-on="true"] .og-mk__dot{background:#02D69C;transform:scale(1.3)}
 
 /* labels */
 @keyframes og-fade{from{opacity:0}to{opacity:1}}
-.og-mk__lab{position:absolute;top:0;transform:translateY(-50%);display:flex;flex-direction:column;gap:1px;white-space:nowrap;color:#fff;pointer-events:none;text-shadow:0 0 2px #0E1520,0 0 5px #0E1520,0 1px 3px #0E1520;opacity:0}
+.og-mk__lab{position:absolute;top:0;transform:translateY(-50%);display:flex;flex-direction:column;gap:1px;white-space:nowrap;color:#fff;pointer-events:none;text-shadow:0 1px 2px #1D2632;opacity:0}
 .og-map[data-live="true"] .og-mk__lab{animation:og-fade .4s ease both;animation-delay:var(--d,0s)}
 .og-mk{--off:24px}
 .og-mk[data-on="true"]{--off:29px}
@@ -46,12 +44,12 @@
 .og-mk[data-side="br"] .og-mk__lab{left:12px;top:14px;transform:none;align-items:flex-start;text-align:left}
 .og-mk[data-side="bl"] .og-mk__lab{right:12px;top:14px;transform:none;align-items:flex-end;text-align:right}
 .og-mk[data-hide="true"] .og-mk__lab{visibility:hidden}
-.og-mk__city{font-size:15px;font-weight:700;line-height:1.15}
+.og-mk__city{font-size:16px;font-weight:700;line-height:1.15}
 .og-mk[data-on="true"] .og-mk__city{font-weight:800}
 .og-mk__dates{font-size:14px;font-weight:600;line-height:1.15;opacity:.88}
 
 /* tooltip (hover / keyboard focus) */
-.og-mk__tip{position:absolute;left:0;z-index:6;transform:translateX(-50%);min-width:max-content;padding:8px 12px;border-radius:12px;background:#fff;color:#1D2632;font-size:14px;font-weight:600;line-height:1.35;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,.35);opacity:0;pointer-events:none;transition:opacity .15s ease}
+.og-mk__tip{position:absolute;left:0;z-index:6;transform:translateX(-50%);min-width:max-content;padding:8px 12px;border-radius:12px;background:#fff;color:#1D2632;font-size:14px;font-weight:600;line-height:1.35;text-align:center;opacity:0;pointer-events:none;transition:opacity .15s ease}
 .og-mk[data-tip="t"] .og-mk__tip{bottom:26px}
 .og-mk[data-tip="b"] .og-mk__tip{top:26px}
 .og-mk__btn:hover ~ .og-mk__tip,.og-mk__btn:focus-visible ~ .og-mk__tip{opacity:1}
@@ -60,7 +58,6 @@
   .og-leg-reveal{stroke-dashoffset:0}
   .og-mk__pop{transform:none;opacity:1}
   .og-mk__lab{opacity:1}
-  .og-leg-reveal,.og-mk__pop,.og-mk__lab,.og-mk[data-on="true"] .og-mk__dot::after{animation:none!important}
-  .og-leg-mint,.og-mk__dot{transition:none!important}
+  .og-leg-reveal,.og-mk__pop,.og-mk__lab,  .og-leg-mint,.og-mk__dot{transition:none!important}
   .og-dot{display:none}
 }

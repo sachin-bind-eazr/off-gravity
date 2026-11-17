@@ -4,7 +4,7 @@ import { TicketRail } from "./tickets/TicketRail";
 import { WaitlistBanner } from "./tickets/Banner";
 import { normalise, STATIC_CARDS, type Loaded, type TierCard } from "./tickets/types";
 import { useWaitlist } from "@/components/waitlist";
-import { DISCLAIMER, TOUR } from "@/lib/tour";
+import { TOUR } from "@/lib/tour";
 import { fmtRange } from "../format";
 import "./tickets/tickets.css";
 
@@ -20,15 +20,6 @@ export type WaysInProps = {
   /** Legacy names (kept so the current Tour.tsx keeps working) */
   slug?: string; city?: string; code?: string; mode?: string; onWaitlist?: (tierKey?: string) => void;
 };
-
-function Lock() {
-  return (
-    <svg width="14" height="16" viewBox="0 0 14 16" aria-hidden="true">
-      <rect x="1" y="7" width="12" height="8" rx="2.2" fill="currentColor" />
-      <path d="M3.8 7V5a3.2 3.2 0 0 1 6.4 0v2" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-    </svg>
-  );
-}
 
 export function WaysIn(p: WaysInProps) {
   const slug = p.citySlug ?? p.slug ?? "mumbai";
@@ -67,26 +58,26 @@ export function WaysIn(p: WaysInProps) {
   return (
     <div className="tk-wrap" aria-labelledby="ways-in-h">
       <div className="tk-head">
-        <p className="tk-pill"><Lock /><span>Tickets go on sale soon · <span key={city} className="tk-city">{city}</span></span></p>
-        <h3 id="ways-in-h" className="t-section tk-h3">Four ways to <span className="tk-hl">bounce in.</span></h3>
-        <p className="tk-line">
+        <p className="t-kicker on-light">Tickets · {city}</p>
+        <h2 id="ways-in-h" className="t-h2">Four ways to bounce in.</h2>
+        <p className="t-body-lg measure">
           Pricing for each tier is being finalised with our city partners. Here&apos;s a preview of what&apos;s coming. Waitlist members get early access
           {hours ? <>, <strong>a {hours}-hour early-bird window</strong> and the lowest ticket prices.</> : <> and the lowest ticket prices.</>}
         </p>
+        <p className="tk-note t-label">Tickets go on sale soon. Dates are provisional.</p>
       </div>
 
-      <div aria-live="polite" aria-busy={!ready}>
+      <div className="tk-content" aria-live="polite" aria-busy={!ready}>
         {!ready ? (
-          <div className="tk-skels" aria-hidden="true">{[0, 1, 2, 3].map((i) => <div key={i} className="tk-skel" />)}</div>
+          <div className="tk-rail tk-skels" aria-hidden="true">{[0, 1, 2, 3].map((i) => <div key={i} className="tk-skel" />)}</div>
         ) : ready.hidden ? (
-          <p className="tk-empty">Tiers for {city} will be announced soon.</p>
+          <p className="tk-empty t-body">Tiers for {city} will be announced soon.</p>
         ) : (
           <TicketRail tiers={ready.tiers} slug={slug} city={city} jaipurDates={JAI_DATES} onHold={(t) => hold(t)} onSwitch={toJaipur} />
         )}
       </div>
 
       <WaitlistBanner onJoin={() => hold()} />
-      <p className="tk-disclaimer">{DISCLAIMER}</p>
     </div>
   );
 }

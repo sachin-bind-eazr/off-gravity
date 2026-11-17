@@ -2,7 +2,9 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { Logo } from "./Logo";
-import { BookButton } from "./BookButton";
+import { Menu, X } from "lucide-react";
+import { Button } from "@/components/ui/Button";
+import { Container } from "@/components/ui/Container";
 import "./nav.css";
 const SECTION_IDS = ["about", "obstacles", "tour"];
 const LINKS = [
@@ -14,7 +16,6 @@ const LINKS = [
 export function SiteNav({ cta }: { cta?: React.ReactNode } = {}) {
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
-  const btnRef = useRef<HTMLButtonElement>(null);
   const [active, setActive] = useState<string | null>(null);
   // active-section underline: whichever section spans the viewport's middle line.
   // Re-queries the DOM each time: homepage sections can remount when layout mode (pinned/static) resolves.
@@ -42,7 +43,7 @@ export function SiteNav({ cta }: { cta?: React.ReactNode } = {}) {
     const el = menuRef.current!; const f = () => Array.from(el.querySelectorAll<HTMLElement>("a,button"));
     f()[0]?.focus();
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") { setOpen(false); btnRef.current?.focus(); }
+      if (e.key === "Escape") { setOpen(false); document.getElementById("menu-btn")?.focus(); }
       if (e.key === "Tab") { const items = f(); const first = items[0], last = items[items.length - 1];
         if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
         else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); } }
@@ -51,27 +52,31 @@ export function SiteNav({ cta }: { cta?: React.ReactNode } = {}) {
     return () => { document.body.style.overflow = prev; document.removeEventListener("keydown", onKey); };
   }, [open]);
   return (
-    <header className="sticky top-0 z-50 border-b border-white/10 bg-ink text-white">
-      <div className="mx-auto flex h-[var(--nav-h)] max-w-[1312px] items-center justify-between gap-2 px-[var(--pad)]">
-        <Logo height={50} className="og-logo" />
-        <nav aria-label="Main" className="hidden items-center gap-8 text-[16px] font-semibold min-[980px]:flex">
-          {LINKS.map((l) => { const id = l.href.startsWith("/#") ? l.href.slice(2) : ""; return <Link key={l.label} href={l.href} className="og-navlink hover:text-mint" aria-current={id && active === id ? "location" : undefined}>{l.label}</Link>; })}
-        </nav>
-        <div className="flex items-center gap-2 min-[400px]:gap-4 min-[980px]:gap-5">
-          <Link href="/my-bookings" className="hidden text-[16px] font-semibold hover:text-mint min-[980px]:inline">My bookings</Link>
-          {cta ?? <BookButton small>Book your slot</BookButton>}
-          <button ref={btnRef} type="button" aria-expanded={open} aria-controls="mobile-menu" onClick={() => setOpen(true)} className="inline-flex h-11 items-center rounded-full border border-white/40 px-3.5 text-[15px] font-bold min-[980px]:hidden">Menu</button>
-        </div>
-      </div>
-      {open && (
-        <div id="mobile-menu" ref={menuRef} role="dialog" aria-modal="true" aria-label="Menu" className="fixed inset-0 z-50 flex flex-col bg-ink px-[var(--pad)] py-5">
-          <div className="flex h-[52px] items-center justify-between"><Logo height={46} className="og-logo" />
-            <button type="button" onClick={() => { setOpen(false); btnRef.current?.focus(); }} className="inline-flex h-11 items-center rounded-full border border-white/30 px-4 text-[15px] font-bold">Close</button></div>
-          <nav aria-label="Mobile" className="mt-10 flex flex-col gap-2">
-            {[...LINKS, { href: "/my-bookings", label: "My bookings" }].map((l) => (
-              <Link key={l.label} href={l.href} onClick={() => setOpen(false)} className="border-b border-white/10 py-4 text-[32px] font-extrabold tracking-tight">{l.label}</Link>))}
+    <header className="og-nav">
+      <Container>
+        <div className="og-nav__bar">
+          <Logo height={50} className="og-logo" />
+          <nav aria-label="Main" className="og-nav__links">
+            {LINKS.map((l) => { const id = l.href.startsWith("/#") ? l.href.slice(2) : ""; return <Link key={l.label} href={l.href} className="og-navlink" aria-current={id && active === id ? "location" : undefined}>{l.label}</Link>; })}
           </nav>
-          <div className="mt-auto pb-6" onClick={() => setOpen(false)}>{cta ?? <BookButton>Book your slot</BookButton>}</div>
+          <div className="og-nav__right">
+            <Link href="/my-bookings" className="og-navlink og-nav__mylink">My bookings</Link>
+            <div className="og-nav__cta">{cta ?? <Button href="/book">Book your slot</Button>}</div>
+            <Button id="menu-btn" variant="ghost-on-dark" leadingIcon={Menu} aria-expanded={open} aria-controls="mobile-menu" onClick={() => setOpen(true)} className="og-nav__burger">Menu</Button>
+          </div>
+        </div>
+      </Container>
+      {open && (
+        <div id="mobile-menu" ref={menuRef} role="dialog" aria-modal="true" aria-label="Menu" className="og-menu">
+          <Container className="flex flex-1 flex-col">
+            <div className="og-nav__bar"><Logo height={50} className="og-logo" />
+              <Button variant="ghost-on-dark" leadingIcon={X} onClick={() => { setOpen(false); document.getElementById("menu-btn")?.focus(); }}>Close</Button></div>
+            <nav aria-label="Mobile" className="og-menu__list">
+              {[...LINKS, { href: "/my-bookings", label: "My bookings" }].map((l) => (
+                <Link key={l.label} href={l.href} onClick={() => setOpen(false)}>{l.label}</Link>))}
+            </nav>
+            <div className="og-menu__cta" onClick={() => setOpen(false)}>{cta ?? <Button href="/book">Book your slot</Button>}</div>
+          </Container>
         </div>
       )}
     </header>

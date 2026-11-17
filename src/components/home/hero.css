@@ -1,45 +1,19 @@
-/* Hero layout. Desktop: whole first screen (nav 72 + hero + tour strip) fills the viewport. */
-.og-hero{--strip-h:66px;display:flex;flex-direction:column;background:var(--color-ink);color:#fff}
-.og-hero__stage{position:relative;overflow:hidden;display:flex;flex-direction:column}
-.og-hero__art{position:relative;aspect-ratio:4/5;width:100%;overflow:hidden;
-  -webkit-mask-image:linear-gradient(to bottom,#000 60%,transparent 100%);mask-image:linear-gradient(to bottom,#000 60%,transparent 100%)}
+/* Hero: one Container + 12-col grid. Art is real artwork with a plain flat dark overlay for legibility only. */
+.og-hero{position:relative;background:var(--color-ink);color:#fff}
+.og-hero__stage{position:relative;overflow:hidden}
+.og-hero__art{position:relative;aspect-ratio:16/11;width:100%;overflow:hidden}
 .og-hero__art img{object-fit:cover;object-position:64% 45%}
-.og-hero__copy{position:relative;z-index:1;margin-top:-104px;margin-inline:auto;width:100%;max-width:1312px;padding:0 var(--pad) 48px}
-.og-hero__copy::before{content:"";position:absolute;left:0;right:0;top:-40px;height:190px;z-index:-1;pointer-events:none;background:linear-gradient(to bottom,transparent,rgba(29,38,50,.85) 55%,var(--color-ink))}
-.og-hero__col{display:flex;flex-direction:column}
-.og-hero__col>.og-hero__actions{order:2;margin-top:24px}
-.og-hero__col>.og-hero__lead{order:3;margin-top:22px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.og-hero__h1{font-size:clamp(46px,13vw,64px);order:1}
-.og-hero__col>p:first-child{order:0}
-@media (min-width:560px) and (max-width:859.98px){.og-hero__art{aspect-ratio:16/10}.og-hero__copy{margin-top:-120px}}
-@media (min-width:860px){
-  .og-hero__copy{margin-top:0}
-  .og-hero__copy::before{display:none}
-  .og-hero__h1{order:0}
-  .og-hero__col>.og-hero__actions{order:0;margin-top:36px}
-  .og-hero__col>.og-hero__lead{order:0;margin-top:24px;display:block;-webkit-line-clamp:unset;overflow:visible}
-  .og-hero{min-height:clamp(600px,calc(100svh - 72px),1040px)}
-  .og-hero__stage{flex:1 1 auto;flex-direction:row;align-items:center}
-  .og-hero__art{position:absolute;inset:0 0 0 auto;width:78%;aspect-ratio:auto;
-    -webkit-mask-image:linear-gradient(to right,transparent 0,#000 34%);mask-image:linear-gradient(to right,transparent 0,#000 34%)}
-  .og-hero__art img{object-position:62% 45%}
-  /* scrim keeps copy readable without hiding the runners */
-  .og-hero__stage::after{content:"";position:absolute;inset:0;pointer-events:none;
-    background:linear-gradient(90deg,rgba(29,38,50,.96) 0,rgba(29,38,50,.86) 28%,rgba(29,38,50,.5) 44%,rgba(29,38,50,.12) 56%,transparent 64%)}
-  .og-hero__copy{position:relative;z-index:1;padding-block:72px}
-  .og-hero__col{max-width:min(46%,600px)}
-  .og-hero__h1{font-size:clamp(58px,6.4vw,106px)}
+.og-hero__copy{position:relative;padding-block:var(--og-section-y)}
+.og-hero__lead{margin-top:var(--s-24);color:var(--color-on-dark)}
+.og-hero__actions{margin-top:var(--s-32);display:flex;flex-wrap:wrap;gap:var(--s-16)}
+@media (min-width:1000px){
+  .og-hero__stage{display:flex;align-items:center;min-height:clamp(640px,calc(100svh - var(--nav-h) - 72px),960px)}
+  .og-hero__art{position:absolute;inset:0;aspect-ratio:auto}
+  .og-hero__art::after{content:"";position:absolute;inset:0;background:rgb(14 21 32/.72)}
+  .og-hero__copy{width:100%}
 }
-@media (min-width:860px) and (max-width:1100px){.og-hero__art{width:84%}.og-hero__col{max-width:50%}}
-@media (min-width:1700px){.og-hero__art img{object-position:55% 45%}}
-.og-hero__strip{border-top:1px solid rgb(255 255 255/.15)}
-
-/* watch pill + scroll cue */
-.og-watch{display:inline-flex;align-items:center;gap:9px;padding:15px 20px;border-radius:999px;border:1.5px solid rgb(255 255 255/.5);color:#fff;font-weight:700;font-size:16px;white-space:nowrap;background:rgb(29 38 50/.35);cursor:pointer;transition:transform .15s,background .2s,border-color .2s}
-.og-watch:hover{transform:translateY(-3px);background:rgb(255 255 255/.14);border-color:#fff}
-.og-watch__dur{color:var(--color-on-dark);font-weight:600}
-.og-hero__cue{position:absolute;left:50%;margin-left:-1px;bottom:14px;width:2px;height:44px;border-radius:2px;background:rgb(255 255 255/.22);overflow:hidden;pointer-events:none;z-index:2}
-.og-hero__cue::after{content:"";position:absolute;left:0;top:0;width:100%;height:50%;background:var(--color-mint);border-radius:2px;animation:og-cue 2.2s cubic-bezier(.6,0,.4,1) infinite}
-@keyframes og-cue{0%{transform:translateY(-100%)}70%,100%{transform:translateY(200%)}}
-@media (max-width:859.98px){.og-hero__cue{display:none}}
-@media (prefers-reduced-motion:reduce){.og-hero__cue::after{animation:none;transform:translateY(40%)}}
+.og-hero__strip{border-top:1px solid rgb(255 255 255/.12)}
+.og-hero__strip ul{display:flex;flex-wrap:wrap;align-items:center;gap:var(--s-8) var(--s-32);padding-block:var(--s-24);list-style:none;margin:0}
+.og-hero__strip li{white-space:nowrap}
+.og-hero__strip a:hover{color:var(--color-mint)}
+.og-hero__strip .tag{margin-left:var(--s-8);color:var(--color-on-dark)}

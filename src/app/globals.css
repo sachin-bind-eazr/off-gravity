@@ -31,20 +31,8 @@ section[id]{scroll-margin-top:var(--nav-h)}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 
 /* ---- homepage additions ---- */
-:root{--hero-mask:linear-gradient(to right,transparent 0,#000 24%)}
-@media (max-width:859px){:root{--hero-mask:linear-gradient(to bottom,#000 55%,transparent 100%)}}
-@keyframes hero-push{from{transform:scale(1.07)}to{transform:scale(1)}}
-.hero-push{animation:hero-push 14s ease-out both}
-@keyframes beam-sweep{0%,100%{transform:rotate(-7deg)}50%{transform:rotate(7deg)}}
 @keyframes neon-flicker{0%,100%{opacity:1}45%{opacity:.85}50%{opacity:.6}55%{opacity:.92}}
-@keyframes twinkle{0%,100%{opacity:.25}50%{opacity:1}}
-.beam{transform-box:fill-box;transform-origin:50% 0;animation:beam-sweep 9s ease-in-out infinite}
-.beam:nth-of-type(2n){animation-delay:-3s}.beam:nth-of-type(3n){animation-delay:-6s}
 .neon{animation:neon-flicker 4s ease-in-out infinite}
-.star{animation:twinkle 3s ease-in-out infinite}
-.rule-top{border-top:2px solid currentColor}
-.tour-panel{transition:background-color .35s ease,color .35s ease}
-
 
 /* ---- global focus + glow additions (agent 4) ---- */
 :where(a,button,input,select,textarea,summary,[tabindex]):focus-visible{outline:3px solid var(--color-orange);outline-offset:3px;border-radius:6px}
@@ -52,54 +40,17 @@ section[id]{scroll-margin-top:var(--nav-h)}
 :where(.bg-mint) :where(a,button):focus-visible{outline-color:var(--color-ink)}
 .skip-link{position:absolute;left:12px;top:-60px;z-index:100;background:var(--color-orange);color:var(--color-ink);font-weight:800;padding:12px 18px;border-radius:999px}
 .skip-link:focus{top:12px}
-@keyframes crowd-sway{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
-.crowd-arm{animation:crowd-sway 3.4s ease-in-out infinite}
-@keyframes stage-pulse{0%,100%{opacity:.85}50%{opacity:1}}
-.stage-glow{animation:stage-pulse 6s ease-in-out infinite}
-.city-chip{display:inline-flex;align-items:center;gap:8px;border-radius:999px;border:1.5px solid rgba(29,38,50,.35);padding:10px 18px;font-weight:700;font-size:16px;transition:background-color .15s,transform .15s}
-.city-chip:hover{background:var(--color-ink);color:#fff;transform:translateY(-3px)}
-.gn-fade-m{display:none}
-@media (max-width:859px){.gn-fade-d{display:none}.gn-fade-m{display:block}}
-.crowd-arm{transform-box:fill-box;transform-origin:50% 100%}
 
 /* ---- agent 3: experiences + tour (namespaced) ---- */
-.og-exp-img{display:block;object-fit:cover;transition:transform .6s cubic-bezier(.2,.7,.2,1)}
-.og-exp:hover .og-exp-img{transform:scale(1.035)}
-.og-tour-panel{transition:background-color .35s ease,color .35s ease}
 @keyframes og-tour-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 .og-tour-in{animation:og-tour-in .35s ease both}
-@keyframes og-route-dash{to{stroke-dashoffset:-22}}
-.og-route-dash{animation:og-route-dash 3s linear infinite}
 
 /* ---- race filmstrip (rj-) ---- */
-.rj-strip{scrollbar-width:none}.rj-strip::-webkit-scrollbar{display:none}
-.rj-card .rj-img{transition:transform .6s ease}
-@media (hover:hover){.rj-card:hover .rj-img{transform:scale(1.04)}}
 
-/* S4 ways-in (namespaced wi-) */
-.wi-cta{display:inline-flex;align-items:center;gap:10px;background:var(--color-orange);color:var(--color-ink);font-weight:800;font-size:16px;padding:13px 20px;border-radius:999px;transition:transform .15s}
-.wi-cta:hover{transform:translateY(-2px)}
-.wi-cta--ghost{background:transparent;color:#fff;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.4)}
-.wi-card{transition:transform .25s ease}
-@media (hover:hover){.wi-card:hover{transform:translateY(-4px)}}
 
 /* ---- polish round (agent X1) ---- */
 /* Shared kicker: 15px / 700, ink on light grounds (never cobalt) */
-.t-kicker{font-size:15px;font-weight:700;letter-spacing:0;color:var(--color-text-muted)}
 #tour .text-cobalt{color:var(--color-text-muted)}
-
-/* .og-grade: brand colour grade for off-palette footage/photos.
-   Usage: <div class="og-grade" style="--grade:var(--color-mint)"><img .../></div>  (wrapper needs a size; clips to its radius)
-   - image is mostly desaturated, then tinted with the grade colour (mix-blend: color)
-   - ::after adds fine film grain + a bottom vignette (hides upscale softness) */
-.og-grade{position:relative;isolation:isolate;overflow:hidden}
-.og-grade>img,.og-grade>picture img{filter:grayscale(.88) contrast(1.14) brightness(.94)}
-.og-grade::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:var(--grade,var(--color-mint));mix-blend-mode:color;opacity:var(--grade-strength,.82)}
-.og-grade::after{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;
-  background:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E") 0 0/160px 160px,
-    linear-gradient(to top,rgb(14 21 32/.55),transparent 55%);
-  opacity:.55}
 
 /* scroll reveal (opt-in: [data-reveal], plus section h2s). Hidden state exists only when JS has armed it. */
 html[data-reveal="on"] [data-reveal]:not([data-in]){opacity:0;transform:translateY(16px)}
@@ -107,3 +58,47 @@ html[data-reveal="on"] [data-reveal]{transition:opacity .65s cubic-bezier(.2,.7,
 /* scroll progress hairline under the nav */
 .og-progress{position:fixed;left:0;right:0;top:var(--nav-h);height:3px;z-index:45;pointer-events:none;background:transparent}
 .og-progress i{display:block;height:100%;background:var(--color-mint);transform-origin:0 50%;transform:scaleX(0);will-change:transform}
+
+/* ================= FOUNDATION (see FOUNDATION.md) ================= */
+:root{--s-4:4px;--s-8:8px;--s-12:12px;--s-16:16px;--s-24:24px;--s-32:32px;--s-48:48px;--s-64:64px;--s-96:96px;--s-128:128px;
+  --og-section-y:64px;--og-pad:24px}
+@media (min-width:640px){:root{--og-section-y:96px;--og-pad:40px}}
+@media (min-width:1024px){:root{--og-section-y:128px;--og-pad:64px}}
+.og-container{width:100%;max-width:1280px;margin-inline:auto;padding-inline:var(--og-pad)}
+.grid-12{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:24px;row-gap:24px}
+.og-section{padding-block:var(--og-section-y)}
+.og-section--light{background:var(--color-cream);color:var(--color-ink)}
+.og-section--dark{background:var(--color-ink);color:#fff}
+.og-section--white{background:#fff;color:var(--color-ink)}
+.t-display,.t-h2,.t-h3{text-wrap:balance}
+.t-display{font-size:48px;font-weight:800;line-height:1;letter-spacing:-.03em}
+.t-h2{font-size:40px;font-weight:800;line-height:1;letter-spacing:-.03em}
+.t-h3{font-size:24px;font-weight:700;line-height:1.2;letter-spacing:-.01em}
+.t-body-lg{font-size:18px;font-weight:400;line-height:1.6}
+.t-body{font-size:16px;font-weight:400;line-height:1.6}
+.t-label{font-size:14px;font-weight:600;line-height:1.4}
+@media (min-width:640px) and (max-width:1023px){.t-display{font-size:68px}.t-h2{font-size:52px}.t-h3{font-size:26px}.t-body-lg{font-size:19px}}
+@media (min-width:1024px){.t-display{font-size:88px}.t-h2{font-size:64px}.t-h3{font-size:28px}.t-body-lg{font-size:20px}}
+.t-kicker{font-size:14px;font-weight:600;line-height:1.4;color:color-mix(in srgb,var(--color-ink) 60%,transparent)}
+.t-kicker.on-dark{color:var(--color-mint)}
+.t-kicker.on-light{color:var(--color-cobalt)}
+.measure{max-width:60ch}
+.t-kicker+:is(.t-h2,.t-h3,.t-display){margin-top:var(--s-16)}
+:is(.t-h2,.t-display)+:is(.t-body-lg,.t-body){margin-top:var(--s-24)}
+.og-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap;border-radius:999px;font-weight:600;border:1.5px solid transparent;cursor:pointer;text-decoration:none;transition:background-color .15s,color .15s,border-color .15s;height:48px;padding:0 24px;font-size:16px;line-height:1}
+.og-btn--lg{height:56px;padding:0 32px;font-size:17px}
+.og-btn--full{display:flex;width:100%}
+.og-btn--primary{background:var(--color-orange);color:var(--color-ink)}
+.og-btn--primary:hover{background:#e85f0c}
+.og-btn--secondary{background:var(--color-ink);color:#fff}
+.og-btn--secondary:hover{background:var(--color-ink-deep)}
+.og-btn--outline{background:transparent;color:var(--color-ink);border-color:var(--color-ink)}
+.og-btn--outline:hover{background:var(--color-ink);color:#fff}
+.og-btn--ghost-on-dark{background:transparent;color:#fff;border-color:#fff}
+.og-btn--ghost-on-dark:hover{background:#fff;color:var(--color-ink)}
+.og-btn:focus-visible{outline:3px solid var(--color-ink);outline-offset:3px;border-radius:999px}
+:where(.bg-ink,.bg-ink-deep,.bg-night-deep,.og-section--dark) .og-btn:focus-visible{outline-color:#fff}
+.og-btn[aria-disabled="true"],.og-btn:disabled{opacity:.45;cursor:not-allowed;pointer-events:none}
+.og-btn[aria-busy="true"]{cursor:progress}
+@keyframes og-spin{to{transform:rotate(360deg)}}
+.og-btn__spin{animation:og-spin .8s linear infinite}

@@ -1,15 +1,15 @@
 "use client";
-import { ArrowIcon } from "@/components/site/BookButton";
+import { Button } from "@/components/ui/Button";
 
 export function WaitlistBanner({ onJoin }: { onJoin: () => void }) {
   return (
     <div className="tk-banner">
       <div className="tk-banner-copy">
-        <p className="tk-banner-kicker">Waitlist early access</p>
-        <h4 className="tk-banner-h">Get priority access and the lowest ticket prices.</h4>
-        <p className="tk-banner-p">When sales open, waitlist members get first pick of every tier, in every city.</p>
+        <p className="t-kicker on-dark">Waitlist early access</p>
+        <h3 className="t-h3">Get priority access and the lowest ticket prices.</h3>
+        <p className="t-body">When sales open, waitlist members get first pick of every tier, in every city.</p>
       </div>
-      <button type="button" className="tk-banner-btn" onClick={onJoin}>Join the waitlist<ArrowIcon /></button>
+      <div className="tk-banner-act"><Button variant="primary" size="lg" onClick={onJoin}>Join the waitlist</Button></div>
     </div>
   );
 }

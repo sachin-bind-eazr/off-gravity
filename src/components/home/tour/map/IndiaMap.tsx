@@ -24,6 +24,7 @@ type View = { k: number; tx: number; ty: number };
 type Pt = { x: number; y: number };
 const ZOOM = 1.6;
 const DUR = 700;
+const EDGE = 40; // min distance from the map edge to the outermost marker centre
 type Side = "l" | "r" | "t" | "b" | "tr" | "tl" | "br" | "bl";
 const SIDE: Record<string, Side> = { mumbai: "t", bengaluru: "r", delhi: "r", chandigarh: "l", jaipur: "l", satara: "r" };
 
@@ -91,9 +92,14 @@ export function IndiaMap({ events, selected, onSelect }: { events: EventView[]; 
     // zoom far enough that EVERY pair of stops is at least ~46px apart on screen (markers never touch)
     let dMin = Infinity;
     for (let i = 0; i < base.length; i++) for (let j = i + 1; j < base.length; j++) dMin = Math.min(dMin, Math.hypot(base[i].x - base[j].x, base[i].y - base[j].y) || 1);
-    const kz = Math.min(5, Math.max(ZOOM, 46 / dMin));
+    const kz0 = Math.min(5, Math.max(ZOOM, 46 / dMin));
+    // frame the whole route: shrink the zoom until every stop fits between the top and bottom edge (never closer than ~34px apart)
+    const ys = base.map((b) => b.y);
+    const span = Math.max(...ys) - Math.min(...ys) || 1;
+    const kfit = (size.h - 2 * EDGE) / span;
+    const kz = Math.max(Math.min(kz0, kfit), Math.min(kz0, 34 / dMin));
     return {
-      base, kz,
+      base, kz, minY: Math.min(...ys), maxY: Math.max(...ys),
       states: fc.features.map((f) => path(f) ?? ""),
       inner: path(mesh(topo, obj, (a, b) => a !== b)) ?? "",
       outer: path(mesh(topo, obj, (a, b) => a === b)) ?? "",
@@ -110,7 +116,14 @@ export function IndiaMap({ events, selected, onSelect }: { events: EventView[]; 
     const ov = overlay();
     const ax = ov ? size.w * 0.64 : size.w * 0.5;
     const ay = ov ? size.h * 0.38 : size.h * 0.5;
-    return { k: geo.kz, tx: ax - b.x * geo.kz, ty: ay - b.y * geo.kz };
+    let ty = ay - b.y * geo.kz;
+    // when the whole route fits vertically, slide the view so no marker is clipped at the top or bottom edge
+    const top = geo.minY * geo.kz + ty, bot = geo.maxY * geo.kz + ty;
+    if (bot - top <= size.h - 2 * EDGE + 0.5) {
+      if (top < EDGE) ty += EDGE - top;
+      else if (bot > size.h - EDGE) ty -= bot - (size.h - EDGE);
+    }
+    return { k: geo.kz, tx: ax - b.x * geo.kz, ty };
   }, [geo, size.w, size.h]);
 
   /** Write one frame to the DOM. `dt` = travelling-dot progress (0..1) or null. */
