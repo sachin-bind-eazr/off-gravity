@@ -25,7 +25,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     <div className="min-h-screen bg-cream md:grid md:grid-cols-[240px_1fr]">
       <aside className="bg-ink p-5 text-on-dark md:sticky md:top-0 md:h-screen">
         <div className="flex items-center gap-3 md:block">
-          <div className="inline-grid h-14 w-14 place-items-center rounded-2xl bg-mint"><Image src="/assets/art/logo.png" alt="OFF GRAVITY" width={44} height={32} /></div>
+          <div className="inline-grid h-14 w-14 place-items-center"><Image src="/assets/brand/logo-ink.png" alt="OFF GRAVITY" width={55} height={42} /></div>
           <p className="text-sm md:mt-3">{a.email}<br /><span className="font-bold text-mint">{a.role.toLowerCase()}</span></p>
         </div>
         <nav aria-label="Admin" className="mt-5 flex gap-1 overflow-x-auto md:flex-col">

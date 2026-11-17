@@ -19,7 +19,7 @@ export function Hero({ events }: { events: EventView[] }) {
         <Container className="og-hero__copy">
           <div className="grid-12">
             <div className="col-span-12 lg:col-span-7">
-              <p className="t-kicker on-dark">India&rsquo;s first play-fitness festival</p>
+              <p className="og-hero__kicker">India&rsquo;s first play-fitness festival</p>
               <h1 className="t-display">Fitness,<br />minus the<br />gravity.</h1>
               <p className="og-hero__lead t-body-lg measure">Race a timed course of giant inflatable obstacles, then stay for the festival. Two days in six cities, from 30 January 2027.</p>
               <HeroActions mode={mode} />

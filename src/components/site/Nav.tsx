@@ -76,7 +76,7 @@ export function SiteNav({ cta, overlay = false }: { cta?: React.ReactNode; overl
     <header className="og-nav" data-hidden={hidden && !open ? "true" : undefined} onFocusCapture={() => setHidden(false)}>
       <Container>
         <div className="og-nav__bar">
-          <Logo height={40} className="og-logo og-nav__logo" />
+          <Logo height={52} priority className="og-logo og-nav__logo" />
           <nav aria-label="Main" className="og-nav__links">
             {LINKS.map((l) => { const id = l.href.startsWith("/#") ? l.href.slice(2) : ""; return <Link key={l.label} href={l.href} className="og-navlink" aria-current={id && active === id ? "location" : undefined}>{l.label}</Link>; })}
           </nav>
@@ -89,7 +89,7 @@ export function SiteNav({ cta, overlay = false }: { cta?: React.ReactNode; overl
       {open && (
         <div id="mobile-menu" ref={menuRef} role="dialog" aria-modal="true" aria-label="Menu" className="og-menu">
           <Container className="flex flex-1 flex-col">
-            <div className="og-nav__bar"><Logo height={50} className="og-logo" />
+            <div className="og-nav__bar"><Logo height={52} variant="cream" className="og-logo" />
               <Button variant="ghost-on-dark" leadingIcon={X} onClick={() => { setOpen(false); document.getElementById("menu-btn")?.focus(); }}>Close</Button></div>
             <nav aria-label="Mobile" className="og-menu__list">
               {[...LINKS, { href: "/my-bookings", label: "My bookings" }].map((l) => (

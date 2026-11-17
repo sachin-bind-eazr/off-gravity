@@ -1,12 +1,11 @@
-/* Logo: trim the 1-2px colour fringe left by the stop-gap crop (replace with the vector logo when supplied) */
-.og-logo img{clip-path:inset(3px 2px 3px 2px round 9px)}
+.og-logo{display:inline-flex;align-items:center}
 /* Floating header, no bar background: logo left, links in a rounded pill centre, My bookings button right.
    Hides on scroll down, slides back on scroll up. (No will-change: it would trap the fixed mobile menu.) */
 .og-nav__spacer{height:var(--nav-h)}
 .og-nav{position:fixed;top:0;left:0;right:0;z-index:50;background:transparent;color:#fff;transition:transform .45s cubic-bezier(.22,.8,.24,1)}
 .og-nav[data-hidden="true"]{transform:translateY(calc(-100% - 8px))}
-.og-nav .og-nav__logo{display:inline-flex;align-items:center;justify-self:start;height:52px;padding:0 var(--s-12);border-radius:16px;border:1px solid rgb(255 255 255/.14)}
-.og-nav .og-nav__chip,.og-nav .og-nav__links,.og-nav .og-nav__logo{background:rgb(14 21 32/.78);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+.og-nav .og-nav__logo{justify-self:start}
+.og-nav .og-nav__chip,.og-nav .og-nav__links{background:rgb(14 21 32/.78);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
 .og-nav .og-nav__chip{border-color:rgb(255 255 255/.5)}
 .og-nav .og-nav__chip:hover{background:#fff;color:var(--color-ink);border-color:#fff}
 .og-nav__bar{display:flex;align-items:center;justify-content:space-between;gap:var(--s-16);height:var(--nav-h)}

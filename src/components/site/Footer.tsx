@@ -14,7 +14,7 @@ export function SiteFooter() {
     <Section as="footer" tone="none" className="og-footer">
       <div className="grid-12">
         <div className="col-span-12 md:col-span-6 lg:col-span-3">
-          <Logo height={64} className="og-logo" />
+          <Logo height={80} variant="cream" className="og-logo" />
           <p className="t-body mt-6 max-w-[320px]">{HOME.footer.blurb}</p>
         </div>
         <nav aria-label="Footer" className="col-span-6 lg:col-span-3">
