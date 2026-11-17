@@ -80,7 +80,7 @@ export default async function CityPage({ params }: P) {
 
         <section style={{ background: c.bg, color: c.fg }}>
           <div className="container-og grid gap-12 py-[clamp(64px,8vw,120px)] md:grid-cols-[1.3fr_1fr] md:items-end">
-            <div>
+            <div className="min-w-0">
               <p className="mb-6 font-bold">
                 <Link href="/#tour" className="underline underline-offset-4">2027 tour</Link> / Season {e.season}
               </p>
@@ -89,7 +89,7 @@ export default async function CityPage({ params }: P) {
                 <p className="mt-6 inline-block rounded-full px-4 py-1.5 text-[15px] font-bold" style={{ background: c.panel }}>{e.tag}</p>
               )}
             </div>
-            <div className="rounded-[26px] p-7" style={{ background: c.panel }}>
+            <div className="min-w-0 rounded-[26px] p-6 sm:p-7" style={{ background: c.panel }}>
               <p className="text-[20px] font-extrabold">{dates}</p>
               <ul className="mt-4 space-y-2 text-[18px]">
                 <li><strong>{sat.weekday}</strong> {sat.day} {sat.month}</li>

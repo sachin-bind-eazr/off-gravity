@@ -40,13 +40,16 @@
 @media (min-width:640px) and (max-width:1279px){.tk-skels{margin-bottom:0;row-gap:var(--s-24)}}
 .tk-empty{margin:0;color:var(--color-text-muted)}
 
-.tk-banner{margin-top:var(--s-48);display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:var(--s-24);row-gap:var(--s-24);align-items:center;background:var(--color-ink);color:#fff;border-radius:20px;padding:var(--s-32)}
+/* one column on phones/tablets (12 columns of 24px gaps don't fit inside a padded 320px card); 8/4 split from 860px */
+.tk-banner{margin-top:var(--s-48);display:grid;grid-template-columns:minmax(0,1fr);column-gap:var(--s-24);row-gap:var(--s-24);align-items:center;background:var(--color-ink);color:#fff;border-radius:20px;padding:var(--s-24)}
+@media (min-width:480px){.tk-banner{padding:var(--s-32)}}
 .tk-banner-copy{grid-column:1 / -1}
 .tk-banner-copy .t-h3{margin-top:var(--s-16)}
 .tk-banner-copy .t-body{margin:var(--s-16) 0 0;max-width:60ch;color:rgb(255 255 255 / .8)}
 .tk-banner-act{grid-column:1 / -1;display:flex;justify-content:flex-start}
 @media (min-width:640px){.tk-banner{padding:var(--s-48)}}
 @media (min-width:860px){
+  .tk-banner{grid-template-columns:repeat(12,minmax(0,1fr))}
   .tk-banner-copy{grid-column:span 8}
   .tk-banner-act{grid-column:span 4;justify-content:flex-end}
 }

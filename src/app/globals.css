@@ -88,6 +88,9 @@ html[data-reveal="on"] [data-reveal]{transition:opacity .65s cubic-bezier(.2,.7,
 .og-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap;border-radius:999px;font-weight:600;border:1.5px solid transparent;cursor:pointer;text-decoration:none;transition:background-color .15s,color .15s,border-color .15s;height:48px;padding:0 24px;font-size:16px;line-height:1}
 .og-btn--lg{height:56px;padding:0 32px;font-size:17px}
 .og-btn--full{display:flex;width:100%}
+/* narrow phones: a long label wraps onto two lines inside the pill instead of pushing the page sideways */
+.og-btn{max-width:100%}
+@media (max-width:479px){.og-btn{white-space:normal;text-align:center;height:auto;min-height:48px;padding-block:10px;line-height:1.2}.og-btn--lg{min-height:56px}}
 .og-btn--primary{background:var(--color-orange);color:var(--color-ink)}
 .og-btn--primary:hover{background:#e85f0c}
 .og-btn--secondary{background:var(--color-ink);color:#fff}

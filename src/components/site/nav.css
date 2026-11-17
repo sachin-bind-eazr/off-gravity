@@ -30,7 +30,10 @@
 .og-menu__cta .og-btn{display:flex;width:100%}
 /* footer */
 .og-footer{background:var(--color-ink-deep);color:var(--color-on-dark)}
-.og-footer__links{display:flex;flex-direction:column;gap:var(--s-12);margin-top:var(--s-16)}
+.og-footer__links{display:flex;flex-direction:column;gap:0;margin-top:var(--s-8)}
+/* 40px tall tap targets on touch screens (text size unchanged) */
+.og-footer__links a,.og-footer__bar nav a{display:inline-flex;align-items:center;min-height:40px;width:fit-content}
+.og-footer__links .og-footer__plain{min-height:40px;display:flex;align-items:center;margin:0}
 .og-footer__links a:hover{color:var(--color-mint)}
 .og-footer__plain{color:rgb(255 255 255/.55)}
 .og-footer__bar{border-top:1px solid rgb(255 255 255/.12);margin-top:var(--s-64);padding-top:var(--s-24);display:flex;flex-wrap:wrap;justify-content:space-between;gap:var(--s-12) var(--s-32)}
