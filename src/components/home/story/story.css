@@ -52,13 +52,15 @@
   .st-progress{display:none}
 }
 @media (min-width:900px){
-  .st-grid{grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(40px,5vw,80px)}
+  /* the card copies the text's height, so the text column must stay short enough to fit a laptop screen:
+     equal columns up to 1279px (a 5fr text column wraps the headline to five lines at 1024) */
+  .st-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(40px,5vw,80px)}
   .st-left{position:sticky;top:32px}
-  .st-card{width:auto;height:min(80svh,760px);max-width:100%}
-  /* the card is narrower than its column (fixed aspect): sit it on the column's right edge, so the section has the
-     same gutter on both sides and lines up with the nav's right-hand button */
+  /* height = the left column's content (JS sets --st-card-h); width fills the column */
+  .st-card{width:100%;height:var(--st-card-h,min(80svh,760px));aspect-ratio:auto;max-width:100%}
   .st-item{justify-content:flex-end}
 }
+@media (min-width:1280px){.st-grid{grid-template-columns:minmax(0,5fr) minmax(0,7fr)}}
 /* reduced motion: static readable stack, no pinning */
 @media (prefers-reduced-motion:reduce){
   .st-item{position:static;margin-bottom:28px}

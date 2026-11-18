@@ -20,7 +20,30 @@ export function Story() {
   // false on the server and until mounted, so SSR and first client render match (static stack)
   const pinned = useMedia("(prefers-reduced-motion: no-preference)");
   const stackRef = useRef<HTMLOListElement>(null);
+  const gridRef = useRef<HTMLDivElement>(null);
+  const leftRef = useRef<HTMLDivElement>(null);
   const geo = useRef<Geo>({ ph: 600, gap: 200, total: 4000, vh: 900 });
+
+  // two-column layout: the cards are exactly as tall as the left column's content (kicker top → progress bars),
+  // so text and card start and end on the same lines
+  useEffect(() => {
+    const grid = gridRef.current, left = leftRef.current;
+    if (!grid || !left) return;
+    const mq = window.matchMedia("(min-width: 900px)");
+    const sync = () => {
+      if (!mq.matches) { grid.style.removeProperty("--st-card-h"); return; }
+      const top = left.getBoundingClientRect().top;
+      // the dots have a 40px hit area with the visible 4px bar at 18–22px; end the card at the bar, not the hit area
+      const dots = left.querySelector<HTMLElement>(".st-dots");
+      const bottom = dots ? dots.getBoundingClientRect().top + 22 : left.getBoundingClientRect().bottom;
+      grid.style.setProperty("--st-card-h", `${Math.max(420, Math.round(bottom - top))}px`);
+    };
+    sync();
+    const ro = new ResizeObserver(sync);
+    ro.observe(left);
+    mq.addEventListener("change", sync);
+    return () => { ro.disconnect(); mq.removeEventListener("change", sync); };
+  }, []);
   const [active, setActive] = useState(0);
 
   const { scrollYProgress } = useScroll({ target: stackRef, offset: ["start start", "end end"] });
@@ -92,8 +115,8 @@ export function Story() {
     <section id="about" className="og-section og-section--light st-section" aria-labelledby="story-h2">
       <ScrollEffects />
       <Container>
-        <div className="st-grid" data-mode={mode}>
-          <div className="st-left">
+        <div ref={gridRef} className="st-grid" data-mode={mode}>
+          <div ref={leftRef} className="st-left">
             <p className="t-kicker on-light">{HOME.story.kicker}</p>
             <h2 id="story-h2" className="t-h2 st-h2">{HOME.story.h2}</h2>
             <div className="st-body t-body-lg mt-6 space-y-4 text-text-muted">
