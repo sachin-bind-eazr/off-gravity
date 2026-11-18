@@ -23,9 +23,8 @@
 .st-tone-cream .st-band{background:var(--color-cream);color:var(--color-ink)}
 .st-tone-cream{box-shadow:inset 0 0 0 1px rgb(29 38 50/.12)}
 .st-tone-orange .st-band{background:var(--color-orange);color:var(--color-ink)}
-.st-tone-night .st-band{background:var(--color-night);color:#fff;border-top:2px solid var(--color-mint);box-shadow:0 -10px 40px rgb(2 214 156/.35)}
+.st-tone-night .st-band{background:var(--color-night);color:#fff}
 .st-tone-night .st-num,.st-tone-night .st-title{text-shadow:0 0 14px rgb(184 166 244/.85),0 0 32px rgb(2 214 156/.45)}
-.st-tone-night{box-shadow:0 0 0 2px rgb(2 214 156/.55),0 0 46px rgb(184 166 244/.45)}
 
 /* progress */
 .st-progress{margin-top:36px}
