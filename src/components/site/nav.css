@@ -40,3 +40,6 @@
 .og-footer__bar nav{display:flex;flex-wrap:wrap;gap:var(--s-8) var(--s-24)}
 .og-footer__bar a:hover{color:var(--color-mint)}
 @media (prefers-reduced-motion:reduce){.og-navlink,.og-nav{transition:none}}
+
+/* homepage overlay: bar spans the full width (aligned with the hero copy and tour ticket) */
+.og-nav .og-nav__wide{max-width:1680px}

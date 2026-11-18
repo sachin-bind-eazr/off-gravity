@@ -74,7 +74,8 @@ export function SiteNav({ cta, overlay = false }: { cta?: React.ReactNode; overl
     <>
     {!overlay && <div className="og-nav__spacer" aria-hidden />}
     <header className="og-nav" data-hidden={hidden && !open ? "true" : undefined} onFocusCapture={() => setHidden(false)}>
-      <Container>
+      {/* homepage (overlay): full width, so logo, hero copy and tour ticket share the page-gutter line */}
+      <Container className={overlay ? "og-nav__wide" : ""}>
         <div className="og-nav__bar">
           <Logo height={52} priority className="og-logo og-nav__logo" />
           <nav aria-label="Main" className="og-nav__links">
