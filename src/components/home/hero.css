@@ -14,7 +14,7 @@
 .og-hero__actions{margin-top:var(--s-32);display:flex;flex-wrap:wrap;gap:var(--s-16)}
 @media (min-width:1000px){
   /* nav floats over the hero (homepage overlay), so the stage fills the viewport minus the city strip */
-  .og-hero__stage{display:flex;align-items:center;min-height:clamp(560px,calc(100svh - 200px),1032px)}
+  .og-hero__stage{display:flex;align-items:center;min-height:clamp(560px,calc(100svh - 164px),1032px)}
   .og-hero__art{position:absolute;inset:0;aspect-ratio:auto}
   /* light black gradient: darkest behind the copy (left) and under the nav (top), art stays visible on the right */
   .og-hero__art::after{content:"";position:absolute;inset:0;background:
