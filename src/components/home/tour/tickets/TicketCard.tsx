@@ -37,7 +37,7 @@ export function TicketCard({ tier, slug, offCity, jaipurDates, onHold, onSwitch 
       </ul>
       <div className="tk-act">
         {offCity ? (
-          <Button variant="outline" fullWidth onClick={onSwitch}>Switch to Jaipur</Button>
+          <Button variant="secondary" fullWidth onClick={onSwitch}>Switch to Jaipur</Button>
         ) : tier.purchasable ? (
           <Button variant="secondary" fullWidth href={`/book?city=${slug}`}>Book this tier</Button>
         ) : (
