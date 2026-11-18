@@ -1,35 +1,49 @@
-.ob{--ob-nav:0px;--ob-stage-h:min(calc(100svh - var(--ob-nav)),125vw)}
-.ob-head{display:flex;align-items:center;justify-content:space-between;gap:var(--s-16);flex-wrap:wrap;margin-bottom:var(--s-24)}
-.ob-head .t-kicker{margin:0}
-/* scroll-linked reveal: the track gives the stage room to pin; JS opens .ob-frame's clip-path from a card to full-frame */
-.ob-track{position:relative;height:calc(var(--ob-stage-h) + 110svh)}
-.ob-stage{position:sticky;top:calc(var(--ob-nav) + max(0px,(100svh - var(--ob-nav) - 125vw) / 2));height:var(--ob-stage-h);overflow:hidden}
+/* Video section = one screen: a 100svh stage pins while the video's clip-path grows from a card to full-frame.
+   The heading row sits on top of the stage, the caption + stats on the video's bottom edge over a blurred shade. */
+.ob{--ob-stage-h:100svh;position:relative;background:var(--color-ink);color:#fff}
+/* scroll room for the pin: the stage height plus the grow/hold distance */
+.ob-track{position:relative;height:calc(var(--ob-stage-h) + 80svh)}
+.ob-stage{position:sticky;top:0;height:var(--ob-stage-h);overflow:hidden}
 .ob-frame{position:absolute;inset:0;overflow:hidden;background:#141A21;clip-path:inset(10% 6% round 20px);will-change:clip-path}
 .ob-video{position:absolute!important;inset:0;width:100%;height:100%;background:#141A21 var(--ob-poster) center/cover no-repeat}
 /* zoom pushes the source's top-right watermark out of frame */
 .ob-video video{transform:scale(1.13);transform-origin:0 100%}
-.ob-speaker{position:absolute;top:var(--s-24);right:var(--s-24);z-index:3;width:48px;height:48px;border-radius:999px;display:grid;place-items:center;padding:0;cursor:pointer;color:#fff;background:#1D2632;border:1.5px solid #fff;opacity:0;visibility:hidden;pointer-events:none;transition:opacity 200ms ease,visibility 0s linear 200ms}
-.ob-speaker[data-show="true"]{opacity:1;visibility:visible;pointer-events:auto;transition:opacity 200ms ease,visibility 0s}
-.ob-speaker:focus-visible{outline:3px solid #fff;outline-offset:-6px}
-.ob-after{margin-top:var(--s-24)}
-.ob-caption{margin:0;color:rgba(255,255,255,.7)}
-.ob-stats{display:grid;grid-template-columns:1fr;margin:var(--s-48) 0 0;padding:0;list-style:none;container-type:inline-size}
-.ob-stat{padding:var(--s-24) 0;border-top:1px solid #02D69C;display:flex;flex-direction:column;gap:var(--s-8)}
-.ob-stat .t-label{color:#02D69C;margin:0}
-.ob-stat h3{margin:0;white-space:nowrap}
-.ob-stat p{margin:0;color:rgba(255,255,255,.7)}
+/* soft shade at the top of the video for the heading row */
+.ob-frame::before{content:"";position:absolute;inset:0 0 auto 0;z-index:1;height:200px;pointer-events:none;background:linear-gradient(to bottom,rgba(14,21,32,.6),rgba(14,21,32,0))}
+
+/* heading row: below the floating nav's height, on top of the stage */
+.ob-head{position:absolute;z-index:3;left:0;right:0;top:calc(var(--nav-h) + 8px);display:flex;align-items:center;justify-content:space-between;gap:var(--s-16);flex-wrap:wrap}
+.ob-head .t-kicker{margin:0}
+
+/* caption + stats on the video's bottom edge: dark gradient + blur, faded in as the video reaches full-frame */
+.ob-overlay{
+  position:absolute;z-index:2;left:0;right:0;bottom:0;padding:72px 0 32px;
+  background:linear-gradient(to top,rgba(14,21,32,.88) 0%,rgba(14,21,32,.6) 55%,rgba(14,21,32,0) 100%);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  -webkit-mask-image:linear-gradient(to top,#000 70%,transparent);mask-image:linear-gradient(to top,#000 70%,transparent);
+  opacity:clamp(0,calc((var(--ob-e,1) - .55) * 2.6),1)
+}
+.ob-caption{margin:0;color:rgba(255,255,255,.75)}
+.ob-stats{display:grid;grid-template-columns:1fr;margin:var(--s-16) 0 0;padding:0;list-style:none;container-type:inline-size}
+.ob-stat{padding:var(--s-12) 0;border-top:1px solid #02D69C;display:grid;grid-template-columns:auto 1fr;column-gap:var(--s-12);align-items:baseline}
+.ob-stat .t-label{grid-row:1 / span 2;color:#02D69C;margin:0}
+.ob-stat h3{margin:0;white-space:nowrap;font-size:20px}
+.ob-stat p{margin:0;color:rgba(255,255,255,.78);font-size:15px;line-height:1.45}
 @media (min-width:1024px){
-  .ob-stats{grid-template-columns:repeat(3,1fr)}
-  .ob-stat{padding:0 0 0 var(--s-24);border-top:0;border-left:1px solid #02D69C}
+  .ob-overlay{padding:96px 0 40px}
+  .ob-stats{grid-template-columns:repeat(3,1fr);margin-top:var(--s-24)}
+  .ob-stat{padding:0 0 0 var(--s-24);border-top:0;border-left:1px solid #02D69C;display:flex;flex-direction:column;gap:var(--s-8)}
   .ob-stat:first-child{padding-left:0;border-left:0}
-  /* "National leaderboard" must stay on one line: 24px (h3 mobile step) from 1024, 28px from 1120 where a column is wide enough */
+  /* "National leaderboard" must stay on one line: 24px from 1024, 28px from 1120 where a column is wide enough */
   .ob-stat h3{font-size:24px}
+  .ob-stat p{font-size:16px}
 }
 @media (min-width:1120px){.ob-stat h3{font-size:28px}}
-@media (max-width:639px){.ob-frame{clip-path:inset(20% 24px round 12px)}.ob-speaker{top:var(--s-12);right:var(--s-12)}}
-/* reduced motion: no pinning, the video sits static at full-frame */
+@media (max-width:639px){.ob-frame{clip-path:inset(20% 24px round 12px)}}
+/* reduced motion: no pinning, the video sits static at full-frame with the overlay shown */
 @media (prefers-reduced-motion:reduce){
   .ob-track{height:auto}
   .ob-stage{position:relative;top:auto}
   .ob-frame{clip-path:none!important;will-change:auto}
+  .ob-overlay{opacity:1}
 }

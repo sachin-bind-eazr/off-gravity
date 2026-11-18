@@ -1,8 +1,6 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Pause, Play, Volume2, VolumeX } from "lucide-react";
 import { Container } from "@/components/ui/Container";
-import { Button } from "@/components/ui/Button";
 import { HOME } from "@/content/home";
 import { TEASER } from "@/content/video";
 import { TeaserVideo } from "@/components/video";
@@ -17,7 +15,6 @@ const NAV = 0; // header is static (not sticky), so the stage pins at the viewpo
 const GROW_END = 0.7;
 const clamp = (v: number) => Math.min(1, Math.max(0, v));
 const ease = (t: number) => t * (2 - t);
-type Mode = "idle" | "playing" | "paused";
 type Metrics = { sx: number; sy: number; r: number; top: number; range: number; reduced: boolean };
 
 export default function Obstacles() {
@@ -26,10 +23,6 @@ export default function Obstacles() {
   const stageRef = useRef<HTMLDivElement>(null);
   const frameRef = useRef<HTMLDivElement>(null);
   const m = useRef<Metrics>({ sx: 0, sy: 0, r: 20, top: NAV, range: 0, reduced: false });
-  const fullRef = useRef(false);
-  const [mode, setMode] = useState<Mode>("idle");
-  const [muted, setMuted] = useState(true);
-  const [full, setFull] = useState(false);
   const [near, setNear] = useState(false);
 
   // reveal the <video> only once playing; poster shows until then
@@ -66,12 +59,9 @@ export default function Obstacles() {
         last = e;
         const k = 1 - e;
         frame.style.clipPath = k < 0.0005 ? "none" : `inset(${(s.sy * k).toFixed(1)}px ${(s.sx * k).toFixed(1)}px round ${(s.r * k).toFixed(1)}px)`;
+        // growth progress for CSS: the caption/stats overlay fades in over the last part of the growth
+        frame.style.setProperty("--ob-e", e.toFixed(3));
       }
-      // full-frame = fully grown and (almost) the whole stage visible below the nav
-      const r = stage.getBoundingClientRect();
-      const vis = Math.min(r.bottom, window.innerHeight) - Math.max(r.top, NAV);
-      const isFull = e > 0.98 && vis / r.height >= 0.9;
-      if (isFull !== fullRef.current) { fullRef.current = isFull; setFull(isFull); }
     };
     const schedule = () => { if (!raf) raf = requestAnimationFrame(update); };
 
@@ -120,14 +110,13 @@ export default function Obstacles() {
     const v = videoRef.current, track = trackRef.current; if (!v) return;
     v.dataset.userPaused = "0";
     v.dispatchEvent(new Event("og-activate"));
-    v.muted = false; setMuted(false);
+    v.muted = false;
     try { v.currentTime = 0; } catch {}
     // only fall back to muted if the browser blocks sound; an AbortError just means the off-screen observer paused it
     v.play().catch((err: unknown) => {
       if ((err as DOMException)?.name !== "NotAllowedError") return;
-      v.muted = true; setMuted(true); v.play().catch(() => {});
+      v.muted = true; v.play().catch(() => {});
     });
-    setMode("playing");
     if (!track) return;
     // scroll to where the video has finished growing (inside the full-frame hold)
     const s = m.current;
@@ -135,53 +124,41 @@ export default function Obstacles() {
     window.scrollTo({ top: Math.max(0, top), behavior: s.reduced ? "auto" : "smooth" });
   }, []);
 
-  const toggle = () => {
-    const v = videoRef.current; if (!v) return;
-    if (mode === "idle") return start();
-    if (mode === "playing") { v.dataset.userPaused = "1"; v.pause(); setMode("paused"); }
-    else { v.dataset.userPaused = "0"; v.play().catch(() => {}); setMode("playing"); }
-  };
-
+  // "watch with sound" from elsewhere on the page (e.g. the hero's teaser link) still plays it with sound
   useEffect(() => {
     window.addEventListener(WATCH_EVENT, start);
     return () => window.removeEventListener(WATCH_EVENT, start);
   }, [start]);
 
-  const toggleMute = () => { const v = videoRef.current; if (!v) return; v.muted = !v.muted; setMuted(v.muted); };
-
-  const label = mode === "idle" ? "Watch with sound" : mode === "playing" ? "Pause" : "Resume";
-  const Icon = mode === "playing" ? Pause : Play;
-
   return (
-    <section id="obstacles" className="og-section og-section--dark ob">
+    <section id="obstacles" className="og-section--dark ob">
       <h2 className="sr-only">{O.kicker}</h2>
-      <Container className="ob-head">
-        <p className="t-kicker on-dark">{O.kicker}</p>
-        <Button variant="ghost-on-dark" size="md" leadingIcon={Icon} onClick={toggle}>{label}</Button>
-      </Container>
+      {/* one screen: the stage is 100svh and pins while the video grows; the heading row sits on top of it and the
+          caption + stats sit on the video's bottom edge over a blurred shade */}
       <div ref={trackRef} className="ob-track">
         <div ref={stageRef} className="ob-stage">
           <div ref={frameRef} className="ob-frame" style={near ? POSTER_VAR : NO_POSTER}>
             <TeaserVideo ref={videoRef} className="ob-video" />
-            <button type="button" className="ob-speaker" data-show={full} tabIndex={full ? 0 : -1} aria-hidden={!full}
-              aria-label={muted ? "Unmute video" : "Mute video"} aria-pressed={muted} onClick={toggleMute}>
-              {muted ? <VolumeX size={22} strokeWidth={1.75} aria-hidden="true" /> : <Volume2 size={22} strokeWidth={1.75} aria-hidden="true" />}
-            </button>
+            <div className="ob-overlay">
+              <Container className="ob-after">
+                <p className="ob-caption t-label">{O.caption} · {TEASER.durationLabel}</p>
+                <ul className="ob-stats">
+                  {O.stats.map((s, i) => (
+                    <li key={s.title} className="ob-stat">
+                      <span className="t-label">{String(i + 1).padStart(2, "0")}</span>
+                      <h3 className="t-h3">{s.title}</h3>
+                      <p className="t-body">{s.line}</p>
+                    </li>
+                  ))}
+                </ul>
+              </Container>
+            </div>
           </div>
+          <Container className="ob-head">
+            <p className="t-kicker on-dark">{O.kicker}</p>
+          </Container>
         </div>
       </div>
-      <Container className="ob-after">
-        <p className="ob-caption t-label">{O.caption} · {TEASER.durationLabel}</p>
-        <ul className="ob-stats">
-          {O.stats.map((s, i) => (
-            <li key={s.title} className="ob-stat">
-              <span className="t-label">{String(i + 1).padStart(2, "0")}</span>
-              <h3 className="t-h3">{s.title}</h3>
-              <p className="t-body">{s.line}</p>
-            </li>
-          ))}
-        </ul>
-      </Container>
     </section>
   );
 }
