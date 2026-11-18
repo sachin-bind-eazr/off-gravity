@@ -55,6 +55,9 @@
   .st-grid{grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(40px,5vw,80px)}
   .st-left{position:sticky;top:32px}
   .st-card{width:auto;height:min(80svh,760px);max-width:100%}
+  /* the card is narrower than its column (fixed aspect): sit it on the column's right edge, so the section has the
+     same gutter on both sides and lines up with the nav's right-hand button */
+  .st-item{justify-content:flex-end}
 }
 /* reduced motion: static readable stack, no pinning */
 @media (prefers-reduced-motion:reduce){
