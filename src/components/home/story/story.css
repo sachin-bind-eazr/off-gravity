@@ -8,13 +8,14 @@
 .st-stack{list-style:none;margin:0;padding:0}
 .st-card{position:relative;overflow:hidden;border-radius:28px;aspect-ratio:5/6;width:100%;background:var(--color-ink);transform-origin:50% 0;isolation:isolate;box-shadow:0 -14px 40px rgb(14 21 32/.18),0 24px 60px -24px rgb(14 21 32/.35)}
 .st-media{position:absolute;inset:0;background:var(--color-ink-deep)}
-.st-img{object-fit:cover;object-position:50% 30%}
-.st-caption{position:absolute;top:16px;left:16px;z-index:2;padding:4px 10px;border-radius:999px;background:rgb(14 21 32/.6);color:#fff;font-size:12px;font-weight:600;line-height:1.4;letter-spacing:.01em}
+.st-img{object-fit:cover;object-position:50% 32%;transition:transform .8s cubic-bezier(.2,.7,.2,1)}
+.st-caption{grid-column:2;grid-row:3;margin-top:5px;font-size:11px;font-weight:700;line-height:1.2;letter-spacing:.08em;text-transform:uppercase;opacity:.58}
 .st-band{position:absolute;left:0;right:0;bottom:0;padding:20px 24px 24px;display:grid;grid-template-columns:auto 1fr;column-gap:18px;row-gap:2px;align-items:end}
 .st-num{grid-row:1 / span 2;font-style:italic;font-weight:900;font-stretch:118%;letter-spacing:-.04em;line-height:.85;font-size:clamp(46px,4.4vw,64px)}
 .st-title{font-weight:800;font-stretch:102%;letter-spacing:-.02em;line-height:1.05;font-size:clamp(24px,2.2vw,30px)}
 .st-line{font-size:17px;line-height:1.45;max-width:36ch}
 .st-dim{position:absolute;inset:0;background:var(--color-ink-deep);opacity:0;pointer-events:none;z-index:3}
+@media (hover:hover) and (pointer:fine){.st-card:hover .st-img{transform:scale(1.025)}}
 
 /* band tones (all text passes 4.5:1 on its band) */
 .st-tone-mint .st-band{background:var(--color-mint);color:var(--color-ink)}

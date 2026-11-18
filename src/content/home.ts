@@ -13,14 +13,14 @@ export const HOME = {
       "You race timed waves through a course of giant inflatables, then roll straight into a festival village.",
       "Saturday turns into Glow Night. Sunday belongs to families and anyone chasing a podium.",
     ],
-    // `photo` = file in public/images/story (without .jpg); `alt` describes what the photo shows
+    // `photo` = file stem in public/images/story; the panel loads the generated -v2.webp asset
     panels: [
-      { id: "timed", n: "01", title: "Timed racing", line: "Every wave is timed. Chase your best, or beat your friend's.", tone: "mint", photo: "01-timed-racing", alt: "Two sprinters crouched in their starting positions on a red running track, focused on the start line" },
-      { id: "leaderboards", n: "02", title: "Live leaderboards", line: "City and national rankings, updated through the weekend.", tone: "ink", photo: "02-live-leaderboards", alt: "Two athletes in red sportswear sitting on an indoor track, smiling as they check a phone together" },
-      { id: "family", n: "03", title: "Family wave", line: "A parent-and-child batch on smaller inflatables.", tone: "lilac", photo: "03-family-wave", alt: "A smiling mother lifting her laughing toddler into the air outdoors", confirm: { confirm: true, note: "Family wave age limit (reference said 6+ / 6–14)" } },
-      { id: "glow", n: "04", title: "Glow Night", line: "Saturday after dark: lights, music and a glowing finish.", tone: "night", photo: "04-glow-night", alt: "Festival crowd at night with raised hands under blue and orange stage lights", confirm: { confirm: true, note: "UV kits and live DJ at Glow Night" } },
-      { id: "recovery", n: "05", title: "Recovery village", line: "Stretch, hydrate, refuel and slow down after your wave.", tone: "cream", photo: "05-recovery-village", alt: "A large group stretching together on a sunlit lawn among trees", confirm: { confirm: true, note: "Food trucks and hammocks in recovery village" } },
-      { id: "game", n: "06", title: "Game layer", line: "Checkpoints, bonus obstacles and point multipliers on the course.", tone: "orange", photo: "06-game-layer", alt: "An athlete gripping hanging wooden rings on an obstacle course", confirm: { confirm: true, note: "'Gaming overlay' / game layer mechanics" } },
+      { id: "timed", n: "01", title: "Timed racing", line: "Every wave is timed. Chase your best, or beat your friend's.", tone: "mint", photo: "01-timed-racing", alt: "Indian runners racing over the first inflatable hurdle beneath a timing gantry" },
+      { id: "leaderboards", n: "02", title: "Live leaderboards", line: "City and national rankings, updated through the weekend.", tone: "ink", photo: "02-live-leaderboards", alt: "Three obstacle racers comparing their result beside a live event leaderboard" },
+      { id: "family", n: "03", title: "Family wave", line: "A parent-and-child batch on smaller inflatables.", tone: "lilac", photo: "03-family-wave", alt: "A mother and school-age child crossing a smaller inflatable obstacle together", confirm: { confirm: true, note: "Family wave age limit (reference said 6+ / 6–14)" } },
+      { id: "glow", n: "04", title: "Glow Night", line: "Saturday after dark: lights, music and a glowing finish.", tone: "night", photo: "04-glow-night", alt: "Two runners crossing an illuminated inflatable finish arch at night", confirm: { confirm: true, note: "UV kits and live DJ at Glow Night" } },
+      { id: "recovery", n: "05", title: "Recovery village", line: "Stretch, hydrate, refuel and slow down after your wave.", tone: "cream", photo: "05-recovery-village", alt: "Tired obstacle racers cooling down, stretching and hydrating in the recovery village", confirm: { confirm: true, note: "Food trucks and hammocks in recovery village" } },
+      { id: "game", n: "06", title: "Game layer", line: "Checkpoints, bonus obstacles and point multipliers on the course.", tone: "orange", photo: "06-game-layer", alt: "A racer touching a lit checkpoint pad while another takes a bonus obstacle lane", confirm: { confirm: true, note: "'Gaming overlay' / game layer mechanics" } },
     ],
   },
   obstacles: {
