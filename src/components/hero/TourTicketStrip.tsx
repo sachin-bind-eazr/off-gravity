@@ -42,7 +42,7 @@ export function TourTicketStrip({ events, initialNow }: { events: StripEvent[]; 
   const [reduced, setReduced] = useState(false);
   const [running, setRunning] = useState(false);
 
-  const rootRef = useRef<HTMLElement>(null);
+  const rootRef = useRef<HTMLDivElement>(null);
   const ticketRef = useRef<HTMLButtonElement>(null);
   const marqueeRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
@@ -226,7 +226,10 @@ export function TourTicketStrip({ events, initialNow }: { events: StripEvent[]; 
   };
 
   return (
-    <section ref={rootRef} className="tts" data-testid="tour-strip" aria-label="2027 tour" data-ready={ready ? "true" : undefined} data-run={running ? "true" : undefined}>
+    <section id="tour-strip" className="tts-section" aria-label="2027 tour">
+    <Container className="tts-kicker">2027 tour · six cities</Container>
+    {/* the band: ticket + marquee; its own box is what the fade, geometry and IntersectionObserver measure */}
+    <div ref={rootRef} className="tts" data-testid="tour-strip" data-ready={ready ? "true" : undefined} data-run={running ? "true" : undefined}>
       <Container className="tts-row">
         <TourTicket
           ref={ticketRef}
@@ -243,6 +246,7 @@ export function TourTicketStrip({ events, initialNow }: { events: StripEvent[]; 
       <ul className="sr-only">
         {cities.map((c) => <li key={c.slug}>{c.city}, {c.dates}, provisional</li>)}
       </ul>
+    </div>
     </section>
   );
 }

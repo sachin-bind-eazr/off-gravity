@@ -1,5 +1,4 @@
 "use client";
-import Link from "next/link";
 import { ArrowRight, Play } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { watchWithSound } from "@/components/home/obstacles/watch";
@@ -22,7 +21,7 @@ export function HeroActions({ mode }: { mode: HeroCtaMode }) {
           <Play aria-hidden="true" size={16} />{HOME.hero.watchLabel}
         </button>
       ) : (
-        <Link href="/#tour" className="og-hero__link">Explore the 2027 tour</Link>
+        <a href="#tour-strip" className="og-hero__link">Explore the 2027 tour</a>
       )}
     </div>
   );

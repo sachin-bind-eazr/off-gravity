@@ -4,8 +4,16 @@
 .tts{
   --tts-band:#141A21;--tts-ticket-w:440px;--tts-ticket-h:116px;--tts-stub-w:84px;
   --tts-name:40px;--tts-arrow-w:36px;--tts-arrow-h:13px;
-  position:relative;overflow:hidden;overflow:clip;background:var(--tts-band);border-top:1px solid rgba(255,255,255,.1);color:#fff
+  position:relative;overflow:hidden;overflow:clip;background:var(--tts-band);color:#fff
 }
+/* section 2 (after the full-screen hero): band colour + padding; the band itself keeps its fixed geometry */
+.tts-section{background:#141A21;color:#fff;padding-block:40px;border-top:1px solid rgba(255,255,255,.1);scroll-margin-top:0}
+.tts-section .tts-kicker{display:none;max-width:1680px;margin-bottom:16px;font-size:13px;font-weight:600;line-height:1.3;letter-spacing:.08em;text-transform:uppercase;color:rgb(255 255 255/.6)}
+@media (min-width:768px){
+  .tts-section{padding-block:48px}
+  .tts-section .tts-kicker{display:block}
+}
+@media (min-width:1024px){.tts-section{padding-block:56px}}
 
 /* ---------- ticket ---------- */
 /* wide column (1680px): the ticket shares one left line with the homepage nav logo and the hero copy */

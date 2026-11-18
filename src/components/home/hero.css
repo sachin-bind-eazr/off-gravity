@@ -1,32 +1,71 @@
-/* Hero: full-width copy at the page gutter over the artwork; on desktop a solid ink panel on the left fades into the art. */
-.og-hero{position:relative;background:var(--color-ink);color:#fff}
-.og-hero__stage{position:relative;overflow:hidden}
-.og-hero__art{position:relative;aspect-ratio:16/11;width:100%;overflow:hidden}
-.og-hero__art img{object-fit:cover;object-position:64% 45%}
+/* Hero: full viewport (100svh, 100vh fallback), artwork full-bleed under the floating nav.
+   Desktop (>=1024): a solid ink panel on the left, the art to its right, copy vertically centred below the nav.
+   Below 1024: art covers the screen, copy sits at the bottom over a strong bottom gradient. */
+.og-hero{
+  position:relative;display:flex;flex-direction:column;justify-content:flex-end;
+  width:100%;height:100vh;height:100svh;min-height:640px;max-height:1100px;
+  overflow:hidden;background:var(--color-ink);color:#fff
+}
+.og-hero__art{position:absolute;inset:0;overflow:hidden}
+.og-hero__art img{object-fit:cover;object-position:50% 40%}
+.og-hero__art::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(14,21,32,.95) 0%,rgba(14,21,32,.6) 45%,rgba(14,21,32,0) 75%)}
+/* legibility shade behind the nav, across the full width */
+.og-hero::before{content:"";position:absolute;inset:0 0 auto 0;z-index:1;height:160px;pointer-events:none;
+  background:linear-gradient(to bottom,rgba(14,21,32,.55),rgba(14,21,32,0))}
+
 /* wide column (1680px): copy shares one left line with the homepage nav logo and the tour ticket */
-.og-hero .og-hero__copy{position:relative;max-width:1680px;padding-block:var(--og-section-y)}
-.og-hero__lead{margin-top:var(--s-24);max-width:34em;color:rgb(255 255 255/.92)}
+.og-hero .og-hero__copy{position:relative;z-index:2;max-width:1680px;padding-top:var(--nav-h);padding-bottom:96px}
+.og-hero__lead{margin-top:var(--s-16);max-width:34em;color:rgb(255 255 255/.92)}
 /* kicker: small mint label */
 .og-hero .og-hero__kicker{font-size:14px;font-weight:700;line-height:1.3;letter-spacing:.01em;color:var(--color-mint);opacity:1}
-@media (min-width:1000px){.og-hero .og-hero__kicker{font-size:15px}}
-.og-hero__kicker + h1{margin-top:var(--s-16)}
+.og-hero__kicker + h1{margin-top:var(--s-12, 12px)}
 /* headline: heavy italic, slightly expanded (Archivo wdth axis), tight */
 .og-hero .og-hero__title{font-style:italic;font-weight:900;font-variation-settings:'wdth' 112;letter-spacing:-.035em;line-height:.95}
-/* mobile: soft fade at the top of the art so the floating logo and Menu read clearly */
-@media (max-width:999px){.og-hero__art::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgb(0 0 0/.4) 0,rgb(0 0 0/0) 120px)}}
-.og-hero__actions{margin-top:var(--s-32);display:flex;flex-wrap:wrap;align-items:center;column-gap:var(--s-32);row-gap:var(--s-16)}
+.og-hero__actions{margin-top:var(--s-24);display:flex;flex-wrap:wrap;align-items:center;column-gap:var(--s-32);row-gap:var(--s-8, 8px)}
 /* secondary action: text link, 48px tap target */
 .og-hero__link{display:inline-flex;align-items:center;gap:8px;min-height:48px;padding:0;border:0;background:none;color:#fff;font:inherit;font-size:16px;font-weight:700;cursor:pointer;
   text-decoration:underline;text-decoration-color:rgb(255 255 255/.4);text-underline-offset:6px;text-decoration-thickness:2px;transition:text-decoration-color .2s ease}
 .og-hero__link:hover{text-decoration-color:var(--color-mint)}
 .og-hero__link:focus-visible{outline:2px solid var(--color-mint);outline-offset:4px;border-radius:4px}
-@media (min-width:1000px){
-  /* nav floats over the hero (homepage overlay), so the stage fills the viewport minus the city strip */
-  .og-hero__stage{display:flex;align-items:center;min-height:clamp(560px,calc(100svh - 164px),1032px)}
-  .og-hero__art{position:absolute;inset:0;aspect-ratio:auto}
-  /* solid ink panel on the left fading into the bright art; a light shade under the nav */
-  .og-hero__art::after{content:"";position:absolute;inset:0;background:
-    linear-gradient(180deg,rgb(8 10 14/.4) 0,rgb(8 10 14/0) 160px),
-    linear-gradient(90deg,var(--color-ink) 0%,var(--color-ink) 20%,rgb(29 38 50/.88) 32%,rgb(29 38 50/.45) 46%,rgb(29 38 50/0) 60%)}
-  .og-hero .og-hero__copy{width:100%}
+
+/* scroll cue: 1×40 line, a dot slides down it; links to #tour-strip (html has smooth scrolling) */
+.og-hero__cue{position:absolute;z-index:2;left:50%;bottom:32px;width:24px;height:40px;margin-left:-12px;display:block}
+.og-hero__cue::before{content:"";position:absolute;left:11.5px;top:0;width:1px;height:40px;background:rgb(255 255 255/.5)}
+.og-hero__cue-dot{position:absolute;left:9px;top:0;width:6px;height:6px;border-radius:50%;background:#fff;animation:og-cue 1.8s ease-in-out infinite}
+@keyframes og-cue{0%{transform:translateY(0);opacity:0}20%{opacity:1}80%{opacity:1}100%{transform:translateY(34px);opacity:0}}
+.og-hero__cue:focus-visible{outline:2px solid var(--color-mint);outline-offset:4px;border-radius:4px}
+@media (prefers-reduced-motion:reduce){.og-hero__cue-dot{animation:none;transform:translateY(17px)}}
+
+/* small phones: the bottom-anchored copy + CTAs must fit 360×640 */
+/* below desktop the copy covers more than the bottom 45%, so the bottom gradient reaches a little higher than
+   the base stops; a soft shadow keeps the mint kicker readable over the bright art */
+@media (max-width:1023.98px){
+  .og-hero__art::after{background:linear-gradient(to top,rgba(14,21,32,.95) 0%,rgba(14,21,32,.8) 40%,rgba(14,21,32,.5) 60%,rgba(14,21,32,0) 82%)}
+  .og-hero__copy{text-shadow:0 1px 14px rgba(14,21,32,.55)}
+}
+@media (max-width:767.98px){
+  .og-hero__art img{object-position:46% 40%}
+  .og-hero .og-hero__copy{padding-bottom:80px}
+  .og-hero__lead{font-size:16px;line-height:1.5}
+  .og-hero__cue{bottom:20px}
+}
+@media (max-height:700px) and (max-width:1023.98px){
+  .og-hero .og-hero__title{font-size:44px}
+  .og-hero__lead{font-size:15px}
+}
+
+@media (min-width:1024px){
+  .og-hero{justify-content:center}
+  .og-hero .og-hero__kicker{font-size:15px}
+  .og-hero__kicker + h1{margin-top:var(--s-16)}
+  .og-hero__lead{margin-top:var(--s-24)}
+  .og-hero__actions{margin-top:var(--s-32);row-gap:var(--s-16)}
+  .og-hero .og-hero__copy{padding-bottom:var(--nav-h)}
+  /* the art sits right of a solid ink panel, so the runners stay clear of the copy */
+  /* panel width follows the 1680px content column, so on very wide screens the copy still starts over the dark part */
+  .og-hero__art{left:calc(max(0px,(100% - 1680px) / 2) + min(100%,1680px) * .18)}
+  .og-hero__art img{object-position:80% 40%}
+  /* blend the art's left edge into the ink panel; the copy reads over the dark part */
+  .og-hero__art::after{background:linear-gradient(90deg,var(--color-ink) 0%,rgb(29 38 50/.9) 12%,rgb(29 38 50/.62) 30%,rgb(29 38 50/.22) 48%,rgb(29 38 50/0) 62%)}
 }

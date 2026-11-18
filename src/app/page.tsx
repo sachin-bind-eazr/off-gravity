@@ -3,6 +3,7 @@ import { getEvents } from "@/lib/events";
 import { ctaFor } from "@/lib/cta";
 import { WaitlistProvider } from "@/components/waitlist";
 import { Hero } from "@/components/home/Hero";
+import { TourTicketStrip } from "@/components/hero/TourTicketStrip";
 import { Story } from "@/components/home/story/Story";
 import dynamic from "next/dynamic";
 const Obstacles = dynamic(() => import("@/components/home/obstacles/Obstacles"));
@@ -19,6 +20,7 @@ export default async function Home() {
         <SiteNav overlay cta={<HeaderCta mode={ctaFor(events)} />} />
         <main id="main">
           <Hero events={events} />
+          <TourTicketStrip events={events.map(({ slug, city, season, start, end, status }) => ({ slug, city, season, start, end, status }))} initialNow={Date.now()} />
           <Story />
           <Obstacles />
           <Tour events={events} />
