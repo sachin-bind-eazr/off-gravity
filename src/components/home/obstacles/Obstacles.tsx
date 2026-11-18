@@ -82,8 +82,12 @@ export default function Obstacles() {
       const col = stage.closest("section")?.querySelector<HTMLElement>(".og-container") ?? document.querySelector<HTMLElement>(".og-container");
       const gutter = (col && parseFloat(getComputedStyle(col).paddingLeft)) || 24;
       const aspect = W < 640 ? 3 / 4 : 9 / 16;
-      let sw = W - gutter * 2, sh = sw * aspect;
-      if (sh > H - 48) { sh = H - 48; sw = sh / aspect; }
+      // start small and grow on scroll: 60% of the content width on desktop, 75% on tablet, full column on phones
+      // (already narrow); never taller than 60% of the stage so the growth is visible on short screens too
+      const startScale = W >= 1024 ? 0.6 : W >= 640 ? 0.75 : 1;
+      const maxH = W >= 640 ? H * 0.6 : H - 48;
+      let sw = (W - gutter * 2) * startScale, sh = sw * aspect;
+      if (sh > maxH) { sh = maxH; sw = sh / aspect; }
       const s = m.current;
       s.sx = Math.max(0, (W - sw) / 2);
       s.sy = Math.max(0, (H - sh) / 2);
