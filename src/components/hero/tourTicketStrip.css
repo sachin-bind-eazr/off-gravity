@@ -125,7 +125,7 @@
   .tts-main{padding:14px 20px}
   .tts-fade{
     display:block;position:absolute;inset:0 auto 0 0;z-index:1;pointer-events:none;
-    width:var(--tts-fade-w,calc((max(0px,(100% - var(--og-max)) / 2) + var(--og-pad) + var(--tts-ticket-w)) / .79));
+    width:var(--tts-fade-w,calc((max(var(--og-pad),(100% - var(--og-content)) / 2) + var(--tts-ticket-w)) / .79));
     background:linear-gradient(90deg,var(--tts-band) 79%,rgba(20,26,33,0))
   }
   .tts-marquee{position:absolute;inset:0;height:auto;-webkit-mask-image:none;mask-image:none}
@@ -151,7 +151,7 @@
 }
 @media (prefers-reduced-motion:reduce) and (min-width:768px){
   /* start the row where the fade ends so no name sits under the ticket */
-  .tts-track,.tts[data-ready] .tts-track{padding-left:var(--tts-fade-w,calc((max(0px,(100% - var(--og-max)) / 2) + var(--og-pad) + var(--tts-ticket-w)) / .79))}
+  .tts-track,.tts[data-ready] .tts-track{padding-left:var(--tts-fade-w,calc((max(var(--og-pad),(100% - var(--og-content)) / 2) + var(--tts-ticket-w)) / .79))}
   /* keyboard focus scrolls a city clear of the ticket and fade, not under them */
   .tts-marquee{scroll-padding-left:var(--tts-fade-w,0px)}
 }

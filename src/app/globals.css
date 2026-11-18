@@ -14,11 +14,13 @@
   --pad:clamp(20px,4.4vw,64px);--section-y:clamp(100px,11vw,160px);--section-y-tight:clamp(72px,8vw,112px);
   --space-1:8px;--space-2:12px;--space-3:16px;--space-4:24px;--space-5:32px;--space-6:48px;--space-7:64px;
   --gap-grid:clamp(16px,1.7vw,24px);--nav-h:72px;
-  /* one content column for the whole site: every section, the nav, the hero copy and the tour ticket share its left edge */
-  --og-max:1680px;
+  /* one content column for the whole site: every section, the nav, the hero copy and the tour ticket share its left edge.
+     Gutter = max(--og-pad, centring): laptops get a gutter that grows with the screen (--og-pad), large desktops a
+     centred 1552px content width (1680px column incl. 64px gutters). */
+  --og-max:1680px;--og-content:1552px;
 }
 html{scroll-behavior:smooth} body{background:var(--color-cream);color:var(--color-ink);font-family:var(--font-sans);font-size:17px;line-height:1.6;overflow-x:hidden;overflow-x:clip}
-.container-og{max-width:var(--og-max);margin-inline:auto;padding-inline:var(--og-pad)}
+.container-og{width:100%;margin-inline:auto;padding-inline:max(var(--og-pad),calc((100% - var(--og-content)) / 2))}
 .section-y{padding-block:var(--section-y)}
 .section-y-tight{padding-block:var(--section-y-tight)}
 section[id]{scroll-margin-top:0}
@@ -65,8 +67,9 @@ html[data-reveal="on"] [data-reveal]{transition:opacity .65s cubic-bezier(.2,.7,
 :root{--s-4:4px;--s-8:8px;--s-12:12px;--s-16:16px;--s-24:24px;--s-32:32px;--s-48:48px;--s-64:64px;--s-96:96px;--s-128:128px;
   --og-section-y:64px;--og-pad:24px}
 @media (min-width:640px){:root{--og-section-y:96px;--og-pad:40px}}
-@media (min-width:1024px){:root{--og-section-y:128px;--og-pad:64px}}
-.og-container{width:100%;max-width:var(--og-max);margin-inline:auto;padding-inline:var(--og-pad)}
+/* laptops: 64px at 1024 growing to ~104px at 1440 and ~142px at 1840, where the centred column takes over */
+@media (min-width:1024px){:root{--og-section-y:128px;--og-pad:max(64px,calc(9.6vw - 34px))}}
+.og-container{width:100%;margin-inline:auto;padding-inline:max(var(--og-pad),calc((100% - var(--og-content)) / 2))}
 .grid-12{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:24px;row-gap:24px}
 .og-section{padding-block:var(--og-section-y)}
 .og-section--light{background:var(--color-cream);color:var(--color-ink)}

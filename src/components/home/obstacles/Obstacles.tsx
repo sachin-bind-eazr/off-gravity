@@ -77,10 +77,12 @@ export default function Obstacles() {
 
     const measure = () => {
       const W = stage.clientWidth, H = stage.clientHeight;
-      const pad = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--og-pad")) || 24;
+      // start frame = the site content column: the resolved gutter of a full-width container (it grows on laptops
+      // and centres on large screens, so it can't be read from a CSS variable as a plain number)
+      const col = stage.closest("section")?.querySelector<HTMLElement>(".og-container") ?? document.querySelector<HTMLElement>(".og-container");
+      const gutter = (col && parseFloat(getComputedStyle(col).paddingLeft)) || 24;
       const aspect = W < 640 ? 3 / 4 : 9 / 16;
-      const max = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--og-max")) || 1680;
-      let sw = Math.min(W, max) - pad * 2, sh = sw * aspect;
+      let sw = W - gutter * 2, sh = sw * aspect;
       if (sh > H - 48) { sh = H - 48; sw = sh / aspect; }
       const s = m.current;
       s.sx = Math.max(0, (W - sw) / 2);
