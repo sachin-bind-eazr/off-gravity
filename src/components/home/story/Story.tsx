@@ -22,6 +22,8 @@ export function Story() {
   const stackRef = useRef<HTMLOListElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
   const leftRef = useRef<HTMLDivElement>(null);
+  /** Current sticky line (px): TOP on phones, the vertically centred line from 900px up. */
+  const topRef = useRef(TOP);
   const geo = useRef<Geo>({ ph: 600, gap: 200, total: 4000, vh: 900 });
 
   // two-column layout: the cards are exactly as tall as the left column's content (kicker top → progress bars),
@@ -31,18 +33,27 @@ export function Story() {
     if (!grid || !left) return;
     const mq = window.matchMedia("(min-width: 900px)");
     const sync = () => {
-      if (!mq.matches) { grid.style.removeProperty("--st-card-h"); return; }
       const top = left.getBoundingClientRect().top;
       // the dots have a 40px hit area with the visible 4px bar at 18–22px; end the card at the bar, not the hit area
       const dots = left.querySelector<HTMLElement>(".st-dots");
       const bottom = dots ? dots.getBoundingClientRect().top + 22 : left.getBoundingClientRect().bottom;
-      grid.style.setProperty("--st-card-h", `${Math.max(420, Math.round(bottom - top))}px`);
+      const h = Math.max(420, Math.round(bottom - top));
+      // pin text + card in the vertical middle of the screen, not at the top
+      const st = Math.max(TOP, Math.round((window.innerHeight - h) / 2));
+      grid.style.setProperty("--st-card-h", `${h}px`);
+      grid.style.setProperty("--st-top", `${st}px`);
+      topRef.current = st;
     };
-    sync();
-    const ro = new ResizeObserver(sync);
+    const reset = () => {
+      if (mq.matches) return sync();
+      grid.style.removeProperty("--st-card-h"); grid.style.removeProperty("--st-top"); topRef.current = TOP;
+    };
+    reset();
+    const ro = new ResizeObserver(reset);
     ro.observe(left);
-    mq.addEventListener("change", sync);
-    return () => { ro.disconnect(); mq.removeEventListener("change", sync); };
+    mq.addEventListener("change", reset);
+    window.addEventListener("resize", reset);
+    return () => { ro.disconnect(); mq.removeEventListener("change", reset); window.removeEventListener("resize", reset); };
   }, []);
   const [active, setActive] = useState(0);
 
@@ -68,9 +79,9 @@ export function Story() {
   const riseOf = useCallback((i: number, progress: number) => {
     const { ph, gap, total, vh } = geo.current;
     const s = progress * Math.max(1, total - vh);
-    const pitch = ph + gap;
-    const start = (i + 1) * pitch - (TOP + i * PEEK) - ph;
-    const end = (i + 1) * pitch - (TOP + (i + 1) * PEEK);
+    const pitch = ph + gap, T = topRef.current;
+    const start = (i + 1) * pitch - (T + i * PEEK) - ph;
+    const end = (i + 1) * pitch - (T + (i + 1) * PEEK);
     return Math.min(1, Math.max(0, (s - start) / Math.max(1, end - start)));
   }, []);
 
@@ -89,7 +100,7 @@ export function Story() {
     } else {
       // static stack: the panel nearest the sticky line is the active one
       const items = stackRef.current?.querySelectorAll<HTMLElement>(".st-item") ?? [];
-      items.forEach((it, i) => { if (it.getBoundingClientRect().top <= TOP + 40) a = i; });
+      items.forEach((it, i) => { if (it.getBoundingClientRect().top <= topRef.current + 40) a = i; });
     }
     setActive((prev) => (prev === a ? prev : a));
   });
@@ -102,9 +113,9 @@ export function Story() {
       const { ph, gap } = geo.current;
       const top = el.getBoundingClientRect().top + window.scrollY;
       // land where panel i has just fully covered panel i-1
-      window.scrollTo({ top: top + i * (ph + gap) - (TOP + i * PEEK) + 2, behavior: "smooth" });
+      window.scrollTo({ top: top + i * (ph + gap) - (topRef.current + i * PEEK) + 2, behavior: "smooth" });
     } else {
-      window.scrollTo({ top: items[i].getBoundingClientRect().top + window.scrollY - TOP, behavior: "auto" });
+      window.scrollTo({ top: items[i].getBoundingClientRect().top + window.scrollY - topRef.current, behavior: "auto" });
     }
     setActive(i);
   };
@@ -134,7 +145,7 @@ export function Story() {
             </div>
           </div>
           <ol ref={stackRef} className="st-stack"
-            style={{ ["--st-top" as string]: `${TOP}px`, ["--st-peek" as string]: `${PEEK}px` }}>
+            style={{ ["--st-peek" as string]: `${PEEK}px` }}>
             {panels.map((p, i) => (
               <StoryPanel key={p.id} p={p} index={i} total={N} scale={scales[i]} dim={dims[i]} motionOn={pinned} />
             ))}
