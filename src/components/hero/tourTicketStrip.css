@@ -56,8 +56,14 @@
 .tts-stub{
   flex:none;width:var(--tts-stub-w);display:flex;flex-direction:column;align-items:center;justify-content:space-between;
   padding:10px 10px;background:#00C08C;color:var(--color-ink);border-radius:0 14px 14px 0;
-  transform-origin:0 50%;transition:transform .25s ease
+  position:relative;transform-origin:0 50%;transition:transform .25s ease;
+  /* the other half of each punch: notches cut into the stub's left corners (circles centred on the perf line,
+     1px left of the stub), so a torn-off stub keeps its rounded cut-outs. Two half-height layers, no compositing. */
+  -webkit-mask:radial-gradient(circle 10px at -1px 0,#0000 9.5px,#000 10px) top/100% 51% no-repeat,radial-gradient(circle 10px at -1px 100%,#0000 9.5px,#000 10px) bottom/100% 51% no-repeat;
+  mask:radial-gradient(circle 10px at -1px 0,#0000 9.5px,#000 10px) top/100% 51% no-repeat,radial-gradient(circle 10px at -1px 100%,#0000 9.5px,#000 10px) bottom/100% 51% no-repeat
 }
+/* the stub's own torn edge: a dashed line like the main part's, shown only once the stub swings away */
+.tts-stub::before{content:"";position:absolute;top:10px;bottom:10px;left:0;border-left:2px dashed rgba(29,38,50,.35);opacity:0;transition:opacity .25s ease}
 .tts-stub-label{font-size:13px;font-weight:600;line-height:1.2;opacity:.7}
 .tts-stopno{font-size:28px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums}
 .tts-barcode{display:block;width:60px;height:16px;background:repeating-linear-gradient(90deg,var(--color-ink) 0 2px,transparent 2px 4px,var(--color-ink) 4px 5px,transparent 5px 7px,var(--color-ink) 7px 10px,transparent 10px 12px)}
@@ -67,6 +73,7 @@
   .tts-ticket:hover{transform:translateY(-4px)}
   .tts-ticket:hover::after{opacity:1}
   .tts-ticket:hover .tts-stub{transform:translateX(6px) rotate(4deg)}
+  .tts-ticket:hover .tts-stub::before{opacity:1}
 }
 
 /* punch on every city change; two identical keyframes so swapping the class restarts it */
