@@ -2,7 +2,7 @@ import type { ElementType, ReactNode } from "react";
 
 type Props = { as?: ElementType; className?: string; children?: ReactNode; id?: string };
 
-/** 1280px max, 24/40/64 side padding. Use inside every section. */
+/** Site content column (--og-max, 1680px), 24/40/64 side padding. Use inside every section. */
 export function Container({ as: Tag = "div", className = "", ...rest }: Props) {
   return <Tag className={`og-container ${className}`.trim()} {...rest} />;
 }

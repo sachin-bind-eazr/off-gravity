@@ -79,7 +79,8 @@ export default function Obstacles() {
       const W = stage.clientWidth, H = stage.clientHeight;
       const pad = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--og-pad")) || 24;
       const aspect = W < 640 ? 3 / 4 : 9 / 16;
-      let sw = Math.min(W, 1280) - pad * 2, sh = sw * aspect;
+      const max = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--og-max")) || 1680;
+      let sw = Math.min(W, max) - pad * 2, sh = sw * aspect;
       if (sh > H - 48) { sh = H - 48; sw = sh / aspect; }
       const s = m.current;
       s.sx = Math.max(0, (W - sw) / 2);

@@ -168,9 +168,11 @@ export default async function CityPage({ params }: P) {
         </section>
 
         <section id="faqs" className="pb-[var(--section-y)] scroll-mt-24">
-          <div className="container-og max-w-[960px]">
+          <div className="container-og">
+            <div className="max-w-[960px]">
             <h2 className="t-section mb-10">FAQs</h2>
             <Faq items={faqs} />
+            </div>
           </div>
         </section>
 
